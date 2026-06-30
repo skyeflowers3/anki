@@ -301,6 +301,8 @@ mod test {
     use super::*;
     use crate::card::CardQueue;
     use crate::card::CardType;
+    use crate::card::FsrsMemoryState;
+    use crate::storage::card::review_order_sql;
 
     impl Collection {
         fn set_deck_gather_order(&mut self, deck: &mut Deck, order: NewCardGatherPriority) {
@@ -354,6 +356,42 @@ mod test {
                     let card = self.storage.get_card(entry.card_id()).unwrap().unwrap();
                     (card.due, card.interval)
                 })
+                .collect()
+        }
+
+        /// Add a due review card with FSRS memory state to the given deck, so
+        /// that `extract_fsrs_retrievability` returns a value < 1. A fixed
+        /// past review time keeps retrievability deterministic regardless of
+        /// the collection's creation date.
+        fn add_review_card_with_memory(&mut self, deck_id: DeckId, stability: f32) -> CardId {
+            let nt = self.get_notetype_by_name("Basic").unwrap().unwrap();
+            let mut note = nt.new_note();
+            note.set_field(0, "foo").unwrap();
+            self.add_note(&mut note, deck_id).unwrap();
+            let mut card = self
+                .storage
+                .get_card_by_ordinal(note.id, 0)
+                .unwrap()
+                .unwrap();
+            card.interval = 10;
+            card.due = 0;
+            card.ctype = CardType::Review;
+            card.queue = CardQueue::Review;
+            card.memory_state = Some(FsrsMemoryState {
+                stability,
+                difficulty: 5.0,
+            });
+            card.last_review_time = Some(TimestampSecs::now().adding_secs(-10 * 86_400));
+            let cid = card.id;
+            self.update_cards_maybe_undoable(vec![card], false).unwrap();
+            cid
+        }
+
+        fn points_at_stake_order(&mut self, deck_id: DeckId) -> Vec<CardId> {
+            self.build_queues(deck_id)
+                .unwrap()
+                .iter()
+                .map(|entry| entry.card_id())
                 .collect()
         }
     }
@@ -471,6 +509,122 @@ mod test {
         col.update_cards_maybe_undoable(cards, false)?;
         col.set_deck_review_order(&mut deck, ReviewCardOrder::RelativeOverdueness);
         assert_eq!(col.queue_as_due_and_ivl(deck.id), expected_queue);
+
+        Ok(())
+    }
+
+    #[test]
+    fn points_at_stake_generates_expected_sql() {
+        let mut col = Collection::new();
+        let timing = col.timing_today().unwrap();
+        let sql = review_order_sql(ReviewCardOrder::PointsAtStake, timing, true);
+        // section-weight CASE generated from the SECTION_WEIGHTS table
+        assert!(
+            sql.contains("case when instr(char(31)"),
+            "missing weight CASE: {sql}"
+        );
+        assert!(
+            sql.contains("else 0.0 end"),
+            "missing default weight: {sql}"
+        );
+        // weakness term: 1 - retrievability
+        assert!(
+            sql.contains("(1 - extract_fsrs_retrievability("),
+            "missing retrievability term: {sql}"
+        );
+        // descending, with the random tiebreaker review_order_sql always appends
+        assert!(sql.contains(") desc"), "should sort descending: {sql}");
+        assert!(
+            sql.contains("fnvhash(id, mod)"),
+            "missing random tiebreaker: {sql}"
+        );
+    }
+
+    #[test]
+    fn points_at_stake_orders_by_section_weight() -> Result<()> {
+        let mut col = Collection::new();
+        let mut root = DeckAdder::new("AnKing-MCAT").add(&mut col);
+        let behavioral = DeckAdder::new("AnKing-MCAT::Behavioral").add(&mut col);
+        let biochem = DeckAdder::new("AnKing-MCAT::Biochemistry").add(&mut col);
+
+        // Equal stability => equal retrievability, so the section weight alone
+        // decides the order: Behavioral (1.0) must outrank Biochemistry (0.5).
+        let behavioral_card = col.add_review_card_with_memory(behavioral.id, 100.0);
+        let biochem_card = col.add_review_card_with_memory(biochem.id, 100.0);
+
+        col.set_deck_review_order(&mut root, ReviewCardOrder::PointsAtStake);
+        let order = col.points_at_stake_order(root.id);
+
+        let behavioral_pos = order.iter().position(|&c| c == behavioral_card).unwrap();
+        let biochem_pos = order.iter().position(|&c| c == biochem_card).unwrap();
+        assert!(
+            behavioral_pos < biochem_pos,
+            "Behavioral (weight 1.0) should precede Biochemistry (weight 0.5): {order:?}"
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn points_at_stake_unlisted_deck_gets_zero_weight() -> Result<()> {
+        let mut col = Collection::new();
+        let mut root = DeckAdder::new("AnKing-MCAT").add(&mut col);
+        let behavioral = DeckAdder::new("AnKing-MCAT::Behavioral").add(&mut col);
+        // CARS is intentionally absent from SECTION_WEIGHTS -> implicit weight 0.0.
+        let cars = DeckAdder::new("AnKing-MCAT::CARS").add(&mut col);
+
+        let behavioral_card = col.add_review_card_with_memory(behavioral.id, 100.0);
+        let cars_card = col.add_review_card_with_memory(cars.id, 100.0);
+
+        col.set_deck_review_order(&mut root, ReviewCardOrder::PointsAtStake);
+        let order = col.points_at_stake_order(root.id);
+
+        // Behavioral scores weight * (1 - R) > 0; CARS scores 0 and sinks last.
+        assert_eq!(order.first(), Some(&behavioral_card), "order: {order:?}");
+        assert_eq!(order.last(), Some(&cars_card), "order: {order:?}");
+
+        Ok(())
+    }
+
+    #[test]
+    fn points_at_stake_preserves_undo_and_integrity() -> Result<()> {
+        let mut col = Collection::new();
+        let mut root = DeckAdder::new("AnKing-MCAT").add(&mut col);
+        let behavioral = DeckAdder::new("AnKing-MCAT::Behavioral").add(&mut col);
+        let biochem = DeckAdder::new("AnKing-MCAT::Biochemistry").add(&mut col);
+        let behavioral_card = col.add_review_card_with_memory(behavioral.id, 100.0);
+        col.add_review_card_with_memory(biochem.id, 100.0);
+
+        col.set_deck_review_order(&mut root, ReviewCardOrder::PointsAtStake);
+        col.set_current_deck(root.id)?;
+
+        // Building the queue under the new order must leave the collection valid.
+        let order = col.points_at_stake_order(root.id);
+        assert_eq!(
+            order.first(),
+            Some(&behavioral_card),
+            "highest-weight card should sort first: {order:?}"
+        );
+        let problems = col.check_database()?.to_i18n_strings(&col.tr);
+        assert!(problems.is_empty(), "db check reported problems: {problems:?}");
+
+        // Answering the top card and undoing it must behave normally under the
+        // new order: the queue change is read-only, so undo is unaffected.
+        let before = col.storage.get_card(behavioral_card)?.unwrap();
+        let answered = col.answer_easy();
+        assert_eq!(answered.card_id, behavioral_card);
+        let after = col.storage.get_card(behavioral_card)?.unwrap();
+        assert_eq!(after.reps, before.reps + 1, "answering should bump reps");
+
+        assert!(col.undo_status().undo.is_some(), "answer should be undoable");
+        col.undo()?;
+        let restored = col.storage.get_card(behavioral_card)?.unwrap();
+        assert_eq!(restored.reps, before.reps, "undo should restore reps");
+        assert_eq!(restored.queue, before.queue, "undo should restore queue");
+
+        // Integrity remains intact after the undo.
+        let problems = col.check_database()?.to_i18n_strings(&col.tr);
+        assert!(problems.is_empty(), "db check after undo: {problems:?}");
 
         Ok(())
     }

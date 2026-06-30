@@ -243,6 +243,8 @@ deck-config-sort-order-descending-difficulty = Difficult cards first
 deck-config-sort-order-retrievability-ascending = Ascending retrievability
 # Sort the cards by retrievability percentage, in descending order (100% to 0%, most easily retrievable to least retrievable).
 deck-config-sort-order-retrievability-descending = Descending retrievability
+# Sort the cards by MCAT exam-section weight multiplied by weakness (1 - retrievability), in descending order, so the highest-value due cards come first.
+deck-config-sort-order-points-at-stake = Points at stake (MCAT)
 
 ## Timer section
 

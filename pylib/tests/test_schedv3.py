@@ -10,7 +10,9 @@ from typing import Dict
 import pytest
 
 from anki import hooks
+from anki.cards import FSRSMemoryState
 from anki.consts import *
+from anki.deck_config_pb2 import DeckConfig
 from anki.lang import without_unicode_isolation
 from anki.scheduler import UnburyDeck
 from anki.utils import int_time
@@ -1183,3 +1185,48 @@ def test_initial_repeat():
 
     ivl = col.db.scalar("select ivl from revlog")
     assert ivl == -5.5 * 60
+
+
+def test_points_at_stake_review_order():
+    col = getEmptyCol()
+    # MCAT-style subdeck layout under a parent deck.
+    parent = col.decks.id("AnKing-MCAT")
+    behavioral = col.decks.id("AnKing-MCAT::Behavioral")
+    biochem = col.decks.id("AnKing-MCAT::Biochemistry")
+
+    def add_review_card(did: int, stability: float) -> int:
+        note = col.newNote()
+        note["Front"] = "foo"
+        col.add_note(note, did)
+        card = note.cards()[0]
+        card.type = CARD_TYPE_REV
+        card.queue = QUEUE_TYPE_REV
+        card.due = 0
+        card.ivl = 10
+        card.reps = 1
+        card.memory_state = FSRSMemoryState(stability=stability, difficulty=5.0)
+        # A fixed past review time keeps retrievability < 1 deterministically.
+        card.last_review_time = int(time.time()) - 10 * 86400
+        card.flush()
+        return card.id
+
+    # Equal stability => equal retrievability, so the section weight decides:
+    # Behavioral (weight 1.0) must outrank Biochemistry (weight 0.5).
+    behavioral_card = add_review_card(behavioral, 100.0)
+    biochem_card = add_review_card(biochem, 100.0)
+
+    # Set the new review order via the deck config; the backend round-trips this
+    # legacy dict field into the real protobuf config.
+    conf = col.decks.config_dict_for_deck_id(parent)
+    conf["reviewOrder"] = DeckConfig.Config.REVIEW_CARD_ORDER_POINTS_AT_STAKE
+    col.decks.update_config(conf)
+
+    # Build the queue for the parent deck and read its order (idempotent).
+    col.decks.select(parent)
+    col.reset()
+    queued = col.sched.get_queued_cards(fetch_limit=10)
+    order = [c.card.id for c in queued.cards]
+
+    assert behavioral_card in order, order
+    assert biochem_card in order, order
+    assert order.index(behavioral_card) < order.index(biochem_card), order

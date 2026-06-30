@@ -43,6 +43,22 @@ use crate::timestamp::TimestampMillis;
 use crate::timestamp::TimestampSecs;
 use crate::types::Usn;
 
+/// Per-subdeck MCAT section weights for the points-at-stake review order.
+///
+/// Each entry maps a deck-name path component to a ranking multiplier
+/// reflecting that topic's share of the scored MCAT exam (CARS is excluded
+/// since flashcards cannot meaningfully prepare for it). These are tunable
+/// MVP constants; decks not listed here receive an implicit weight of 0.0.
+const SECTION_WEIGHTS: &[(&str, f64)] = &[
+    ("Behavioral", 1.0),
+    ("Biology", 0.5),
+    ("Biochemistry", 0.5),
+    ("General-Chemistry", 0.33),
+    ("Organic-Chemistry", 0.33),
+    ("Physics-and-Math", 0.33),
+    ("Essential-Equations", 0.15),
+];
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) struct CardFixStats {
     pub new_cards_fixed: usize,
@@ -810,6 +826,10 @@ pub(crate) enum ReviewOrderSubclause {
         fsrs: bool,
         timing: SchedTimingToday,
     },
+    /// MCAT points-at-stake: section weight * (1 - FSRS retrievability), desc.
+    PointsAtStake {
+        timing: SchedTimingToday,
+    },
     Added,
     ReverseAdded,
 }
@@ -849,6 +869,29 @@ impl fmt::Display for ReviewOrderSubclause {
                 };
                 &temp_string
             }
+            ReviewOrderSubclause::PointsAtStake { timing } => {
+                let today = timing.days_elapsed;
+                let next_day_at = timing.next_day_at.0;
+                let now = timing.now.0;
+                // Build the section-weight CASE from the tunable weight table.
+                // `did`/`odid` is resolved to the home deck (so cards pulled into
+                // a filtered deck keep their topic weight), then the deck name is
+                // matched component-wise using \x1f (char(31)) separators.
+                let weight_cases: String = SECTION_WEIGHTS
+                    .iter()
+                    .map(|(component, weight)| {
+                        format!(
+                            "when instr(char(31)||d.name||char(31), char(31)||'{component}'||char(31))>0 then {weight} "
+                        )
+                    })
+                    .collect();
+                temp_string = format!(
+                    "(select case {weight_cases}else 0.0 end \
+                     from decks d where d.id = (case when odid != 0 then odid else did end)) \
+                     * (1 - extract_fsrs_retrievability(data, case when odue != 0 then odue else due end, ivl, {today}, {next_day_at}, {now})) desc"
+                );
+                &temp_string
+            }
             ReviewOrderSubclause::Added => "nid asc, ord asc",
             ReviewOrderSubclause::ReverseAdded => "nid desc, ord asc",
         };
@@ -856,7 +899,11 @@ impl fmt::Display for ReviewOrderSubclause {
     }
 }
 
-fn review_order_sql(order: ReviewCardOrder, timing: SchedTimingToday, fsrs: bool) -> String {
+pub(crate) fn review_order_sql(
+    order: ReviewCardOrder,
+    timing: SchedTimingToday,
+    fsrs: bool,
+) -> String {
     let mut subclauses = match order {
         ReviewCardOrder::Day => vec![ReviewOrderSubclause::Day],
         ReviewCardOrder::DayThenDeck => vec![ReviewOrderSubclause::Day, ReviewOrderSubclause::Deck],
@@ -891,6 +938,7 @@ fn review_order_sql(order: ReviewCardOrder, timing: SchedTimingToday, fsrs: bool
             vec![ReviewOrderSubclause::RelativeOverdueness { fsrs, timing }]
         }
         ReviewCardOrder::Random => vec![],
+        ReviewCardOrder::PointsAtStake => vec![ReviewOrderSubclause::PointsAtStake { timing }],
         ReviewCardOrder::Added => vec![ReviewOrderSubclause::Added],
         ReviewCardOrder::ReverseAdded => vec![ReviewOrderSubclause::ReverseAdded],
     };

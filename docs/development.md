@@ -1,11 +1,11 @@
-# Anki development
+# sortiAnki development
 
 ## Packaged betas
 
 For non-developers who want to try beta versions, the easiest way is to use a
 packaged version - please see:
 
-https://betas.ankiweb.net/
+[https://betas.ankiweb.net/](https://betas.ankiweb.net/)
 
 ## Pre-built Python wheels
 
@@ -20,7 +20,7 @@ recommended, as Anki has only received minimal testing on 3.10+ so far, and some
 dependencies have not been fully updated yet. You can install Python from python.org
 or from your distro.
 
-For further instructions, please see https://betas.ankiweb.net/#via-pypipip. Note that
+For further instructions, please see [https://betas.ankiweb.net/#via-pypipip](https://betas.ankiweb.net/#via-pypipip). Note that
 in the provided commands, `--pre` tells pip to fetch alpha/beta versions. If you remove
 `--pre`, it will download the latest stable version instead.
 
@@ -31,13 +31,13 @@ contain spaces, and should not be too long if you are on Windows.
 
 On all platforms, you will need to install:
 
-- Rustup (https://rustup.rs/). The Rust version pinned in rust-toolchain.toml
+- Rustup ([https://rustup.rs/](https://rustup.rs/)). The Rust version pinned in rust-toolchain.toml
   will be automatically downloaded if not yet installed. If removing that file
   to use a distro-provided Rust, newer Rust versions will typically work for
   building but may fail tests; older Rust versions may not work at all.
 - N2 or Ninja. N2 gives better status output. You can install it with `tools/install-n2`,
   or `bash tools\install-n2` on Windows. If you want to use Ninja, it can be downloaded
-  from https://github.com/ninja-build/ninja/releases/tag/v1.11.1 and
+  from [https://github.com/ninja-build/ninja/releases/tag/v1.11.1](https://github.com/ninja-build/ninja/releases/tag/v1.11.1) and
   placed on your path, or from your distro/homebrew if it's 1.10+.
   - On Windows, if you have WSL installed, it may conflict with MSYS2 bash. If you are getting an error, try running `C:\msys64\usr\bin\bash.exe tools/install-n2` instead.
 - (Optional) [just](https://just.systems/man/en/packages.html) command runner.

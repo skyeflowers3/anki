@@ -234,5 +234,9 @@ function retrievabilityOrders(
             label: tr.deckConfigSortOrderRetrievabilityDescending(),
             value: DeckConfig_Config_ReviewCardOrder.RETRIEVABILITY_DESCENDING,
         },
+        {
+            label: tr.deckConfigSortOrderPointsAtStake(),
+            value: DeckConfig_Config_ReviewCardOrder.POINTS_AT_STAKE,
+        },
     ];
 }
