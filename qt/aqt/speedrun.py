@@ -5,8 +5,9 @@
 When a student studies an MCAT deck, this module takes over from the standard
 review session and runs the loop defined in speedrun/speedrun_loop.py:
 
-* Two-step question blocks and between-block transition screens are shown in a
-  dedicated dialog web view.
+* Two-step question blocks and between-block transition screens render inline in
+  the main window (``mw.web``) via a custom ``speedrun`` main-window state, so the
+  loop feels like a native part of Anki rather than a dialog layered on top.
 * Flashcard blocks are delegated to Anki's own reviewer, scoped to the topic's
   subdeck and capped at a block size via the ``reviewer_did_answer_card`` hook,
   after which control returns here.
@@ -27,13 +28,20 @@ import aqt
 from anki.decks import DeckId
 from aqt import gui_hooks
 from aqt.qt import *
-from aqt.webview import AnkiWebView, AnkiWebViewKind
 
 if TYPE_CHECKING:
     import aqt.main
 
 
 MCAT_ROOT = "AnKing-MCAT"
+
+# A session is a fixed number of blocks; after the last one a summary is shown.
+SESSION_BLOCKS = 5
+
+# Custom main-window state, so the loop's screens render inline in mw.web (the
+# same web view the reviewer uses) instead of a separate dialog window. Typed as
+# a plain str since it is not one of Anki's built-in MainWindowState literals.
+SPEEDRUN_STATE: str = "speedrun"
 
 
 def _modules():
@@ -47,11 +55,6 @@ def _modules():
         from speedrun import performance_score, speedrun_loop
 
     return speedrun_loop, performance_score
-
-
-def deck_is_mcat(name: str) -> bool:
-    """Whether a deck (by full name) belongs to the MCAT deck tree."""
-    return name == MCAT_ROOT or name.startswith(f"{MCAT_ROOT}::")
 
 
 def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId]:
@@ -99,6 +102,11 @@ _SHELL_CSS = """
 <style>
 body { margin: 0; }
 .sr-shell { max-width: 760px; margin: 0 auto; padding: 16px 18px 40px; }
+.sr-block-badge {
+    position: fixed; top: 10px; right: 14px; z-index: 10;
+    font-size: 12px; font-weight: 600; opacity: 0.6;
+    letter-spacing: 0.03em;
+}
 .sr-reason {
     padding: 12px 16px; margin-bottom: 18px; border-radius: 8px;
     background: rgba(125,125,255,0.12); font-size: 16px; line-height: 1.4;
@@ -124,6 +132,15 @@ body { margin: 0; }
 .sr-score-val { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .sr-upnext { font-size: 15px; opacity: 0.85; margin-bottom: 16px; }
 .sr-footer { margin-top: 24px; }
+table.sr-summary { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14px; }
+table.sr-summary th, table.sr-summary td {
+    text-align: left; padding: 7px 8px;
+    border-top: 1px solid rgba(128,128,128,0.2);
+}
+table.sr-summary th { opacity: 0.6; font-weight: 600; }
+table.sr-summary td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.sr-summary td.delta { opacity: 0.8; font-size: 13px; }
+.sr-summary-actions { margin-top: 8px; }
 </style>
 """
 
@@ -132,8 +149,11 @@ def _esc(text: str) -> str:
     return escape(text)
 
 
-def _shell(reason: str, inner: str, footer: bool = True) -> str:
-    parts = [_SHELL_CSS, '<div class="sr-shell">']
+def _shell(reason: str, inner: str, footer: bool = True, block_label: str = "") -> str:
+    parts = [_SHELL_CSS]
+    if block_label:
+        parts.append(f'<div class="sr-block-badge">{_esc(block_label)}</div>')
+    parts.append('<div class="sr-shell">')
     if reason:
         parts.append(f'<div class="sr-reason">{_esc(reason)}</div>')
     parts.append(inner)
@@ -151,37 +171,14 @@ def _shell(reason: str, inner: str, footer: bool = True) -> str:
 ############################################################
 
 
-class SpeedrunLoopDialog(QDialog):
-    """Hosts the loop's web view (block previews and question blocks)."""
-
-    def __init__(self, mw: aqt.main.AnkiQt, controller: SpeedrunController) -> None:
-        QDialog.__init__(self, mw)
-        self.mw = mw
-        self.controller = controller
-        self.setWindowTitle("Speedrun")
-        self.setMinimumSize(720, 640)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self.web = AnkiWebView(kind=AnkiWebViewKind.SPEEDRUN_LOOP)
-        self.web.set_bridge_command(self.controller.on_bridge_cmd, self)
-        layout.addWidget(self.web)
-
-    def set_body(self, body: str) -> None:
-        self.web.stdHtml(body, context=self)
-
-    def reject(self) -> None:
-        # Treat closing the window as ending the session.
-        self.controller.end(from_dialog=True)
-        super().reject()
-
-    def cleanup(self) -> None:
-        if self.web:
-            self.web.cleanup()
-            self.web = None  # type: ignore[assignment]
-
-
 class SpeedrunController:
-    """Orchestrates one Speedrun session across question and flashcard blocks."""
+    """Orchestrates one Speedrun session across question and flashcard blocks.
+
+    The question, transition and summary screens render inline in the main
+    window (``mw.web``) via a custom ``speedrun`` main-window state, so the loop
+    feels like a native part of Anki rather than a dialog. Flashcard blocks are
+    delegated to Anki's own reviewer, and control returns to the loop afterward.
+    """
 
     def __init__(self, mw: aqt.main.AnkiQt, deck_id: DeckId) -> None:
         self.mw = mw
@@ -190,10 +187,13 @@ class SpeedrunController:
         self.topic_decks = scope_topics(mw, deck_id)
         self.session = self.speedrun_loop.SpeedrunSession(list(self.topic_decks))
 
-        self.dialog = SpeedrunLoopDialog(mw, self)
         self._ended = False
         self._served_any = False
         self._rng = random.Random()
+        self._body = ""  # HTML for the screen currently shown in mw.web
+        # Session structure: SESSION_BLOCKS blocks, then a summary screen.
+        self._blocks_done = 0
+        self._baseline: dict[str, dict[str, float | None]] = {}
 
         # Flashcard-block delegation state.
         self._fc_active = False
@@ -209,13 +209,71 @@ class SpeedrunController:
     # -- lifecycle -----------------------------------------------------------
 
     def start(self) -> None:
+        self._register_state()
         if not self.topic_decks:
             self._show_done("No MCAT topics were found under this deck.")
             return
+        self._baseline = self._section_scores()
         self.serve_next()
+
+    # -- main-window state ---------------------------------------------------
+
+    def _register_state(self) -> None:
+        """Install the custom ``speedrun`` main-window state handlers."""
+        self.mw._speedrunState = self._enter_state  # type: ignore[attr-defined]
+        self.mw._speedrunCleanup = self._exit_state  # type: ignore[attr-defined]
+
+    def _unregister_state(self) -> None:
+        for attr in ("_speedrunState", "_speedrunCleanup"):
+            if hasattr(self.mw, attr):
+                delattr(self.mw, attr)
+
+    def _enter_state(self, _old_state: str) -> None:
+        # Called by moveToState("speedrun"): paint the current screen.
+        self._paint()
+
+    def _exit_state(self, new_state: str) -> None:
+        # Leaving our state for the reviewer (flashcard block) keeps the session
+        # alive; leaving for anything else means the user navigated away, so end.
+        if new_state == "review":
+            return
+        if not self._ended:
+            self.end(navigated=True)
+
+    def _paint(self) -> None:
+        self.mw.web.set_bridge_command(self.on_bridge_cmd, self)
+        self.mw.web.stdHtml(self._body, context=self)
+        self.mw.bottomWeb.hide()
+        self.mw.web.setFocus()
+
+    def _render(self, body: str) -> None:
+        """Show ``body`` inline in mw.web, entering the speedrun state if needed."""
+        self._body = body
+        if self.mw.state == SPEEDRUN_STATE:
+            self._paint()
+        else:
+            self.mw.moveToState(SPEEDRUN_STATE)  # type: ignore[arg-type]
 
     def _stats(self) -> dict:
         return self.speedrun_loop.build_topic_stats(self.mw.col, list(self.topic_decks))
+
+    def _block_label(self) -> str:
+        return f"Block {min(self._blocks_done + 1, SESSION_BLOCKS)} of {SESSION_BLOCKS}"
+
+    def _section_scores(self) -> dict[str, dict[str, float | None]]:
+        """Per-section memory + performance score (None when below give-up rule)."""
+        col = self.mw.col
+        memory_score = self.speedrun_loop.memory_score
+        mem_sections = memory_score.compute_sections(col)
+        perf_by_code = {s.code: s for s in self.performance_score.compute_sections(col)}
+        out: dict[str, dict[str, float | None]] = {}
+        for s in mem_sections:
+            perf = perf_by_code.get(s.code)
+            out[s.code] = {
+                "memory": s.average if s.has_score else None,
+                "performance": perf.accuracy if perf and perf.has_score else None,
+            }
+        return out
 
     def serve_next(self) -> None:
         if self._ended:
@@ -247,25 +305,39 @@ class SpeedrunController:
         BlockOutcome = self.speedrun_loop.BlockOutcome
         outcome = BlockOutcome("questions", list(self._block_results))
         self.session.after_block(self._stats(), outcome)
+        self._advance_after_block()
+
+    def _advance_after_block(self) -> None:
+        """Count a completed block; end the session after SESSION_BLOCKS."""
+        self._blocks_done += 1
+        if self._blocks_done >= SESSION_BLOCKS:
+            self._show_summary()
+        else:
+            self.serve_next()
+
+    def _new_session(self) -> None:
+        self.session = self.speedrun_loop.SpeedrunSession(list(self.topic_decks))
+        self._blocks_done = 0
+        self._served_any = False
+        self._baseline = self._section_scores()
         self.serve_next()
 
-    def end(self, from_dialog: bool = False) -> None:
+    def end(self, navigated: bool = False) -> None:
         if self._ended:
             return
         self._ended = True
         self._detach_flashcard_hooks()
         self._cleanup_filtered_deck()
-        if not from_dialog:
-            self.dialog.close()
-        self.dialog.cleanup()
+        self._unregister_state()
+        self.mw.bottomWeb.show()
         if getattr(self.mw, "_speedrun_controller", None) is self:
             self.mw._speedrun_controller = None  # type: ignore[attr-defined]
+        # If the user didn't navigate away themselves, return to the deck's
+        # overview; otherwise their navigation already changed the state.
+        if not navigated and self.mw.state == SPEEDRUN_STATE:
+            self.mw.moveToState("overview")
 
     # -- rendering -----------------------------------------------------------
-
-    def _present(self) -> None:
-        self.dialog.show()
-        self.dialog.raise_()
 
     @staticmethod
     def _fmt_pct(value: float | None) -> str:
@@ -277,9 +349,7 @@ class SpeedrunController:
         topic = plan.topic
         title = topic if topic else "Mixed practice"
         up_next = (
-            f"Up next: {topic} {kind_word}"
-            if topic
-            else f"Up next: Mixed {kind_word}"
+            f"Up next: {topic} {kind_word}" if topic else f"Up next: Mixed {kind_word}"
         )
 
         scores = ""
@@ -302,14 +372,12 @@ class SpeedrunController:
             '<button class="sr-btn" onclick=\'pycmd("sr:continue")\'>Continue</button>'
             "</div>"
         )
-        self._present()
-        self.dialog.set_body(_shell("", inner))
+        self._render(_shell("", inner, block_label=self._block_label()))
 
     def _show_question_block(self, plan: Any) -> None:
         questions = self.performance_score.client_questions_for_ids(plan.question_ids)
         inner = self.performance_score.render_question_block(questions)
-        self._present()
-        self.dialog.set_body(_shell(plan.reason, inner))
+        self._render(_shell(plan.reason, inner, block_label=self._block_label()))
 
     def _show_done(self, message: str) -> None:
         inner = (
@@ -318,8 +386,52 @@ class SpeedrunController:
             '<button class="sr-btn" onclick=\'pycmd("sr:close")\'>Close</button>'
             "</div>"
         )
-        self._present()
-        self.dialog.set_body(_shell("", inner, footer=False))
+        self._render(_shell("", inner, footer=False))
+
+    @staticmethod
+    def _fmt_delta(before: float | None, after: float | None) -> str:
+        if before is None or after is None:
+            return "&mdash;"
+        change = round((after - before) * 100)
+        arrow = "\u25b2" if change > 0 else "\u25bc" if change < 0 else ""
+        return f"{arrow}{abs(change)}%" if change else "no change"
+
+    def _show_summary(self) -> None:
+        current = self._section_scores()
+        memory_score = self.speedrun_loop.memory_score
+        rows = ""
+        for code in memory_score.SECTION_ORDER:
+            base = self._baseline.get(code, {})
+            now = current.get(code, {})
+            mem, perf = now.get("memory"), now.get("performance")
+            rows += (
+                "<tr>"
+                f"<td>{_esc(code)}</td>"
+                f'<td class="num">{self._fmt_pct(mem)}</td>'
+                f'<td class="num delta">{self._fmt_delta(base.get("memory"), mem)}</td>'
+                f'<td class="num">{self._fmt_pct(perf)}</td>'
+                f'<td class="num delta">'
+                f"{self._fmt_delta(base.get('performance'), perf)}</td>"
+                "</tr>"
+            )
+        inner = (
+            '<div class="sr-card">'
+            "<h2>Session complete</h2>"
+            f"<p>You finished {SESSION_BLOCKS} blocks. Here's how your scores "
+            "changed this session:</p>"
+            '<table class="sr-summary">'
+            '<tr><th>Section</th><th class="num">Memory</th>'
+            '<th class="num">Change</th><th class="num">Performance</th>'
+            '<th class="num">Change</th></tr>'
+            f"{rows}"
+            "</table>"
+            '<div class="sr-summary-actions">'
+            '<button class="sr-btn" onclick=\'pycmd("sr:new")\'>New session</button>'
+            '<button class="sr-btn ghost" onclick=\'pycmd("sr:close")\'>Stop</button>'
+            "</div>"
+            "</div>"
+        )
+        self._render(_shell("", inner, footer=False))
 
     # -- flashcard delegation ------------------------------------------------
 
@@ -345,7 +457,6 @@ class SpeedrunController:
         self._attach_flashcard_hooks()
 
         self.mw.col.decks.select(deck_id)
-        self.dialog.hide()
         self.mw.col.startTimebox()
         self.mw.moveToState("review")
 
@@ -360,7 +471,9 @@ class SpeedrunController:
             deck = col.decks.get(deck_id)
             if not deck:
                 continue
-            cids = [int(c) for c in col.find_cards(f'deck:"{deck["name"]}" -is:suspended')]
+            cids = [
+                int(c) for c in col.find_cards(f'deck:"{deck["name"]}" -is:suspended')
+            ]
             if cids:
                 self._rng.shuffle(cids)
                 pools[topic] = cids
@@ -437,8 +550,11 @@ class SpeedrunController:
     def _leave_reviewer(self) -> None:
         if not self._fc_active:
             return
-        # Triggers reviewer cleanup -> reviewer_will_end -> _finish_flashcards.
-        self.mw.moveToState("overview")
+        # Return to our inline state (rather than flashing the overview);
+        # reviewer cleanup fires reviewer_will_end -> _finish_flashcards, which
+        # repaints with the next block/transition.
+        self._body = _shell("", '<div class="sr-card"><p>Loading&hellip;</p></div>')
+        self.mw.moveToState(SPEEDRUN_STATE)  # type: ignore[arg-type]
 
     def _on_reviewer_will_end(self) -> None:
         # Fires both when we leave voluntarily and when cards run out early.
@@ -463,7 +579,7 @@ class SpeedrunController:
             return
         BlockOutcome = self.speedrun_loop.BlockOutcome
         self.session.after_block(self._stats(), BlockOutcome("flashcards"))
-        self.serve_next()
+        self._advance_after_block()
 
     def _abort_remediation(self) -> None:
         Mode = self.speedrun_loop.Mode
@@ -482,6 +598,8 @@ class SpeedrunController:
             return self._grade(cmd[len("srq:grade:") :])
         if cmd == "sr:continue":
             self._start_block(self._current_plan)
+        elif cmd == "sr:new":
+            self._new_session()
         elif cmd == "sr:block_done":
             self.on_block_done()
         elif cmd == "sr:end":
@@ -512,8 +630,11 @@ class SpeedrunController:
 
 
 def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
-    """If ``deck`` is an MCAT deck, launch the Speedrun loop. Returns handled."""
-    if not deck_is_mcat(deck.get("name", "")):
+    """Launch the Speedrun loop only for the top-level AnKing-MCAT deck.
+
+    Studying an individual subdeck falls through to standard Anki review.
+    """
+    if deck.get("name", "") != MCAT_ROOT:
         return False
     existing = getattr(mw, "_speedrun_controller", None)
     if existing is not None:

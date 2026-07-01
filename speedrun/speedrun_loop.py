@@ -509,7 +509,7 @@ class SpeedrunSession:
             return BlockPlan(
                 kind="questions",
                 mode=Mode.INTERLEAVED_DISCOVERY,
-                reason="Mixed practice questions",
+                reason="Practice questions",
                 size=len(ids),
                 question_ids=ids,
             )
