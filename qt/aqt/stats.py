@@ -2,8 +2,10 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 from __future__ import annotations
 
+import sys
 import time
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 import aqt
@@ -24,7 +26,25 @@ from aqt.utils import (
     tooltip,
     tr,
 )
-from aqt.webview import LegacyStatsWebView
+from aqt.webview import AnkiWebView, AnkiWebViewKind, LegacyStatsWebView
+
+
+def _memory_score_module():
+    """Import the Speedrun MCAT memory-score module.
+
+    The reusable logic lives in speedrun/memory_score.py at the repo root so it
+    can be shared with the standalone CLI. When running from source that folder
+    is not on sys.path by default, so add it relative to the aqt package.
+    """
+    try:
+        from speedrun import memory_score
+    except ModuleNotFoundError:
+        repo_root = Path(aqt.__file__).resolve().parents[2]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from speedrun import memory_score
+
+    return memory_score
 
 
 class NewDeckStats(QDialog):
@@ -47,6 +67,7 @@ class NewDeckStats(QDialog):
         f.groupBox_2.setVisible(False)
         if not is_mac:
             f.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self._build_tabs()
         restoreGeom(self, self.name, default_size=(800, 800))
 
         from aqt.deckchooser import DeckChooser
@@ -75,10 +96,38 @@ class NewDeckStats(QDialog):
         self.form.web.set_bridge_command(self._on_bridge_cmd, self)
         self.activateWindow()
 
+    def _build_tabs(self) -> None:
+        """Host the existing graphs web view and an MCAT memory panel in tabs."""
+        f = self.form
+        layout = f.verticalLayout
+        # detach the graphs web view from the top of the dialog layout
+        layout.takeAt(0)
+
+        self.tabs = QTabWidget(self)
+
+        graphs_tab = QWidget()
+        graphs_layout = QVBoxLayout(graphs_tab)
+        graphs_layout.setContentsMargins(0, 0, 0, 0)
+        graphs_layout.addWidget(f.web)
+        self.tabs.addTab(graphs_tab, "Graphs")
+
+        self.memory_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_MEMORY)
+        self.memory_web.set_bridge_command(self._on_bridge_cmd, self)
+        memory_tab = QWidget()
+        memory_layout = QVBoxLayout(memory_tab)
+        memory_layout.setContentsMargins(0, 0, 0, 0)
+        memory_layout.addWidget(self.memory_web)
+        self.tabs.addTab(memory_tab, "MCAT Memory")
+
+        layout.insertWidget(0, self.tabs, stretch=1)
+
     def reject(self) -> None:
         self.deck_chooser.cleanup()
         self.form.web.cleanup()
         self.form.web = None  # type: ignore
+        if getattr(self, "memory_web", None):
+            self.memory_web.cleanup()
+            self.memory_web = None  # type: ignore
         saveGeom(self, self.name)
         aqt.dialogs.markClosed("NewDeckStats")
         QDialog.reject(self)
@@ -139,6 +188,23 @@ class NewDeckStats(QDialog):
 
     def refresh(self) -> None:
         self.form.web.load_sveltekit_page("graphs")
+        self._refresh_memory()
+
+    def _refresh_memory(self) -> None:
+        memory_web = getattr(self, "memory_web", None)
+        if memory_web is None:
+            return
+        try:
+            memory_score = _memory_score_module()
+            sections = memory_score.compute_sections(self.mw.col)
+            body = memory_score.render_html(sections)
+        except Exception as exc:
+            body = (
+                "<div style='padding:20px'>"
+                f"Unable to compute the MCAT memory score: {exc}"
+                "</div>"
+            )
+        memory_web.stdHtml(body, context=self)
 
 
 class DeckStats(QDialog):
