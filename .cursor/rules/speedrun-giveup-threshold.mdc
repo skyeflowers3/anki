@@ -1,0 +1,22 @@
+---
+description: Remind to raise Speedrun give-up thresholds when more problems are added
+globs: speedrun/**
+alwaysApply: false
+---
+
+# Speedrun give-up thresholds
+
+The Speedrun give-up thresholds are intentionally set low for the current demo
+deck (**3 per topic**):
+
+- `MIN_ANSWERED = 3` in `speedrun/performance_score.py` (question/performance give-up)
+- `MIN_REVIEWED = 3` in `speedrun/memory_score.py` (memory give-up; also gates
+  when the loop stops serving flashcards and lets a topic into question blocks)
+
+## Reminder
+
+When the user adds more problems to `speedrun/questions.json` (including
+AI-generated questions), or grows the flashcard deck, **proactively remind them
+to raise these thresholds** (toward 10-15, or ~200 reviewed cards for a full
+production deck). Higher thresholds make the memory/performance scores and the
+adaptive loop's gap detection more statistically meaningful.

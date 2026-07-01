@@ -95,6 +95,11 @@ class Overview:
 
     def _linkHandler(self, url: str) -> bool:
         if url == "study":
+            from aqt.speedrun import maybe_start
+
+            deck = self.mw.col.decks.current()
+            if maybe_start(self.mw, deck):
+                return False
             self.mw.col.startTimebox()
             self.mw.moveToState("review")
             if self.mw.state == "overview":

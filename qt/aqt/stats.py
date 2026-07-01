@@ -47,6 +47,25 @@ def _memory_score_module():
     return memory_score
 
 
+def _performance_score_module():
+    """Import the Speedrun MCAT performance-score module.
+
+    Mirrors `_memory_score_module()`: the reusable logic lives in
+    speedrun/performance_score.py at the repo root so it can be shared with the
+    standalone CLI. Add that folder to sys.path relative to the aqt package when
+    running from source.
+    """
+    try:
+        from speedrun import performance_score
+    except ModuleNotFoundError:
+        repo_root = Path(aqt.__file__).resolve().parents[2]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from speedrun import performance_score
+
+    return performance_score
+
+
 class NewDeckStats(QDialog):
     """New deck stats."""
 
@@ -119,6 +138,14 @@ class NewDeckStats(QDialog):
         memory_layout.addWidget(self.memory_web)
         self.tabs.addTab(memory_tab, "MCAT Memory")
 
+        self.performance_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_PERFORMANCE)
+        self.performance_web.set_bridge_command(self._on_bridge_cmd, self)
+        performance_tab = QWidget()
+        performance_layout = QVBoxLayout(performance_tab)
+        performance_layout.setContentsMargins(0, 0, 0, 0)
+        performance_layout.addWidget(self.performance_web)
+        self.tabs.addTab(performance_tab, "MCAT Performance")
+
         layout.insertWidget(0, self.tabs, stretch=1)
 
     def reject(self) -> None:
@@ -128,6 +155,9 @@ class NewDeckStats(QDialog):
         if getattr(self, "memory_web", None):
             self.memory_web.cleanup()
             self.memory_web = None  # type: ignore
+        if getattr(self, "performance_web", None):
+            self.performance_web.cleanup()
+            self.performance_web = None  # type: ignore
         saveGeom(self, self.name)
         aqt.dialogs.markClosed("NewDeckStats")
         QDialog.reject(self)
@@ -189,6 +219,7 @@ class NewDeckStats(QDialog):
     def refresh(self) -> None:
         self.form.web.load_sveltekit_page("graphs")
         self._refresh_memory()
+        self._refresh_performance()
 
     def _refresh_memory(self) -> None:
         memory_web = getattr(self, "memory_web", None)
@@ -205,6 +236,22 @@ class NewDeckStats(QDialog):
                 "</div>"
             )
         memory_web.stdHtml(body, context=self)
+
+    def _refresh_performance(self) -> None:
+        performance_web = getattr(self, "performance_web", None)
+        if performance_web is None:
+            return
+        try:
+            performance_score = _performance_score_module()
+            sections = performance_score.compute_sections(self.mw.col)
+            body = performance_score.render_html(sections)
+        except Exception as exc:
+            body = (
+                "<div style='padding:20px'>"
+                f"Unable to compute the MCAT performance score: {exc}"
+                "</div>"
+            )
+        performance_web.stdHtml(body, context=self)
 
 
 class DeckStats(QDialog):

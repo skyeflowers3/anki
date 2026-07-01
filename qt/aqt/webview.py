@@ -50,6 +50,8 @@ class AnkiWebViewKind(Enum):
     LEGACY_DECK_STATS = "legacy deck stats"
     DECK_STATS = "deck stats"
     MCAT_MEMORY = "mcat memory"
+    MCAT_PERFORMANCE = "mcat performance"
+    SPEEDRUN_LOOP = "speedrun loop"
     PREVIEWER = "previewer"
     CHANGE_NOTETYPE = "change notetype"
     CARD_LAYOUT = "card layout"

@@ -1,0 +1,284 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "passage": "A research team studies how classical conditioning influences taste aversion in laboratory rats. Rats were given a novel-flavored solution (the conditioned stimulus) and, some hours later, injected with a compound that induced mild nausea (the unconditioned stimulus). After a single pairing, the rats strongly avoided the novel flavor. The researchers noted that this rapid, single-trial learning contrasts with the many repetitions typically required for other conditioned associations.",
+      "question": "The rapid, single-trial learning of taste aversion described in the passage is best explained by which concept?",
+      "choices": [
+        "Biological preparedness, in which certain associations are learned more readily due to evolutionary pressures",
+        "Spontaneous recovery of a previously extinguished conditioned response",
+        "Higher-order conditioning involving a second conditioned stimulus",
+        "Stimulus discrimination between the novel flavor and familiar flavors"
+      ],
+      "correct_answer": "Biological preparedness, in which certain associations are learned more readily due to evolutionary pressures",
+      "topic": "Behavioral",
+      "concept": "Classical conditioning and biological preparedness"
+    },
+    {
+      "id": 2,
+      "passage": "A developmental psychologist observes toddlers in a laboratory playroom while their caregivers briefly leave and then return. Some children explore freely when the caregiver is present, become distressed upon separation, and are quickly comforted upon reunion. Other children show little distress at separation and avoid the caregiver upon return.",
+      "question": "The behavior of children who explore freely, show distress at separation, and are readily comforted at reunion is characteristic of which attachment style?",
+      "choices": [
+        "Secure attachment",
+        "Anxious-ambivalent attachment",
+        "Avoidant attachment",
+        "Disorganized attachment"
+      ],
+      "correct_answer": "Secure attachment",
+      "topic": "Behavioral",
+      "concept": "Attachment theory and the strange situation"
+    },
+    {
+      "id": 3,
+      "passage": "A cognitive researcher presents participants with a list of 20 words and later asks them to recall as many as possible. Analysis of the recalled words shows that items from the beginning and the end of the list are remembered better than items in the middle. When a distractor task is inserted between presentation and recall, recall of the final items drops sharply while recall of the initial items is preserved.",
+      "question": "The drop in recall of the final list items following a distractor task is best explained by disruption of which memory process?",
+      "choices": [
+        "The recency effect, reflecting loss of information from short-term memory",
+        "The primacy effect, reflecting failure to encode into long-term memory",
+        "Proactive interference from earlier list items",
+        "Source misattribution during retrieval"
+      ],
+      "correct_answer": "The recency effect, reflecting loss of information from short-term memory",
+      "topic": "Behavioral",
+      "concept": "Serial position effect and memory systems"
+    },
+    {
+      "id": 4,
+      "passage": "A sociologist studies how individuals respond to conflicting expectations. A medical resident is expected to spend long hours caring for patients while also being expected to be an attentive parent at home. The resident reports feeling unable to fully satisfy both sets of expectations simultaneously and experiences significant stress as a result.",
+      "question": "The stress the resident experiences from competing demands of the physician role and the parent role is best described as which of the following?",
+      "choices": [
+        "Role conflict",
+        "Role strain",
+        "Role exit",
+        "Status inconsistency"
+      ],
+      "correct_answer": "Role conflict",
+      "topic": "Behavioral",
+      "concept": "Social roles: role conflict versus role strain"
+    },
+    {
+      "id": 5,
+      "passage": "An enzyme kinetics experiment measures the initial reaction velocity of an enzyme at varying substrate concentrations. When a competitive inhibitor is added to the assay, the researchers observe that the apparent Km increases while the Vmax remains unchanged. They plot the data using a Lineweaver-Burk (double-reciprocal) transformation to characterize the inhibition.",
+      "question": "In the presence of the competitive inhibitor, which change to the Lineweaver-Burk plot would the researchers expect relative to the uninhibited reaction?",
+      "choices": [
+        "The y-intercept is unchanged, but the slope increases and the x-intercept moves closer to the origin",
+        "The y-intercept increases while the x-intercept remains unchanged",
+        "Both the y-intercept and x-intercept decrease",
+        "The slope is unchanged while the y-intercept decreases"
+      ],
+      "correct_answer": "The y-intercept is unchanged, but the slope increases and the x-intercept moves closer to the origin",
+      "topic": "Biochemistry",
+      "concept": "Enzyme kinetics and competitive inhibition"
+    },
+    {
+      "id": 6,
+      "passage": "A biochemist investigates the oxygen-binding behavior of hemoglobin and myoglobin. Hemoglobin exhibits a sigmoidal (S-shaped) oxygen dissociation curve, whereas myoglobin exhibits a hyperbolic curve. The researcher also notes that increasing concentrations of 2,3-bisphosphoglycerate (2,3-BPG) shift the hemoglobin curve to the right.",
+      "question": "The sigmoidal shape of the hemoglobin oxygen dissociation curve is a direct consequence of which property?",
+      "choices": [
+        "Cooperative binding among hemoglobin's four subunits",
+        "The higher intrinsic oxygen affinity of hemoglobin compared to myoglobin",
+        "Irreversible oxidation of the heme iron",
+        "The single polypeptide structure of hemoglobin"
+      ],
+      "correct_answer": "Cooperative binding among hemoglobin's four subunits",
+      "topic": "Biochemistry",
+      "concept": "Hemoglobin cooperativity and allosteric regulation"
+    },
+    {
+      "id": 7,
+      "passage": "Researchers separate a mixture of proteins using SDS-PAGE. The detergent sodium dodecyl sulfate (SDS) is added to denature the proteins and coat them with negative charge. The proteins are then loaded onto a polyacrylamide gel and an electric field is applied. After staining, the proteins appear as distinct bands at different positions along the gel.",
+      "question": "In SDS-PAGE, the proteins are separated primarily on the basis of which property?",
+      "choices": [
+        "Molecular mass, because SDS masks intrinsic charge differences",
+        "Isoelectric point, because SDS establishes a pH gradient",
+        "Native tertiary structure, because SDS preserves protein folding",
+        "Hydrophobicity, because SDS binds only hydrophobic residues"
+      ],
+      "correct_answer": "Molecular mass, because SDS masks intrinsic charge differences",
+      "topic": "Biochemistry",
+      "concept": "Protein separation techniques: SDS-PAGE"
+    },
+    {
+      "id": 8,
+      "passage": "A metabolic study tracks the fate of glucose in liver cells under well-fed conditions with high insulin. Investigators observe that the activity of phosphofructokinase-1 (PFK-1) is elevated, promoting flux through glycolysis. They further note that high levels of ATP and citrate inhibit PFK-1, whereas AMP and fructose-2,6-bisphosphate activate it.",
+      "question": "The inhibition of PFK-1 by ATP and citrate is an example of which type of regulation?",
+      "choices": [
+        "Allosteric feedback regulation reflecting the cell's energy charge",
+        "Covalent modification through phosphorylation",
+        "Competitive inhibition at the substrate-binding site",
+        "Transcriptional repression of the PFK-1 gene"
+      ],
+      "correct_answer": "Allosteric feedback regulation reflecting the cell's energy charge",
+      "topic": "Biochemistry",
+      "concept": "Glycolysis regulation and allosteric control of PFK-1"
+    },
+    {
+      "id": 9,
+      "passage": "During an investigation of cellular respiration, scientists incubate isolated mitochondria with a substrate and measure oxygen consumption. They then add a chemical that makes the inner mitochondrial membrane freely permeable to protons. Oxygen consumption increases sharply, but ATP synthesis by ATP synthase drops to nearly zero.",
+      "question": "The chemical added to the mitochondria most likely acts as which of the following?",
+      "choices": [
+        "An uncoupler that dissipates the proton gradient without inhibiting the electron transport chain",
+        "A direct inhibitor of Complex IV (cytochrome c oxidase)",
+        "A competitive inhibitor of ATP synthase",
+        "An allosteric activator of the citric acid cycle"
+      ],
+      "correct_answer": "An uncoupler that dissipates the proton gradient without inhibiting the electron transport chain",
+      "topic": "Biology",
+      "concept": "Oxidative phosphorylation and chemiosmotic coupling"
+    },
+    {
+      "id": 10,
+      "passage": "A geneticist crosses two true-breeding pea plants: one homozygous for round, yellow seeds and one homozygous for wrinkled, green seeds. The F1 generation is uniformly round and yellow. When the F1 plants are self-crossed, the F2 generation shows round and wrinkled seeds in a 3:1 ratio, and this ratio holds independently for seed color.",
+      "question": "The independent 3:1 phenotypic ratios for seed shape and seed color in the F2 generation are best explained by which principle?",
+      "choices": [
+        "The law of independent assortment of alleles for different traits",
+        "Incomplete dominance between the two alleles",
+        "Genetic linkage of the two loci on the same chromosome",
+        "Cytoplasmic (maternal) inheritance of both traits"
+      ],
+      "correct_answer": "The law of independent assortment of alleles for different traits",
+      "topic": "Biology",
+      "concept": "Mendelian genetics and independent assortment"
+    },
+    {
+      "id": 11,
+      "passage": "A physiologist studies the regulation of blood osmolarity in a healthy volunteer who has been deprived of water for 12 hours. Blood tests reveal elevated plasma osmolarity. In response, the posterior pituitary releases a hormone that increases water reabsorption in the collecting ducts of the nephron by inserting aquaporin channels into the apical membrane.",
+      "question": "The hormone responsible for increasing water reabsorption in the collecting ducts under these conditions is:",
+      "choices": [
+        "Antidiuretic hormone (ADH/vasopressin)",
+        "Aldosterone",
+        "Atrial natriuretic peptide (ANP)",
+        "Renin"
+      ],
+      "correct_answer": "Antidiuretic hormone (ADH/vasopressin)",
+      "topic": "Biology",
+      "concept": "Renal physiology and osmoregulation"
+    },
+    {
+      "id": 12,
+      "passage": "A neuroscientist records the electrical activity of a single neuron. Following a threshold stimulus, the membrane potential rapidly depolarizes, then repolarizes and briefly becomes more negative than the resting potential before returning to baseline. During a specific interval, no new action potential can be generated regardless of stimulus strength.",
+      "question": "The interval during which no new action potential can be generated regardless of stimulus strength is caused primarily by which of the following?",
+      "choices": [
+        "Inactivation of voltage-gated sodium channels",
+        "Closure of all voltage-gated potassium channels",
+        "Depletion of extracellular calcium ions",
+        "Failure of the sodium-potassium ATPase"
+      ],
+      "correct_answer": "Inactivation of voltage-gated sodium channels",
+      "topic": "Biology",
+      "concept": "Action potentials and the absolute refractory period"
+    },
+    {
+      "id": 13,
+      "passage": "A student prepares a buffer solution by mixing acetic acid (pKa = 4.76) with sodium acetate. The student wants the buffer to resist changes in pH when small amounts of strong acid or base are added. They measure the pH of the final solution and find it equal to 4.76.",
+      "question": "Based on the Henderson-Hasselbalch equation, what does the measured pH of 4.76 indicate about the buffer?",
+      "choices": [
+        "The concentrations of acetic acid and acetate ion are equal",
+        "The concentration of acetate ion greatly exceeds that of acetic acid",
+        "The concentration of acetic acid greatly exceeds that of acetate ion",
+        "The buffer has no capacity to resist changes in pH"
+      ],
+      "correct_answer": "The concentrations of acetic acid and acetate ion are equal",
+      "topic": "General-Chemistry",
+      "concept": "Buffers and the Henderson-Hasselbalch equation"
+    },
+    {
+      "id": 14,
+      "passage": "A chemist studies a reaction at equilibrium: N2(g) + 3H2(g) \u21cc 2NH3(g), which is exothermic in the forward direction. The system is initially at equilibrium in a sealed, rigid container. The chemist then increases the temperature of the system and, separately in another trial, decreases the container volume.",
+      "question": "According to Le Ch\u00e2telier's principle, increasing the temperature of this exothermic reaction at equilibrium will shift the equilibrium in which direction?",
+      "choices": [
+        "Toward the reactants, decreasing the yield of ammonia",
+        "Toward the products, increasing the yield of ammonia",
+        "No shift occurs because temperature does not affect equilibrium",
+        "Toward the products, but only if a catalyst is present"
+      ],
+      "correct_answer": "Toward the reactants, decreasing the yield of ammonia",
+      "topic": "General-Chemistry",
+      "concept": "Chemical equilibrium and Le Ch\u00e2telier's principle"
+    },
+    {
+      "id": 15,
+      "passage": "An electrochemistry experiment uses a galvanic (voltaic) cell built from a zinc electrode in a Zn2+ solution and a copper electrode in a Cu2+ solution, connected by a salt bridge. The standard reduction potentials are Zn2+ + 2e- \u2192 Zn (E\u00b0 = -0.76 V) and Cu2+ + 2e- \u2192 Cu (E\u00b0 = +0.34 V). The cell operates spontaneously and generates a measurable voltage.",
+      "question": "In this galvanic cell, which electrode serves as the anode, and what is the standard cell potential?",
+      "choices": [
+        "Zinc is the anode; the standard cell potential is +1.10 V",
+        "Copper is the anode; the standard cell potential is +1.10 V",
+        "Zinc is the anode; the standard cell potential is -0.42 V",
+        "Copper is the anode; the standard cell potential is +0.42 V"
+      ],
+      "correct_answer": "Zinc is the anode; the standard cell potential is +1.10 V",
+      "topic": "General-Chemistry",
+      "concept": "Galvanic cells and standard cell potential"
+    },
+    {
+      "id": 16,
+      "passage": "A chemist investigates the rate of a reaction A + B \u2192 products. By varying the initial concentrations of A and B and measuring initial rates, the chemist finds that doubling [A] doubles the rate, while doubling [B] has no effect on the rate. The reaction is carried out at constant temperature.",
+      "question": "Based on these observations, what is the rate law for the reaction?",
+      "choices": [
+        "rate = k[A]",
+        "rate = k[A][B]",
+        "rate = k[A]^2[B]",
+        "rate = k[B]"
+      ],
+      "correct_answer": "rate = k[A]",
+      "topic": "General-Chemistry",
+      "concept": "Reaction kinetics and determining rate laws"
+    },
+    {
+      "id": 17,
+      "passage": "A chemist performs an SN1 reaction on a tertiary alkyl halide in a polar protic solvent. Kinetic studies reveal that the reaction rate depends only on the concentration of the alkyl halide and is independent of the nucleophile concentration. When an optically pure (single enantiomer) substrate is used, the product mixture is found to be racemic.",
+      "question": "The formation of a racemic product mixture in this SN1 reaction is best explained by which of the following?",
+      "choices": [
+        "A planar carbocation intermediate that can be attacked from either face",
+        "A concerted backside attack that inverts the stereocenter",
+        "Retention of configuration due to a cyclic transition state",
+        "Neighboring-group participation that locks the stereochemistry"
+      ],
+      "correct_answer": "A planar carbocation intermediate that can be attacked from either face",
+      "topic": "Organic-Chemistry",
+      "concept": "SN1 reaction mechanism and carbocation stereochemistry"
+    },
+    {
+      "id": 18,
+      "passage": "An organic chemist analyzes an unknown compound using infrared (IR) spectroscopy. The spectrum shows a strong, broad absorption centered around 3300 cm-1 spanning a wide range, along with a sharp, strong absorption near 1710 cm-1. The chemist suspects the compound contains more than one functional group.",
+      "question": "The strong absorption near 1710 cm-1 in the IR spectrum is most consistent with which functional group?",
+      "choices": [
+        "A carbonyl (C=O) group",
+        "A carbon-carbon triple bond (C\u2261C)",
+        "An isolated carbon-hydrogen (C-H) bond",
+        "An ether (C-O-C) linkage"
+      ],
+      "correct_answer": "A carbonyl (C=O) group",
+      "topic": "Organic-Chemistry",
+      "concept": "IR spectroscopy and functional group identification"
+    },
+    {
+      "id": 19,
+      "passage": "A researcher separates a mixture of two organic compounds using thin-layer chromatography (TLC) on a silica gel plate with a nonpolar solvent as the mobile phase. Silica gel is a polar stationary phase. After developing the plate, one compound travels near the solvent front while the other remains close to the origin.",
+      "question": "On this polar silica gel plate with a nonpolar mobile phase, the compound that remains close to the origin is most likely which of the following?",
+      "choices": [
+        "The more polar compound, because it interacts strongly with the stationary phase",
+        "The less polar compound, because it dissolves poorly in the mobile phase",
+        "The compound with the lower molecular mass, regardless of polarity",
+        "The compound with the higher vapor pressure"
+      ],
+      "correct_answer": "The more polar compound, because it interacts strongly with the stationary phase",
+      "topic": "Organic-Chemistry",
+      "concept": "Chromatography and polarity-based separation"
+    },
+    {
+      "id": 20,
+      "passage": "An organic chemist studies the relative stability of carbocation intermediates formed during electrophilic addition reactions. In one experiment, protonation of an alkene can generate either a secondary carbocation or a tertiary carbocation. The chemist observes that the reaction overwhelmingly proceeds through the tertiary carbocation, and the major product follows Markovnikov's rule.",
+      "question": "The greater stability of the tertiary carbocation compared to the secondary carbocation is primarily attributed to which effect?",
+      "choices": [
+        "Hyperconjugation and the electron-donating inductive effect of additional alkyl groups",
+        "Resonance delocalization into an adjacent aromatic ring",
+        "The greater electronegativity of tertiary carbon atoms",
+        "Steric hindrance that prevents nucleophilic attack"
+      ],
+      "correct_answer": "Hyperconjugation and the electron-donating inductive effect of additional alkyl groups",
+      "topic": "Organic-Chemistry",
+      "concept": "Carbocation stability and Markovnikov's rule"
+    }
+  ]
+}
