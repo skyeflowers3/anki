@@ -11,7 +11,7 @@ license-files = ["LICENSE"]
 author = "Damien Elmes"
 
 [tool.briefcase.app.anki]
-formal_name = "Anki"
+formal_name = "Speedrun"
 description = "An intelligent spaced-repetition learning system"
 long_description = """Anki is a flashcard program that helps you spend more time on challenging material, and less on what you already know."""
 sources = [

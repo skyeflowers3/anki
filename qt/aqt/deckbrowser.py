@@ -146,6 +146,7 @@ class DeckBrowser:
 
     _body = """
 <center>
+<div id="speedrun-banner">Speedrun: MCAT Study Blocks</div>
 <table cellspacing=0 cellpadding=3>
 %(tree)s
 </table>

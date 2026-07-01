@@ -77,7 +77,9 @@ def get_briefcase_sources_path(out_dir: Path) -> Path:
             / "anki"
             / "macos"
             / "app"
-            / "Anki.app"
+            # Briefcase names the bundle after `formal_name` in
+            # qt/installer/app/pyproject.toml; keep this in sync with it.
+            / "Speedrun.app"
             / "Contents"
             / "Resources"
         )

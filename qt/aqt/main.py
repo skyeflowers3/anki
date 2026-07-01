@@ -506,7 +506,7 @@ class AnkiQt(QMainWindow):
         restoreGeom(self, "mainWindow")
         restoreState(self, "mainWindow")
         # titlebar
-        self.setWindowTitle(f"{self.pm.name} - Anki")
+        self.setWindowTitle(f"Speedrun: MCAT Study Blocks — {self.pm.name}")
         # show and raise window for osx
         self.show()
         self.activateWindow()

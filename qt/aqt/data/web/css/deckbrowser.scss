@@ -5,6 +5,14 @@
 @use "../../../../../ts/lib/sass/card-counts";
 @use "../../../../../ts/lib/sass/elevation" as *;
 
+#speedrun-banner {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin: 0.5rem 0 1rem;
+    color: var(--fg);
+}
+
 table {
     padding: 1rem;
 
