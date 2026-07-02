@@ -279,6 +279,426 @@
       "correct_answer": "Hyperconjugation and the electron-donating inductive effect of additional alkyl groups",
       "topic": "Organic-Chemistry",
       "concept": "Carbocation stability and Markovnikov's rule"
+    },
+    {
+      "id": 21,
+      "passage": "A behavioral researcher trains rats to press a lever for food pellets. In one condition, a pellet is delivered only after an unpredictable, varying number of lever presses, averaging one reward per ten presses. The rats in this condition press the lever at a high, steady rate and continue pressing for a long time even after rewards are discontinued. The researcher compares this pattern to gambling behavior in humans.",
+      "question": "The high, steady response rate and strong resistance to extinction observed in these rats are most characteristic of which reinforcement schedule?",
+      "choices": [
+        "A fixed-ratio schedule",
+        "A variable-ratio schedule",
+        "A fixed-interval schedule",
+        "A variable-interval schedule"
+      ],
+      "correct_answer": "A variable-ratio schedule",
+      "topic": "Behavioral",
+      "concept": "Operant conditioning and schedules of reinforcement"
+    },
+    {
+      "id": 22,
+      "passage": "In a classic experiment, participants performed an extremely boring task and were then paid to tell a waiting participant that the task was enjoyable. One group was paid $1 to lie, and another was paid $20. When later asked to rate their true enjoyment of the task, the group paid $1 rated the task as significantly more enjoyable than the group paid $20.",
+      "question": "The finding that participants paid only $1 rated the boring task as more enjoyable is best explained by which concept?",
+      "choices": [
+        "Operant conditioning, because the monetary payment reinforced positive ratings",
+        "The mere exposure effect from repeated engagement with the task",
+        "Self-serving bias in reporting their own performance",
+        "Cognitive dissonance reduction, because insufficient external justification prompted an internal attitude change"
+      ],
+      "correct_answer": "Cognitive dissonance reduction, because insufficient external justification prompted an internal attitude change",
+      "topic": "Behavioral",
+      "concept": "Cognitive dissonance"
+    },
+    {
+      "id": 23,
+      "passage": "A radiologist screens mammograms for tumors. Researchers note that when the radiologist is told that a batch of images comes from a high-risk population, the number of tumors reported (both correct identifications and false alarms) increases, even though the actual images are identical to a control batch. A measure of the radiologist's underlying ability to distinguish tumors from healthy tissue remains constant across the two batches.",
+      "question": "The increase in both correct detections and false alarms without a change in the underlying ability to discriminate signal from noise is best explained by which of the following?",
+      "choices": [
+        "A shift in the response criterion toward a more liberal bias",
+        "An increase in perceptual sensitivity (d')",
+        "A ceiling effect in the detection task",
+        "A reduction in the absolute threshold for detection"
+      ],
+      "correct_answer": "A shift in the response criterion toward a more liberal bias",
+      "topic": "Behavioral",
+      "concept": "Signal detection theory: sensitivity versus response bias"
+    },
+    {
+      "id": 24,
+      "passage": "A commuter is cut off in traffic by another driver. The commuter immediately concludes that the other driver is rude and inconsiderate. Later that same day, when the commuter cuts someone off while rushing to an emergency, they attribute their own behavior to the urgent situation rather than to any personal shortcoming. A social psychologist studying this pattern focuses specifically on how the commuter judges the other driver.",
+      "question": "The commuter's tendency to attribute the other driver's behavior to stable personal traits while underestimating situational factors is best described as which of the following?",
+      "choices": [
+        "Actor–observer bias",
+        "Self-serving bias",
+        "Fundamental attribution error",
+        "The just-world hypothesis"
+      ],
+      "correct_answer": "Fundamental attribution error",
+      "topic": "Behavioral",
+      "concept": "Attribution theory and the fundamental attribution error"
+    },
+    {
+      "id": 25,
+      "passage": "A physiologist studies an organism exposed to a prolonged, unrelenting stressor. The organism first mobilizes resources in an acute fight-or-flight reaction, then enters a prolonged period during which physiological arousal stabilizes at an elevated level as it copes with the stressor. Eventually, if the stressor persists, the organism's adaptive resources become depleted, and it shows increased susceptibility to illness.",
+      "question": "According to Selye's general adaptation syndrome, the final period in which adaptive resources become depleted and disease susceptibility rises corresponds to which stage?",
+      "choices": [
+        "The alarm reaction",
+        "The exhaustion stage",
+        "The resistance stage",
+        "The primary appraisal stage"
+      ],
+      "correct_answer": "The exhaustion stage",
+      "topic": "Behavioral",
+      "concept": "Stress and the general adaptation syndrome"
+    },
+    {
+      "id": 26,
+      "passage": "A biochemist characterizes an inhibitor of a metabolic enzyme. Kinetic assays show that as the inhibitor concentration increases, the measured Vmax decreases while the Km remains unchanged. Binding studies reveal that the inhibitor binds to a site distinct from the active site and can bind whether or not substrate is already bound.",
+      "question": "The pattern of an unchanged Km with a decreased Vmax, together with binding at a site distinct from the active site, is most consistent with which type of inhibition?",
+      "choices": [
+        "Competitive inhibition",
+        "Uncompetitive inhibition",
+        "Noncompetitive inhibition",
+        "Irreversible covalent inhibition"
+      ],
+      "correct_answer": "Noncompetitive inhibition",
+      "topic": "Biochemistry",
+      "concept": "Enzyme kinetics and noncompetitive inhibition"
+    },
+    {
+      "id": 27,
+      "passage": "A student titrates the amino acid glycine, which has no ionizable side chain. The titration curve reveals two pKa values: the alpha-carboxyl group at 2.34 and the alpha-amino group at 9.60. The student is asked to determine the pH at which glycine carries no net electrical charge and exists predominantly as a zwitterion.",
+      "question": "What is the approximate isoelectric point (pI) of glycine?",
+      "choices": [
+        "Approximately 5.97, the average of the two pKa values",
+        "Approximately 9.60, equal to the pKa of the amino group",
+        "Approximately 2.34, equal to the pKa of the carboxyl group",
+        "Approximately 7.00, equal to physiological pH"
+      ],
+      "correct_answer": "Approximately 5.97, the average of the two pKa values",
+      "topic": "Biochemistry",
+      "concept": "Amino acid titration and isoelectric point"
+    },
+    {
+      "id": 28,
+      "passage": "A biochemist studies a rapidly dividing tissue that requires large amounts of reducing equivalents for fatty acid and nucleotide synthesis. Isotopic labeling shows that glucose-6-phosphate is diverted away from glycolysis into a pathway whose oxidative branch generates NADPH and produces ribose-5-phosphate for nucleotide biosynthesis. The pathway does not generate ATP directly.",
+      "question": "Which metabolic pathway is being described?",
+      "choices": [
+        "Glycolysis",
+        "The citric acid cycle",
+        "Gluconeogenesis",
+        "The pentose phosphate pathway"
+      ],
+      "correct_answer": "The pentose phosphate pathway",
+      "topic": "Biochemistry",
+      "concept": "The pentose phosphate pathway and NADPH production"
+    },
+    {
+      "id": 29,
+      "passage": "A cell must carry out a biosynthetic reaction that, on its own, has a positive standard free energy change (ΔG = +3.3 kcal/mol) and therefore does not proceed appreciably. The cell couples this reaction to the hydrolysis of ATP (ΔG = -7.3 kcal/mol) through a shared intermediate, and the combined process proceeds readily in the forward direction.",
+      "question": "The coupling of ATP hydrolysis to the unfavorable reaction allows the overall process to proceed because:",
+      "choices": [
+        "ATP hydrolysis lowers the activation energy of the unfavorable reaction",
+        "The sum of the two free energy changes makes the overall process exergonic",
+        "ATP acts as an enzyme that catalyzes the unfavorable reaction",
+        "The unfavorable reaction becomes exergonic when considered in isolation"
+      ],
+      "correct_answer": "The sum of the two free energy changes makes the overall process exergonic",
+      "topic": "Biochemistry",
+      "concept": "Free energy and energetic coupling of reactions"
+    },
+    {
+      "id": 30,
+      "passage": "In a classic experiment, the enzyme ribonuclease is fully denatured by treatment with urea and a reducing agent that breaks its disulfide bonds, abolishing its catalytic activity. When the urea and reducing agent are slowly removed, the enzyme spontaneously refolds into its original three-dimensional shape and recovers full activity, with its disulfide bonds re-forming in the correct positions.",
+      "question": "This spontaneous recovery of native structure and activity after denaturation most directly demonstrates which principle?",
+      "choices": [
+        "The primary sequence contains sufficient information to determine the native three-dimensional structure",
+        "Molecular chaperones are absolutely required for all protein folding",
+        "Disulfide bonds are the sole determinant of tertiary structure",
+        "Protein folding is a thermodynamically irreversible process"
+      ],
+      "correct_answer": "The primary sequence contains sufficient information to determine the native three-dimensional structure",
+      "topic": "Biochemistry",
+      "concept": "Protein folding and Anfinsen's dogma"
+    },
+    {
+      "id": 31,
+      "passage": "A population geneticist studies an autosomal recessive metabolic disorder in a large, randomly mating population that is in Hardy-Weinberg equilibrium. The disorder, which occurs only in individuals homozygous for the recessive allele, affects 1 in 10,000 newborns. There is no significant migration, mutation, or selection against the allele in this population.",
+      "question": "What is the approximate frequency of unaffected heterozygous carriers in this population?",
+      "choices": [
+        "0.0001",
+        "0.99",
+        "0.01",
+        "Approximately 0.02"
+      ],
+      "correct_answer": "Approximately 0.02",
+      "topic": "Biology",
+      "concept": "Hardy-Weinberg equilibrium and carrier frequency"
+    },
+    {
+      "id": 32,
+      "passage": "An immunologist examines how the body responds to a cell infected by an intracellular virus. The infected cell degrades viral proteins into short peptides and displays them on the cell surface bound to major histocompatibility complex (MHC) class I molecules. A population of lymphocytes recognizes these displayed peptides and induces the infected cell to undergo apoptosis.",
+      "question": "Which cells are primarily responsible for recognizing viral peptides presented on MHC class I molecules and killing the infected cell?",
+      "choices": [
+        "Helper T cells (CD4+)",
+        "B lymphocytes",
+        "Cytotoxic T cells (CD8+)",
+        "Plasma cells"
+      ],
+      "correct_answer": "Cytotoxic T cells (CD8+)",
+      "topic": "Biology",
+      "concept": "Adaptive immunity and MHC class I antigen presentation"
+    },
+    {
+      "id": 33,
+      "passage": "An endocrinologist evaluates a patient with a thyroid tumor that autonomously secretes large amounts of thyroid hormone (T4) independent of normal control. Under normal physiology, circulating T4 acts on the hypothalamus and anterior pituitary to regulate the secretion of thyroid-stimulating hormone (TSH). The clinician measures the patient's serum TSH level.",
+      "question": "Given the autonomous T4 secretion, the patient's serum TSH level would most likely be:",
+      "choices": [
+        "Elevated, because the pituitary compensates for the tumor",
+        "Suppressed, because of negative feedback on the hypothalamus and pituitary",
+        "Unchanged, because T4 does not influence TSH secretion",
+        "Elevated, because thyrotropin-releasing hormone secretion increases"
+      ],
+      "correct_answer": "Suppressed, because of negative feedback on the hypothalamus and pituitary",
+      "topic": "Biology",
+      "concept": "Endocrine negative feedback and the thyroid axis"
+    },
+    {
+      "id": 34,
+      "passage": "A genetic counselor studies an X-linked recessive disorder. A woman who is a phenotypically normal carrier of the recessive allele (one normal and one mutant X chromosome) has children with a man who does not carry the allele and is phenotypically normal. The couple asks about the likelihood that their sons will be affected.",
+      "question": "What is the expected outcome for this couple's children?",
+      "choices": [
+        "1/2 of their sons will be affected",
+        "1/4 of their sons will be affected",
+        "All of their daughters will be affected",
+        "None of their offspring can be affected"
+      ],
+      "correct_answer": "1/2 of their sons will be affected",
+      "topic": "Biology",
+      "concept": "X-linked recessive inheritance"
+    },
+    {
+      "id": 35,
+      "passage": "In regions where malaria is endemic, the allele for sickle cell hemoglobin (HbS) persists at a high frequency despite causing severe disease in homozygotes. Individuals homozygous for the normal allele are susceptible to malaria, and individuals homozygous for HbS suffer from sickle cell anemia. Heterozygous individuals are resistant to severe malaria and do not typically develop significant sickle cell disease.",
+      "question": "The maintenance of the HbS allele at high frequency in malaria-endemic regions is best explained by which mechanism?",
+      "choices": [
+        "Directional selection favoring the homozygous recessive genotype",
+        "Random genetic drift in a small population",
+        "Balancing selection through a heterozygote advantage",
+        "A recent population bottleneck"
+      ],
+      "correct_answer": "Balancing selection through a heterozygote advantage",
+      "topic": "Biology",
+      "concept": "Natural selection and heterozygote advantage"
+    },
+    {
+      "id": 36,
+      "passage": "A chemist studies a reaction that is endothermic (ΔH > 0) and that proceeds with an increase in the disorder of the system (ΔS > 0). The chemist measures the extent of the reaction at several temperatures and uses the relationship ΔG = ΔH - TΔS to predict when the reaction will proceed spontaneously in the forward direction.",
+      "question": "Under what conditions will this reaction be spontaneous?",
+      "choices": [
+        "At high temperatures, where the TΔS term exceeds ΔH",
+        "At all temperatures, regardless of the value of T",
+        "At low temperatures only, where ΔH dominates",
+        "Never, because ΔH is positive"
+      ],
+      "correct_answer": "At high temperatures, where the TΔS term exceeds ΔH",
+      "topic": "General-Chemistry",
+      "concept": "Gibbs free energy and temperature dependence of spontaneity"
+    },
+    {
+      "id": 37,
+      "passage": "A student titrates a solution of a weak monoprotic acid with a strong base, sodium hydroxide, while monitoring the pH. As base is added, the pH rises gradually through a buffering region and then rises sharply near the equivalence point. At the equivalence point, all of the weak acid has been converted to its conjugate base.",
+      "question": "What is the expected pH at the equivalence point of this titration?",
+      "choices": [
+        "Exactly 7, because the acid has been fully neutralized",
+        "Less than 7, because of the excess weak acid remaining",
+        "Equal to the pKa of the weak acid",
+        "Greater than 7, because the conjugate base undergoes hydrolysis"
+      ],
+      "correct_answer": "Greater than 7, because the conjugate base undergoes hydrolysis",
+      "topic": "General-Chemistry",
+      "concept": "Weak acid-strong base titration and equivalence point pH"
+    },
+    {
+      "id": 38,
+      "passage": "A chemist prepares two aqueous solutions of equal molality: one of glucose, a nonelectrolyte, and one of sodium chloride, which dissociates completely into sodium and chloride ions. Both solutions are cooled, and the chemist measures the temperature at which each begins to freeze, comparing them to pure water.",
+      "question": "Which solution will have the lower freezing point, and why?",
+      "choices": [
+        "The glucose solution, because glucose is a larger molecule",
+        "The NaCl solution, because it dissociates into approximately twice as many particles",
+        "Both solutions freeze at the same temperature, because they are equal in molality",
+        "Neither, because freezing point is independent of dissolved solutes"
+      ],
+      "correct_answer": "The NaCl solution, because it dissociates into approximately twice as many particles",
+      "topic": "General-Chemistry",
+      "concept": "Colligative properties and the van't Hoff factor"
+    },
+    {
+      "id": 39,
+      "passage": "A chemistry student examines first ionization energies across the second period of the periodic table. The general trend is an increase in ionization energy from left to right, consistent with increasing effective nuclear charge. However, the student notices that the first ionization energy of oxygen is slightly lower than that of nitrogen, which precedes it.",
+      "question": "Which of the following best explains why the first ionization energy of oxygen is lower than that of nitrogen?",
+      "choices": [
+        "Oxygen has a smaller nuclear charge than nitrogen",
+        "Nitrogen has a substantially larger atomic radius than oxygen",
+        "Removing an electron from oxygen relieves electron–electron repulsion in a doubly occupied 2p orbital",
+        "Oxygen has a completely filled 2p subshell that is easily disrupted"
+      ],
+      "correct_answer": "Removing an electron from oxygen relieves electron–electron repulsion in a doubly occupied 2p orbital",
+      "topic": "General-Chemistry",
+      "concept": "Periodic trends and ionization energy anomalies"
+    },
+    {
+      "id": 40,
+      "passage": "A chemist prepares a saturated solution of silver chloride (AgCl), a sparingly soluble salt with a small solubility product constant (Ksp). To a portion of this solution, the chemist adds solid sodium chloride, which dissolves completely and substantially increases the chloride ion concentration. The temperature is held constant throughout.",
+      "question": "What happens to the molar solubility of AgCl after the sodium chloride is added?",
+      "choices": [
+        "Solubility increases because of the higher ionic strength",
+        "Solubility is unchanged because Ksp is a constant",
+        "Solubility first increases and then decreases",
+        "Solubility decreases because of the common-ion effect"
+      ],
+      "correct_answer": "Solubility decreases because of the common-ion effect",
+      "topic": "General-Chemistry",
+      "concept": "Solubility equilibria and the common-ion effect"
+    },
+    {
+      "id": 41,
+      "passage": "An organic chemist records the proton (1H) NMR spectrum of pure ethanol. The molecule contains a methyl group (CH3) and a methylene group (CH2) that are adjacent to one another, in addition to a hydroxyl proton. The chemist applies the n+1 rule to predict the splitting pattern of each set of chemically equivalent protons, ignoring exchange of the hydroxyl proton.",
+      "question": "Based on the n+1 rule, what splitting pattern is expected for the methylene (CH2) protons, which are adjacent to the three methyl protons?",
+      "choices": [
+        "A triplet",
+        "A quartet",
+        "A doublet",
+        "A singlet"
+      ],
+      "correct_answer": "A quartet",
+      "topic": "Organic-Chemistry",
+      "concept": "1H NMR spectroscopy and spin-spin splitting (n+1 rule)"
+    },
+    {
+      "id": 42,
+      "passage": "A medicinal chemist synthesizes a drug candidate whose structure contains three distinct tetrahedral carbon atoms, each bonded to four different substituents. None of the stereocenters is related to another by an internal mirror plane, so no meso forms arise. The chemist wants to know the maximum number of distinct stereoisomers the molecule could have.",
+      "question": "What is the maximum number of stereoisomers possible for a molecule with three stereocenters and no meso compounds?",
+      "choices": [
+        "8",
+        "6",
+        "3",
+        "4"
+      ],
+      "correct_answer": "8",
+      "topic": "Organic-Chemistry",
+      "concept": "Stereochemistry and the 2^n rule for stereoisomers"
+    },
+    {
+      "id": 43,
+      "passage": "An organic chemist carries out an elimination reaction on 2-bromo-2-methylbutane. When a small, unhindered base is used, the more highly substituted alkene predominates, in accordance with Zaitsev's rule. However, when the bulky base potassium tert-butoxide is used instead, the product distribution shifts markedly.",
+      "question": "When the bulky base potassium tert-butoxide is used, which product is expected to predominate, and why?",
+      "choices": [
+        "The more substituted (Zaitsev) alkene, because it is thermodynamically most stable",
+        "A carbocation rearrangement product, because bulky bases promote rearrangement",
+        "The less substituted (Hofmann) alkene, because steric hindrance of the base favors abstraction of a less hindered proton",
+        "An SN2 substitution product exclusively, because the bulky base is a strong nucleophile"
+      ],
+      "correct_answer": "The less substituted (Hofmann) alkene, because steric hindrance of the base favors abstraction of a less hindered proton",
+      "topic": "Organic-Chemistry",
+      "concept": "Elimination reactions: Zaitsev versus Hofmann products"
+    },
+    {
+      "id": 44,
+      "passage": "An organic chemist evaluates several cyclic, fully conjugated molecules for aromatic character. Aromaticity requires a molecule to be cyclic, planar, and fully conjugated, and to contain 4n+2 π electrons in its conjugated ring system according to Hückel's rule. Molecules that are cyclic and fully conjugated but contain 4n π electrons are instead antiaromatic and destabilized.",
+      "question": "Which of the following species satisfies Hückel's rule and is therefore aromatic?",
+      "choices": [
+        "Cyclobutadiene, with 4 π electrons",
+        "Cyclooctatetraene, with 8 π electrons",
+        "The cyclopentadienyl cation, with 4 π electrons",
+        "Benzene, with 6 π electrons"
+      ],
+      "correct_answer": "Benzene, with 6 π electrons",
+      "topic": "Organic-Chemistry",
+      "concept": "Aromaticity and Hückel's rule"
+    },
+    {
+      "id": 45,
+      "passage": "An organic chemist compares the reactivity of a series of carboxylic acid derivatives toward nucleophilic acyl substitution: an acyl chloride, an ester, an amide, and a carboxylate ion. Reactivity in these reactions depends on both the leaving-group ability of the substituent and the degree to which that substituent donates electron density into the carbonyl by resonance, which reduces the carbonyl's electrophilicity.",
+      "question": "Which of these carboxylic acid derivatives is the most reactive toward nucleophilic acyl substitution?",
+      "choices": [
+        "The acyl chloride",
+        "The amide",
+        "The ester",
+        "The carboxylate ion"
+      ],
+      "correct_answer": "The acyl chloride",
+      "topic": "Organic-Chemistry",
+      "concept": "Reactivity of carboxylic acid derivatives in nucleophilic acyl substitution"
+    },
+    {
+      "id": 46,
+      "passage": "A fluid dynamics demonstration uses an incompressible, nonviscous fluid flowing steadily through a horizontal pipe that narrows from a wide section to a constricted section. The volume flow rate is constant throughout the pipe, so the continuity equation (A1v1 = A2v2) applies. A pressure gauge is placed at both the wide and the narrow sections.",
+      "question": "Compared with the wide section, what happens to the fluid velocity and pressure in the narrow section of the pipe?",
+      "choices": [
+        "Both the velocity and the pressure increase",
+        "Both the velocity and the pressure decrease",
+        "The velocity increases and the pressure decreases",
+        "The velocity decreases and the pressure increases"
+      ],
+      "correct_answer": "The velocity increases and the pressure decreases",
+      "topic": "Physics-and-Math",
+      "concept": "Fluid dynamics: continuity equation and Bernoulli's principle"
+    },
+    {
+      "id": 47,
+      "passage": "A student builds a simple direct-current circuit containing two identical 4-ohm resistors connected in parallel across an ideal battery. The student wants to determine the single equivalent resistance that could replace the two parallel resistors without changing the total current drawn from the battery.",
+      "question": "What is the equivalent resistance of two 4-ohm resistors connected in parallel?",
+      "choices": [
+        "8 Ω",
+        "2 Ω",
+        "4 Ω",
+        "0.5 Ω"
+      ],
+      "correct_answer": "2 Ω",
+      "topic": "Physics-and-Math",
+      "concept": "DC circuits and resistors in parallel"
+    },
+    {
+      "id": 48,
+      "passage": "A stationary observer stands beside a road as an ambulance with its siren on drives past at constant speed. As the ambulance approaches, the observer hears a pitch higher than the siren's actual frequency. The observer then listens carefully as the ambulance moves away into the distance.",
+      "question": "As the ambulance moves away from the stationary observer, the frequency of the siren heard by the observer is:",
+      "choices": [
+        "Higher than the emitted frequency",
+        "Equal to the emitted frequency",
+        "Increasing continuously as the ambulance recedes",
+        "Lower than the emitted frequency"
+      ],
+      "correct_answer": "Lower than the emitted frequency",
+      "topic": "Physics-and-Math",
+      "concept": "The Doppler effect for sound"
+    },
+    {
+      "id": 49,
+      "passage": "In a mechanics demonstration, a small object of mass m is released from rest at a height h above the ground and falls freely. Air resistance is negligible, so mechanical energy is conserved throughout the fall. An instructor asks students to determine the object's speed at the moment just before it strikes the ground using conservation of energy.",
+      "question": "Using conservation of mechanical energy, what is the object's speed just before it hits the ground?",
+      "choices": [
+        "√(2gh)",
+        "√(gh)",
+        "2gh",
+        "gh"
+      ],
+      "correct_answer": "√(2gh)",
+      "topic": "Physics-and-Math",
+      "concept": "Conservation of mechanical energy in free fall"
+    },
+    {
+      "id": 50,
+      "passage": "A radiochemist works with a sample of a radioactive isotope that has a half-life of 8 days. The sample decays by first-order kinetics, so a fixed fraction of the remaining nuclei decays in each half-life. The chemist stores the sample and measures its remaining activity 24 days later.",
+      "question": "What fraction of the original radioactive nuclei remains after 24 days?",
+      "choices": [
+        "1/4",
+        "1/8",
+        "1/16",
+        "1/2"
+      ],
+      "correct_answer": "1/8",
+      "topic": "Physics-and-Math",
+      "concept": "Radioactive decay and half-life"
     }
   ]
 }

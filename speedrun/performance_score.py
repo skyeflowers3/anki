@@ -156,32 +156,48 @@ def ensure_table(col: Collection) -> None:
             answered_at integer not null,
             question_id integer not null,
             topic text not null,
-            chosen text not null,
+            concept text not null,
+            chosen_concept text not null,
+            correct_concept text not null,
+            chosen_answer text not null,
             correct_answer text not null,
-            is_correct integer not null
+            concept_correct integer not null,
+            answer_correct integer not null
         )
         """
     )
 
 
-def record_answer(col: Collection, question: Question, chosen: str) -> bool:
-    """Persist one answer and return whether it was correct."""
+def record_answer(
+    col: Collection,
+    question: Question,
+    chosen_concept: str,
+    chosen_answer: str,
+) -> tuple[bool, bool]:
+    """Persist one two-step answer and return (concept_correct, answer_correct)."""
     ensure_table(col)
-    is_correct = 1 if chosen == question.correct_answer else 0
+    concept_correct = 1 if chosen_concept == question.concept else 0
+    answer_correct = 1 if chosen_answer == question.correct_answer else 0
     col.db.execute(
         f"""
         insert into {PERFORMANCE_TABLE}
-            (answered_at, question_id, topic, chosen, correct_answer, is_correct)
-        values (?, ?, ?, ?, ?, ?)
+            (answered_at, question_id, topic, concept, chosen_concept,
+             correct_concept, chosen_answer, correct_answer,
+             concept_correct, answer_correct)
+        values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         int(time.time()),
         question.id,
         question.topic,
-        chosen,
+        question.concept,
+        chosen_concept,
+        question.concept,
+        chosen_answer,
         question.correct_answer,
-        is_correct,
+        concept_correct,
+        answer_correct,
     )
-    return bool(is_correct)
+    return bool(concept_correct), bool(answer_correct)
 
 
 def reset_answers(col: Collection) -> None:
@@ -271,8 +287,9 @@ def grade_question(
     if question is None:
         return {"error": f"unknown question id {question_id}"}
 
-    answer_correct = record_answer(col, question, answer or "")
-    concept_correct = concept == question.concept
+    concept_correct, answer_correct = record_answer(
+        col, question, concept or "", answer or ""
+    )
     return {
         "concept_correct": concept_correct,
         "answer_correct": answer_correct,
@@ -287,7 +304,7 @@ def fetch_topic_results(col: Collection) -> dict[str, TopicResult]:
     results = {name: TopicResult(name) for name in memory_score.SUBDECK_TO_SECTION}
     rows = col.db.all(
         f"""
-        select topic, count(*), coalesce(sum(is_correct), 0)
+        select topic, count(*), coalesce(sum(answer_correct), 0)
         from {PERFORMANCE_TABLE}
         group by topic
         """
@@ -740,7 +757,7 @@ def run_quiz(
         chosen = _prompt_question(question)
         if chosen is None:
             break
-        was_correct = record_answer(col, question, chosen)
+        _, was_correct = record_answer(col, question, "", chosen)
         answered += 1
         correct += int(was_correct)
         if was_correct:
