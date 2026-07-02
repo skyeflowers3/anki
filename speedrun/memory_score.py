@@ -11,13 +11,13 @@ Sections map to AnKing-MCAT subdecks as follows:
     C/P (Chemical & Physical Foundations)       = General-Chemistry + Organic-Chemistry + Physics-and-Math
     P/S (Psychological, Social & Biological)     = Behavioral
 
-Give-up rule (per section, by subdeck): a section only shows a score once every
-subdeck it needs has enough reviewed cards with an FSRS retrievability value.
-B/B and C/P require at least BB_CP_MIN_REVIEWED reviewed cards from each of their
-subdecks; P/S requires at least PS_MIN_REVIEWED from Behavioral. Otherwise the
-section shows "not enough data" and lists which subdecks still need reviews.
-(MIN_REVIEWED is a separate, smaller floor used only by the Speedrun loop to
-decide when a single topic has any usable memory number.)
+Give-up rule: a section only shows a score once it has at least
+SECTION_MIN_REVIEWED (30) total reviewed cards AND — for sections with 3
+subdecks (B/B, C/P) — at least MULTI_SUBDECK_MIN (10) reviewed cards in each
+subdeck. Sections with a single subdeck (P/S = Behavioral) just need 30 total.
+Otherwise the section shows "not enough data" and lists which subdecks still
+need reviews. (MIN_REVIEWED is a separate, smaller floor used only by the
+Speedrun loop to decide when a single topic has any usable memory number.)
 
 This module is used two ways:
 
@@ -59,9 +59,19 @@ for _p in (_REPO_ROOT / "pylib", _REPO_ROOT / "out" / "pylib"):
 
 # Per-topic floor used only by the Speedrun loop (see speedrun_loop.py) to
 # decide when a single topic has any usable memory number for weighting. The
-# Stats section score uses the per-subdeck rule below, not this constant.
+# Stats section score uses the section-level rule below, not this constant.
 # REMINDER: 3 is a low demo value. Raise it once more cards are added.
 MIN_REVIEWED = 3
+
+# Give-up rule for the Stats memory-score display:
+#   • Every section needs at least SECTION_MIN_REVIEWED total reviewed cards.
+#   • Sections with 3 subdecks (B/B, C/P) also require at least
+#     MULTI_SUBDECK_MIN reviewed cards in *each* subdeck so one thin deck
+#     can't drag down the whole section score.
+#   • Sections with a single subdeck (P/S = Behavioral) just need
+#     SECTION_MIN_REVIEWED from that one subdeck.
+SECTION_MIN_REVIEWED = 30
+MULTI_SUBDECK_MIN = 10
 
 # Internal Anki deck-name separator (decks table stores full paths joined by it).
 DECK_SEP = "\x1f"
@@ -86,15 +96,6 @@ SECTION_NAMES = {
     "P/S": "Psychological, Social & Biological Foundations",
 }
 
-# Section give-up rule: minimum reviewed cards required from each subdeck before
-# its section shows a score. B/B and C/P require this many from every subdeck;
-BB_CP_MIN_REVIEWED = 10
-# P/S requires this many from Behavioral.
-PS_MIN_REVIEWED = 30
-SUBDECK_MIN_REVIEWED: dict[str, int] = {
-    name: (PS_MIN_REVIEWED if section == "P/S" else BB_CP_MIN_REVIEWED)
-    for name, section in SUBDECK_TO_SECTION.items()
-}
 
 DEFAULT_COLLECTION_PATHS = [
     Path.home() / "Library/Application Support/Anki2/User 1/collection.anki2",
@@ -143,19 +144,30 @@ class SectionScore:
         return len(self.values)
 
     @property
+    def per_subdeck_min(self) -> int:
+        """Minimum reviewed cards required per subdeck.
+
+        Sections with 3 subdecks need at least MULTI_SUBDECK_MIN (10) in each
+        so no single thin deck drags the total below 30.  Sections with fewer
+        subdecks (just P/S / Behavioral) use SECTION_MIN_REVIEWED (30) so the
+        30-card floor is still met.
+        """
+        return MULTI_SUBDECK_MIN if len(self.subdecks) >= 3 else SECTION_MIN_REVIEWED
+
+    @property
     def pending_subdecks(self) -> list[tuple[str, int]]:
         """Subdecks still short of their required reviews: (name, still_needed)."""
-        pending: list[tuple[str, int]] = []
-        for b in self.subdecks:
-            required = SUBDECK_MIN_REVIEWED.get(b.name, MIN_REVIEWED)
-            if b.reviewed < required:
-                pending.append((b.name, required - b.reviewed))
-        return pending
+        min_per = self.per_subdeck_min
+        return [
+            (b.name, min_per - b.reviewed)
+            for b in self.subdecks
+            if b.reviewed < min_per
+        ]
 
     @property
     def has_score(self) -> bool:
-        # Every required subdeck must have enough reviewed cards.
-        return not self.pending_subdecks
+        """True when every subdeck meets its minimum AND section total >= 30."""
+        return not self.pending_subdecks and self.reviewed >= SECTION_MIN_REVIEWED
 
     @property
     def average(self) -> float:
@@ -277,8 +289,8 @@ def render_text(sections: list[SectionScore]) -> str:
     lines.append("=" * 66)
     lines.append("MCAT Memory Score  (FSRS retrievability by section)")
     lines.append(
-        f"Give-up rule: B/B and C/P need >= {BB_CP_MIN_REVIEWED} reviewed cards in "
-        f"each subdeck; P/S needs >= {PS_MIN_REVIEWED} in Behavioral"
+        f"Give-up rule: {SECTION_MIN_REVIEWED} reviewed cards per section; "
+        f"sections with 3 subdecks also need >= {MULTI_SUBDECK_MIN} in each subdeck"
     )
     lines.append("=" * 66)
 
@@ -358,11 +370,10 @@ def render_html(sections: list[SectionScore]) -> str:
     parts.append("<h1>MCAT Memory Score</h1>")
     parts.append(
         '<p class="give-up-rule">FSRS retrievability by section. '
-        f"B/B and C/P show a score only once every subdeck has at least "
-        f"{BB_CP_MIN_REVIEWED} reviewed cards; P/S needs at least "
-        f"{PS_MIN_REVIEWED} reviewed cards in Behavioral. Otherwise the section "
-        "shows &ldquo;Not enough data&rdquo; and lists the subdecks that still "
-        "need reviews.</p>"
+        f"Each section needs at least {SECTION_MIN_REVIEWED} reviewed cards total. "
+        f"Sections with 3 subdecks (B/B, C/P) also require at least "
+        f"{MULTI_SUBDECK_MIN} reviewed cards in each subdeck. "
+        "Otherwise the section shows &ldquo;Not enough data&rdquo;.</p>"
     )
 
     for section in sections:

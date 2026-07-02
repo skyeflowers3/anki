@@ -1,704 +1,345 @@
 {
   "questions": [
     {
-      "id": 1,
-      "passage": "A research team studies how classical conditioning influences taste aversion in laboratory rats. Rats were given a novel-flavored solution (the conditioned stimulus) and, some hours later, injected with a compound that induced mild nausea (the unconditioned stimulus). After a single pairing, the rats strongly avoided the novel flavor. The researchers noted that this rapid, single-trial learning contrasts with the many repetitions typically required for other conditioned associations.",
-      "question": "The rapid, single-trial learning of taste aversion described in the passage is best explained by which concept?",
+      "id": "cp_001",
+      "passage_id": "cp_passage_001",
+      "passage": "The heme enzyme indoleamine 2,3 dioxygenase (IDO) catalyzes Reaction 1, the first and rate-determining step of L-tryptophan (Compound 1) metabolism, and is an important enzyme of the human immune system. The IDO-catalyzed oxidation of Compound 1 by H2O2 does not occur. However, researchers have recently discovered that IDO-catalyzed oxidation of indole (Compound 3) by H2O2 (Reaction 2) does occur. Under the conditions employed, the number of catalytic turnovers appeared to stop at roughly 100, on average. Aerobic oxidation of Compound 3 in the presence of 18O-labeled H2(18O2) resulted in the formation of 18O-labeled oxidation products. The formation of Compound 6 does not appear to be the result of a sequential oxidation process. Isotopically labeled Compound 4 does not exchange 18O for 16O in water over 3 hours, but Compound 6 completely loses its 18O label in unlabeled water over the same time period.",
+      "question": "The progress of Reaction 2 can be monitored by observing what change to the IR spectrum of the product mixture?",
       "choices": [
-        "Biological preparedness, in which certain associations are learned more readily due to evolutionary pressures",
-        "Spontaneous recovery of a previously extinguished conditioned response",
-        "Higher-order conditioning involving a second conditioned stimulus",
-        "Stimulus discrimination between the novel flavor and familiar flavors"
+        "Appearance of a broad peak at 3400 cm-1",
+        "Disappearance of a broad peak at 3400 cm-1",
+        "Appearance of a sharp peak at 1700-1750 cm-1",
+        "Disappearance of a sharp peak at 1700-1750 cm-1"
       ],
-      "correct_answer": "Biological preparedness, in which certain associations are learned more readily due to evolutionary pressures",
-      "topic": "Behavioral",
-      "concept": "Classical conditioning and biological preparedness"
-    },
-    {
-      "id": 2,
-      "passage": "A developmental psychologist observes toddlers in a laboratory playroom while their caregivers briefly leave and then return. Some children explore freely when the caregiver is present, become distressed upon separation, and are quickly comforted upon reunion. Other children show little distress at separation and avoid the caregiver upon return.",
-      "question": "The behavior of children who explore freely, show distress at separation, and are readily comforted at reunion is characteristic of which attachment style?",
-      "choices": [
-        "Secure attachment",
-        "Anxious-ambivalent attachment",
-        "Avoidant attachment",
-        "Disorganized attachment"
-      ],
-      "correct_answer": "Secure attachment",
-      "topic": "Behavioral",
-      "concept": "Attachment theory and the strange situation"
-    },
-    {
-      "id": 3,
-      "passage": "A cognitive researcher presents participants with a list of 20 words and later asks them to recall as many as possible. Analysis of the recalled words shows that items from the beginning and the end of the list are remembered better than items in the middle. When a distractor task is inserted between presentation and recall, recall of the final items drops sharply while recall of the initial items is preserved.",
-      "question": "The drop in recall of the final list items following a distractor task is best explained by disruption of which memory process?",
-      "choices": [
-        "The recency effect, reflecting loss of information from short-term memory",
-        "The primacy effect, reflecting failure to encode into long-term memory",
-        "Proactive interference from earlier list items",
-        "Source misattribution during retrieval"
-      ],
-      "correct_answer": "The recency effect, reflecting loss of information from short-term memory",
-      "topic": "Behavioral",
-      "concept": "Serial position effect and memory systems"
-    },
-    {
-      "id": 4,
-      "passage": "A sociologist studies how individuals respond to conflicting expectations. A medical resident is expected to spend long hours caring for patients while also being expected to be an attentive parent at home. The resident reports feeling unable to fully satisfy both sets of expectations simultaneously and experiences significant stress as a result.",
-      "question": "The stress the resident experiences from competing demands of the physician role and the parent role is best described as which of the following?",
-      "choices": [
-        "Role conflict",
-        "Role strain",
-        "Role exit",
-        "Status inconsistency"
-      ],
-      "correct_answer": "Role conflict",
-      "topic": "Behavioral",
-      "concept": "Social roles: role conflict versus role strain"
-    },
-    {
-      "id": 5,
-      "passage": "An enzyme kinetics experiment measures the initial reaction velocity of an enzyme at varying substrate concentrations. When a competitive inhibitor is added to the assay, the researchers observe that the apparent Km increases while the Vmax remains unchanged. They plot the data using a Lineweaver-Burk (double-reciprocal) transformation to characterize the inhibition.",
-      "question": "In the presence of the competitive inhibitor, which change to the Lineweaver-Burk plot would the researchers expect relative to the uninhibited reaction?",
-      "choices": [
-        "The y-intercept is unchanged, but the slope increases and the x-intercept moves closer to the origin",
-        "The y-intercept increases while the x-intercept remains unchanged",
-        "Both the y-intercept and x-intercept decrease",
-        "The slope is unchanged while the y-intercept decreases"
-      ],
-      "correct_answer": "The y-intercept is unchanged, but the slope increases and the x-intercept moves closer to the origin",
-      "topic": "Biochemistry",
-      "concept": "Enzyme kinetics and competitive inhibition"
-    },
-    {
-      "id": 6,
-      "passage": "A biochemist investigates the oxygen-binding behavior of hemoglobin and myoglobin. Hemoglobin exhibits a sigmoidal (S-shaped) oxygen dissociation curve, whereas myoglobin exhibits a hyperbolic curve. The researcher also notes that increasing concentrations of 2,3-bisphosphoglycerate (2,3-BPG) shift the hemoglobin curve to the right.",
-      "question": "The sigmoidal shape of the hemoglobin oxygen dissociation curve is a direct consequence of which property?",
-      "choices": [
-        "Cooperative binding among hemoglobin's four subunits",
-        "The higher intrinsic oxygen affinity of hemoglobin compared to myoglobin",
-        "Irreversible oxidation of the heme iron",
-        "The single polypeptide structure of hemoglobin"
-      ],
-      "correct_answer": "Cooperative binding among hemoglobin's four subunits",
-      "topic": "Biochemistry",
-      "concept": "Hemoglobin cooperativity and allosteric regulation"
-    },
-    {
-      "id": 7,
-      "passage": "Researchers separate a mixture of proteins using SDS-PAGE. The detergent sodium dodecyl sulfate (SDS) is added to denature the proteins and coat them with negative charge. The proteins are then loaded onto a polyacrylamide gel and an electric field is applied. After staining, the proteins appear as distinct bands at different positions along the gel.",
-      "question": "In SDS-PAGE, the proteins are separated primarily on the basis of which property?",
-      "choices": [
-        "Molecular mass, because SDS masks intrinsic charge differences",
-        "Isoelectric point, because SDS establishes a pH gradient",
-        "Native tertiary structure, because SDS preserves protein folding",
-        "Hydrophobicity, because SDS binds only hydrophobic residues"
-      ],
-      "correct_answer": "Molecular mass, because SDS masks intrinsic charge differences",
-      "topic": "Biochemistry",
-      "concept": "Protein separation techniques: SDS-PAGE"
-    },
-    {
-      "id": 8,
-      "passage": "A metabolic study tracks the fate of glucose in liver cells under well-fed conditions with high insulin. Investigators observe that the activity of phosphofructokinase-1 (PFK-1) is elevated, promoting flux through glycolysis. They further note that high levels of ATP and citrate inhibit PFK-1, whereas AMP and fructose-2,6-bisphosphate activate it.",
-      "question": "The inhibition of PFK-1 by ATP and citrate is an example of which type of regulation?",
-      "choices": [
-        "Allosteric feedback regulation reflecting the cell's energy charge",
-        "Covalent modification through phosphorylation",
-        "Competitive inhibition at the substrate-binding site",
-        "Transcriptional repression of the PFK-1 gene"
-      ],
-      "correct_answer": "Allosteric feedback regulation reflecting the cell's energy charge",
-      "topic": "Biochemistry",
-      "concept": "Glycolysis regulation and allosteric control of PFK-1"
-    },
-    {
-      "id": 9,
-      "passage": "During an investigation of cellular respiration, scientists incubate isolated mitochondria with a substrate and measure oxygen consumption. They then add a chemical that makes the inner mitochondrial membrane freely permeable to protons. Oxygen consumption increases sharply, but ATP synthesis by ATP synthase drops to nearly zero.",
-      "question": "The chemical added to the mitochondria most likely acts as which of the following?",
-      "choices": [
-        "An uncoupler that dissipates the proton gradient without inhibiting the electron transport chain",
-        "A direct inhibitor of Complex IV (cytochrome c oxidase)",
-        "A competitive inhibitor of ATP synthase",
-        "An allosteric activator of the citric acid cycle"
-      ],
-      "correct_answer": "An uncoupler that dissipates the proton gradient without inhibiting the electron transport chain",
-      "topic": "Biology",
-      "concept": "Oxidative phosphorylation and chemiosmotic coupling"
-    },
-    {
-      "id": 10,
-      "passage": "A geneticist crosses two true-breeding pea plants: one homozygous for round, yellow seeds and one homozygous for wrinkled, green seeds. The F1 generation is uniformly round and yellow. When the F1 plants are self-crossed, the F2 generation shows round and wrinkled seeds in a 3:1 ratio, and this ratio holds independently for seed color.",
-      "question": "The independent 3:1 phenotypic ratios for seed shape and seed color in the F2 generation are best explained by which principle?",
-      "choices": [
-        "The law of independent assortment of alleles for different traits",
-        "Incomplete dominance between the two alleles",
-        "Genetic linkage of the two loci on the same chromosome",
-        "Cytoplasmic (maternal) inheritance of both traits"
-      ],
-      "correct_answer": "The law of independent assortment of alleles for different traits",
-      "topic": "Biology",
-      "concept": "Mendelian genetics and independent assortment"
-    },
-    {
-      "id": 11,
-      "passage": "A physiologist studies the regulation of blood osmolarity in a healthy volunteer who has been deprived of water for 12 hours. Blood tests reveal elevated plasma osmolarity. In response, the posterior pituitary releases a hormone that increases water reabsorption in the collecting ducts of the nephron by inserting aquaporin channels into the apical membrane.",
-      "question": "The hormone responsible for increasing water reabsorption in the collecting ducts under these conditions is:",
-      "choices": [
-        "Antidiuretic hormone (ADH/vasopressin)",
-        "Aldosterone",
-        "Atrial natriuretic peptide (ANP)",
-        "Renin"
-      ],
-      "correct_answer": "Antidiuretic hormone (ADH/vasopressin)",
-      "topic": "Biology",
-      "concept": "Renal physiology and osmoregulation"
-    },
-    {
-      "id": 12,
-      "passage": "A neuroscientist records the electrical activity of a single neuron. Following a threshold stimulus, the membrane potential rapidly depolarizes, then repolarizes and briefly becomes more negative than the resting potential before returning to baseline. During a specific interval, no new action potential can be generated regardless of stimulus strength.",
-      "question": "The interval during which no new action potential can be generated regardless of stimulus strength is caused primarily by which of the following?",
-      "choices": [
-        "Inactivation of voltage-gated sodium channels",
-        "Closure of all voltage-gated potassium channels",
-        "Depletion of extracellular calcium ions",
-        "Failure of the sodium-potassium ATPase"
-      ],
-      "correct_answer": "Inactivation of voltage-gated sodium channels",
-      "topic": "Biology",
-      "concept": "Action potentials and the absolute refractory period"
-    },
-    {
-      "id": 13,
-      "passage": "A student prepares a buffer solution by mixing acetic acid (pKa = 4.76) with sodium acetate. The student wants the buffer to resist changes in pH when small amounts of strong acid or base are added. They measure the pH of the final solution and find it equal to 4.76.",
-      "question": "Based on the Henderson-Hasselbalch equation, what does the measured pH of 4.76 indicate about the buffer?",
-      "choices": [
-        "The concentrations of acetic acid and acetate ion are equal",
-        "The concentration of acetate ion greatly exceeds that of acetic acid",
-        "The concentration of acetic acid greatly exceeds that of acetate ion",
-        "The buffer has no capacity to resist changes in pH"
-      ],
-      "correct_answer": "The concentrations of acetic acid and acetate ion are equal",
+      "correct_answer": "C",
       "topic": "General-Chemistry",
-      "concept": "Buffers and the Henderson-Hasselbalch equation"
+      "concept": "infrared spectroscopy and functional group identification",
+      "rationale": "This question requires combining knowledge about infrared spectroscopy with reasoning about the structural differences between the products and reactants of Reaction 2. Recognition of the presence of additional carbonyl groups in the products should lead to the conclusion that appearance of a peak between 1700-1750 cm-1 in the IR spectrum would provide the most effective way to monitor product formation.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
     },
     {
-      "id": 14,
-      "passage": "A chemist studies a reaction at equilibrium: N2(g) + 3H2(g) \u21cc 2NH3(g), which is exothermic in the forward direction. The system is initially at equilibrium in a sealed, rigid container. The chemist then increases the temperature of the system and, separately in another trial, decreases the container volume.",
-      "question": "According to Le Ch\u00e2telier's principle, increasing the temperature of this exothermic reaction at equilibrium will shift the equilibrium in which direction?",
+      "id": "cp_002",
+      "passage_id": "cp_passage_001",
+      "question": "Based on the kinetic data showing kcat values of 1.3, 0.34, and ~0 s-1 at L-Trp concentrations of 0, 2, and 5 uM respectively, what effect does L-Trp have on the IDO-catalyzed oxidation of Compound 3 by H2O2?",
       "choices": [
-        "Toward the reactants, decreasing the yield of ammonia",
-        "Toward the products, increasing the yield of ammonia",
-        "No shift occurs because temperature does not affect equilibrium",
-        "Toward the products, but only if a catalyst is present"
+        "L-Trp oxidizes Compound 3 directly.",
+        "L-Trp is oxidized instead of Compound 3.",
+        "L-Trp does not interact with the enzyme.",
+        "L-Trp inhibits the enzyme."
       ],
-      "correct_answer": "Toward the reactants, decreasing the yield of ammonia",
+      "correct_answer": "D",
       "topic": "General-Chemistry",
-      "concept": "Chemical equilibrium and Le Ch\u00e2telier's principle"
+      "concept": "enzyme kinetics and inhibition",
+      "rationale": "The decreasing values of kcat in the presence of higher concentrations of L-Trp indicate the enzyme produces less product. Combining this trend with knowledge of enzyme kinetics leads to the conclusion that L-Trp is inhibiting the reaction.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
     },
     {
-      "id": 15,
-      "passage": "An electrochemistry experiment uses a galvanic (voltaic) cell built from a zinc electrode in a Zn2+ solution and a copper electrode in a Cu2+ solution, connected by a salt bridge. The standard reduction potentials are Zn2+ + 2e- \u2192 Zn (E\u00b0 = -0.76 V) and Cu2+ + 2e- \u2192 Cu (E\u00b0 = +0.34 V). The cell operates spontaneously and generates a measurable voltage.",
-      "question": "In this galvanic cell, which electrode serves as the anode, and what is the standard cell potential?",
+      "id": "cp_003",
+      "passage_id": "cp_passage_001",
+      "question": "Which experiment can be used to show that Compound 6 is not formed sequentially from either Compound 4 or Compound 5?",
       "choices": [
-        "Zinc is the anode; the standard cell potential is +1.10 V",
-        "Copper is the anode; the standard cell potential is +1.10 V",
-        "Zinc is the anode; the standard cell potential is -0.42 V",
-        "Copper is the anode; the standard cell potential is +0.42 V"
+        "Conduct the reaction of Compound 4 with Compound 5, and identify the products.",
+        "Oxidize Compound 4 and Compound 5 with IDO/H2O2, and identify the products.",
+        "Reduce pure Compound 6 without added catalyst, and identify the products.",
+        "Conduct the reaction of Compound 2 with H2O2 without added catalyst, and identify the products."
       ],
-      "correct_answer": "Zinc is the anode; the standard cell potential is +1.10 V",
+      "correct_answer": "B",
       "topic": "General-Chemistry",
-      "concept": "Galvanic cells and standard cell potential"
+      "concept": "experimental design and enzyme catalysis",
+      "rationale": "Enzymes are not used up during catalysis, so any experiment that includes just Compound 4 or just Compound 5 would determine if either is also a substrate for IDO-catalyzed conversion to Compound 6. Having both compounds in solution with IDO adds unnecessary complexity to the interpretation.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
     },
     {
-      "id": 16,
-      "passage": "A chemist investigates the rate of a reaction A + B \u2192 products. By varying the initial concentrations of A and B and measuring initial rates, the chemist finds that doubling [A] doubles the rate, while doubling [B] has no effect on the rate. The reaction is carried out at constant temperature.",
-      "question": "Based on these observations, what is the rate law for the reaction?",
+      "id": "bb_001",
+      "passage_id": "bb_passage_001",
+      "passage": "The myocellular transmembrane Na+ gradient is important for proper cellular function. During septic shock, disruption of Na+ homeostasis often occurs and leads to decreased membrane potential and increased intracellular Na+. It has been found that failure of cellular energy metabolism is a common symptom in septic patients who do not respond to therapeutics. Because normal intracellular levels of Na+ are maintained by the Na+K+ ATPase, it is important to understand how metabolic energy production is linked to cation transport. Researchers are interested in whether the energy used for ion transport is derived from glycolysis or oxidative phosphorylation. Rat skeletal muscle fibers were extracted and incubated in normal media (control), glucose-free media, and glucose-free media with various concentrations of the glycolytic inhibitor iodoacetate (IAA). IAA directly prevents the formation of 1,3-bisphosphoglycerate. After one hour, the muscle tissues were assayed for intracellular Na+ and K+ content and lactate production. The researchers also examined the effect of disruption of oxidative phosphorylation caused by carbonyl-cyanide m-chlorophenylhydrazone (CCCP), an ionophore that allows protons to move freely through membranes. No correlation between Na+ and K+ content and oxidative phosphorylation was found.",
+      "question": "The researchers chose a concentration of 0.3 mM IAA as the working concentration for any additional studies instead of 1 mM or 2 mM. What is the likely reason for this?",
       "choices": [
-        "rate = k[A]",
-        "rate = k[A][B]",
-        "rate = k[A]^2[B]",
-        "rate = k[B]"
+        "The lower concentration of IAA gave the largest Na+ response.",
+        "Higher concentrations induced significant cytotoxicity.",
+        "The solubility of IAA was not high enough.",
+        "The researchers were trying to mimic control conditions as closely as possible."
       ],
-      "correct_answer": "rate = k[A]",
-      "topic": "General-Chemistry",
-      "concept": "Reaction kinetics and determining rate laws"
-    },
-    {
-      "id": 17,
-      "passage": "A chemist performs an SN1 reaction on a tertiary alkyl halide in a polar protic solvent. Kinetic studies reveal that the reaction rate depends only on the concentration of the alkyl halide and is independent of the nucleophile concentration. When an optically pure (single enantiomer) substrate is used, the product mixture is found to be racemic.",
-      "question": "The formation of a racemic product mixture in this SN1 reaction is best explained by which of the following?",
-      "choices": [
-        "A planar carbocation intermediate that can be attacked from either face",
-        "A concerted backside attack that inverts the stereocenter",
-        "Retention of configuration due to a cyclic transition state",
-        "Neighboring-group participation that locks the stereochemistry"
-      ],
-      "correct_answer": "A planar carbocation intermediate that can be attacked from either face",
-      "topic": "Organic-Chemistry",
-      "concept": "SN1 reaction mechanism and carbocation stereochemistry"
-    },
-    {
-      "id": 18,
-      "passage": "An organic chemist analyzes an unknown compound using infrared (IR) spectroscopy. The spectrum shows a strong, broad absorption centered around 3300 cm-1 spanning a wide range, along with a sharp, strong absorption near 1710 cm-1. The chemist suspects the compound contains more than one functional group.",
-      "question": "The strong absorption near 1710 cm-1 in the IR spectrum is most consistent with which functional group?",
-      "choices": [
-        "A carbonyl (C=O) group",
-        "A carbon-carbon triple bond (C\u2261C)",
-        "An isolated carbon-hydrogen (C-H) bond",
-        "An ether (C-O-C) linkage"
-      ],
-      "correct_answer": "A carbonyl (C=O) group",
-      "topic": "Organic-Chemistry",
-      "concept": "IR spectroscopy and functional group identification"
-    },
-    {
-      "id": 19,
-      "passage": "A researcher separates a mixture of two organic compounds using thin-layer chromatography (TLC) on a silica gel plate with a nonpolar solvent as the mobile phase. Silica gel is a polar stationary phase. After developing the plate, one compound travels near the solvent front while the other remains close to the origin.",
-      "question": "On this polar silica gel plate with a nonpolar mobile phase, the compound that remains close to the origin is most likely which of the following?",
-      "choices": [
-        "The more polar compound, because it interacts strongly with the stationary phase",
-        "The less polar compound, because it dissolves poorly in the mobile phase",
-        "The compound with the lower molecular mass, regardless of polarity",
-        "The compound with the higher vapor pressure"
-      ],
-      "correct_answer": "The more polar compound, because it interacts strongly with the stationary phase",
-      "topic": "Organic-Chemistry",
-      "concept": "Chromatography and polarity-based separation"
-    },
-    {
-      "id": 20,
-      "passage": "An organic chemist studies the relative stability of carbocation intermediates formed during electrophilic addition reactions. In one experiment, protonation of an alkene can generate either a secondary carbocation or a tertiary carbocation. The chemist observes that the reaction overwhelmingly proceeds through the tertiary carbocation, and the major product follows Markovnikov's rule.",
-      "question": "The greater stability of the tertiary carbocation compared to the secondary carbocation is primarily attributed to which effect?",
-      "choices": [
-        "Hyperconjugation and the electron-donating inductive effect of additional alkyl groups",
-        "Resonance delocalization into an adjacent aromatic ring",
-        "The greater electronegativity of tertiary carbon atoms",
-        "Steric hindrance that prevents nucleophilic attack"
-      ],
-      "correct_answer": "Hyperconjugation and the electron-donating inductive effect of additional alkyl groups",
-      "topic": "Organic-Chemistry",
-      "concept": "Carbocation stability and Markovnikov's rule"
-    },
-    {
-      "id": 21,
-      "passage": "A behavioral researcher trains rats to press a lever for food pellets. In one condition, a pellet is delivered only after an unpredictable, varying number of lever presses, averaging one reward per ten presses. The rats in this condition press the lever at a high, steady rate and continue pressing for a long time even after rewards are discontinued. The researcher compares this pattern to gambling behavior in humans.",
-      "question": "The high, steady response rate and strong resistance to extinction observed in these rats are most characteristic of which reinforcement schedule?",
-      "choices": [
-        "A fixed-ratio schedule",
-        "A variable-ratio schedule",
-        "A fixed-interval schedule",
-        "A variable-interval schedule"
-      ],
-      "correct_answer": "A variable-ratio schedule",
-      "topic": "Behavioral",
-      "concept": "Operant conditioning and schedules of reinforcement"
-    },
-    {
-      "id": 22,
-      "passage": "In a classic experiment, participants performed an extremely boring task and were then paid to tell a waiting participant that the task was enjoyable. One group was paid $1 to lie, and another was paid $20. When later asked to rate their true enjoyment of the task, the group paid $1 rated the task as significantly more enjoyable than the group paid $20.",
-      "question": "The finding that participants paid only $1 rated the boring task as more enjoyable is best explained by which concept?",
-      "choices": [
-        "Operant conditioning, because the monetary payment reinforced positive ratings",
-        "The mere exposure effect from repeated engagement with the task",
-        "Self-serving bias in reporting their own performance",
-        "Cognitive dissonance reduction, because insufficient external justification prompted an internal attitude change"
-      ],
-      "correct_answer": "Cognitive dissonance reduction, because insufficient external justification prompted an internal attitude change",
-      "topic": "Behavioral",
-      "concept": "Cognitive dissonance"
-    },
-    {
-      "id": 23,
-      "passage": "A radiologist screens mammograms for tumors. Researchers note that when the radiologist is told that a batch of images comes from a high-risk population, the number of tumors reported (both correct identifications and false alarms) increases, even though the actual images are identical to a control batch. A measure of the radiologist's underlying ability to distinguish tumors from healthy tissue remains constant across the two batches.",
-      "question": "The increase in both correct detections and false alarms without a change in the underlying ability to discriminate signal from noise is best explained by which of the following?",
-      "choices": [
-        "A shift in the response criterion toward a more liberal bias",
-        "An increase in perceptual sensitivity (d')",
-        "A ceiling effect in the detection task",
-        "A reduction in the absolute threshold for detection"
-      ],
-      "correct_answer": "A shift in the response criterion toward a more liberal bias",
-      "topic": "Behavioral",
-      "concept": "Signal detection theory: sensitivity versus response bias"
-    },
-    {
-      "id": 24,
-      "passage": "A commuter is cut off in traffic by another driver. The commuter immediately concludes that the other driver is rude and inconsiderate. Later that same day, when the commuter cuts someone off while rushing to an emergency, they attribute their own behavior to the urgent situation rather than to any personal shortcoming. A social psychologist studying this pattern focuses specifically on how the commuter judges the other driver.",
-      "question": "The commuter's tendency to attribute the other driver's behavior to stable personal traits while underestimating situational factors is best described as which of the following?",
-      "choices": [
-        "Actor–observer bias",
-        "Self-serving bias",
-        "Fundamental attribution error",
-        "The just-world hypothesis"
-      ],
-      "correct_answer": "Fundamental attribution error",
-      "topic": "Behavioral",
-      "concept": "Attribution theory and the fundamental attribution error"
-    },
-    {
-      "id": 25,
-      "passage": "A physiologist studies an organism exposed to a prolonged, unrelenting stressor. The organism first mobilizes resources in an acute fight-or-flight reaction, then enters a prolonged period during which physiological arousal stabilizes at an elevated level as it copes with the stressor. Eventually, if the stressor persists, the organism's adaptive resources become depleted, and it shows increased susceptibility to illness.",
-      "question": "According to Selye's general adaptation syndrome, the final period in which adaptive resources become depleted and disease susceptibility rises corresponds to which stage?",
-      "choices": [
-        "The alarm reaction",
-        "The exhaustion stage",
-        "The resistance stage",
-        "The primary appraisal stage"
-      ],
-      "correct_answer": "The exhaustion stage",
-      "topic": "Behavioral",
-      "concept": "Stress and the general adaptation syndrome"
-    },
-    {
-      "id": 26,
-      "passage": "A biochemist characterizes an inhibitor of a metabolic enzyme. Kinetic assays show that as the inhibitor concentration increases, the measured Vmax decreases while the Km remains unchanged. Binding studies reveal that the inhibitor binds to a site distinct from the active site and can bind whether or not substrate is already bound.",
-      "question": "The pattern of an unchanged Km with a decreased Vmax, together with binding at a site distinct from the active site, is most consistent with which type of inhibition?",
-      "choices": [
-        "Competitive inhibition",
-        "Uncompetitive inhibition",
-        "Noncompetitive inhibition",
-        "Irreversible covalent inhibition"
-      ],
-      "correct_answer": "Noncompetitive inhibition",
-      "topic": "Biochemistry",
-      "concept": "Enzyme kinetics and noncompetitive inhibition"
-    },
-    {
-      "id": 27,
-      "passage": "A student titrates the amino acid glycine, which has no ionizable side chain. The titration curve reveals two pKa values: the alpha-carboxyl group at 2.34 and the alpha-amino group at 9.60. The student is asked to determine the pH at which glycine carries no net electrical charge and exists predominantly as a zwitterion.",
-      "question": "What is the approximate isoelectric point (pI) of glycine?",
-      "choices": [
-        "Approximately 5.97, the average of the two pKa values",
-        "Approximately 9.60, equal to the pKa of the amino group",
-        "Approximately 2.34, equal to the pKa of the carboxyl group",
-        "Approximately 7.00, equal to physiological pH"
-      ],
-      "correct_answer": "Approximately 5.97, the average of the two pKa values",
-      "topic": "Biochemistry",
-      "concept": "Amino acid titration and isoelectric point"
-    },
-    {
-      "id": 28,
-      "passage": "A biochemist studies a rapidly dividing tissue that requires large amounts of reducing equivalents for fatty acid and nucleotide synthesis. Isotopic labeling shows that glucose-6-phosphate is diverted away from glycolysis into a pathway whose oxidative branch generates NADPH and produces ribose-5-phosphate for nucleotide biosynthesis. The pathway does not generate ATP directly.",
-      "question": "Which metabolic pathway is being described?",
-      "choices": [
-        "Glycolysis",
-        "The citric acid cycle",
-        "Gluconeogenesis",
-        "The pentose phosphate pathway"
-      ],
-      "correct_answer": "The pentose phosphate pathway",
-      "topic": "Biochemistry",
-      "concept": "The pentose phosphate pathway and NADPH production"
-    },
-    {
-      "id": 29,
-      "passage": "A cell must carry out a biosynthetic reaction that, on its own, has a positive standard free energy change (ΔG = +3.3 kcal/mol) and therefore does not proceed appreciably. The cell couples this reaction to the hydrolysis of ATP (ΔG = -7.3 kcal/mol) through a shared intermediate, and the combined process proceeds readily in the forward direction.",
-      "question": "The coupling of ATP hydrolysis to the unfavorable reaction allows the overall process to proceed because:",
-      "choices": [
-        "ATP hydrolysis lowers the activation energy of the unfavorable reaction",
-        "The sum of the two free energy changes makes the overall process exergonic",
-        "ATP acts as an enzyme that catalyzes the unfavorable reaction",
-        "The unfavorable reaction becomes exergonic when considered in isolation"
-      ],
-      "correct_answer": "The sum of the two free energy changes makes the overall process exergonic",
-      "topic": "Biochemistry",
-      "concept": "Free energy and energetic coupling of reactions"
-    },
-    {
-      "id": 30,
-      "passage": "In a classic experiment, the enzyme ribonuclease is fully denatured by treatment with urea and a reducing agent that breaks its disulfide bonds, abolishing its catalytic activity. When the urea and reducing agent are slowly removed, the enzyme spontaneously refolds into its original three-dimensional shape and recovers full activity, with its disulfide bonds re-forming in the correct positions.",
-      "question": "This spontaneous recovery of native structure and activity after denaturation most directly demonstrates which principle?",
-      "choices": [
-        "The primary sequence contains sufficient information to determine the native three-dimensional structure",
-        "Molecular chaperones are absolutely required for all protein folding",
-        "Disulfide bonds are the sole determinant of tertiary structure",
-        "Protein folding is a thermodynamically irreversible process"
-      ],
-      "correct_answer": "The primary sequence contains sufficient information to determine the native three-dimensional structure",
-      "topic": "Biochemistry",
-      "concept": "Protein folding and Anfinsen's dogma"
-    },
-    {
-      "id": 31,
-      "passage": "A population geneticist studies an autosomal recessive metabolic disorder in a large, randomly mating population that is in Hardy-Weinberg equilibrium. The disorder, which occurs only in individuals homozygous for the recessive allele, affects 1 in 10,000 newborns. There is no significant migration, mutation, or selection against the allele in this population.",
-      "question": "What is the approximate frequency of unaffected heterozygous carriers in this population?",
-      "choices": [
-        "0.0001",
-        "0.99",
-        "0.01",
-        "Approximately 0.02"
-      ],
-      "correct_answer": "Approximately 0.02",
+      "correct_answer": "B",
       "topic": "Biology",
-      "concept": "Hardy-Weinberg equilibrium and carrier frequency"
+      "concept": "experimental design and cytotoxicity",
+      "rationale": "Conducting an experiment where the level of IAA was cytotoxic to the cells would not be desirable for understanding the role of glycolysis in establishing ion concentration gradients, as these cells would lose membrane integrity and undergo lysis. Therefore, the experimental design should not use an IAA concentration that results in significantly increased cell lysis.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
     },
     {
-      "id": 32,
-      "passage": "An immunologist examines how the body responds to a cell infected by an intracellular virus. The infected cell degrades viral proteins into short peptides and displays them on the cell surface bound to major histocompatibility complex (MHC) class I molecules. A population of lymphocytes recognizes these displayed peptides and induces the infected cell to undergo apoptosis.",
-      "question": "Which cells are primarily responsible for recognizing viral peptides presented on MHC class I molecules and killing the infected cell?",
+      "id": "bb_002",
+      "passage_id": "bb_passage_001",
+      "question": "The information in the passage suggests that glycolysis:",
       "choices": [
-        "Helper T cells (CD4+)",
-        "B lymphocytes",
-        "Cytotoxic T cells (CD8+)",
-        "Plasma cells"
+        "is important for maintaining normal Na+ and K+ levels in skeletal muscle.",
+        "facilitates membrane permeability in skeletal muscle.",
+        "impedes the function of the Na+ and K+ ATPase in skeletal muscle.",
+        "is regulated by the Na+ and K+ ATPase in skeletal muscle."
       ],
-      "correct_answer": "Cytotoxic T cells (CD8+)",
+      "correct_answer": "A",
+      "topic": "Biochemistry",
+      "concept": "glycolysis and cellular ion transport",
+      "rationale": "Increasing concentration of IAA results in a higher ratio of Na+ to K+ than observed in the control sample, correlated with IAA's role in disrupting glycolysis. This is further supported by the drop in lactate production at higher IAA concentrations, because IAA prevents the formation of NADH which is used when pyruvate is reduced to lactate. This leads to the conclusion that glycolysis is important to the Na+K+ ATPase and therefore to the maintenance of normal Na+ and K+ concentrations.",
+      "source": "AAMC Sample Questions",
+      "held_out": true
+    },
+    {
+      "id": "bb_003",
+      "passage_id": "bb_passage_001",
+      "question": "If the effects of IAA treatment in nerve cells are the same as those observed in myocytes, which feature of an action potential would be most affected by IAA treatment?",
+      "choices": [
+        "Initiation of depolarization",
+        "Rising phase of depolarization",
+        "Falling phase to undershoot",
+        "Return to resting potential"
+      ],
+      "correct_answer": "D",
       "topic": "Biology",
-      "concept": "Adaptive immunity and MHC class I antigen presentation"
+      "concept": "action potential and na+k+ atpase function",
+      "rationale": "The Na+K+ ATPase is responsible for recovering the nerve cell resting potential after an action potential. IAA inhibits glycolysis, reducing cellular ATP. Since the Na+K+ ATPase requires ATP to pump Na+ out and K+ in, the return to resting potential would be most affected by reduced ATP availability from glycolytic inhibition.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
     },
     {
-      "id": 33,
-      "passage": "An endocrinologist evaluates a patient with a thyroid tumor that autonomously secretes large amounts of thyroid hormone (T4) independent of normal control. Under normal physiology, circulating T4 acts on the hypothalamus and anterior pituitary to regulate the secretion of thyroid-stimulating hormone (TSH). The clinician measures the patient's serum TSH level.",
-      "question": "Given the autonomous T4 secretion, the patient's serum TSH level would most likely be:",
+      "id": "ps_001",
+      "passage_id": "ps_passage_001",
+      "passage": "The illness experience shapes the way that people use health information. For patients with a rare health disorder, which is defined as a medical condition that affects fewer than 200,000 individuals living in the United States, online sources of information tend to be particularly important. An example of a rare disorder is Amyotrophic Lateral Sclerosis (ALS), also known as Lou Gehrig's disease. ALS results from the progressive loss of motor nerves and affects about 1 out of 100,000 people. About 10% of people with ALS have a familial form of the condition, which is caused by an inherited genetic mutation. Having a rare medical condition can make it difficult to meet and interact with others who have the same rare disorder. Despite great distances, online communication provides a form of social interaction for those facing an uncommon health problem. Virtual peer networks provide vital social support for those who are affected by a rare disorder. Research has found that women with rare disorders are more likely to access online support networks than men with rare disorders. Relationships formed through online support networks often become a meaningful part of a person's identity. Individuals with rare disorders report that relating to others who have the same condition is often easier than trying to relate to friends or family members who do not share their condition.",
+      "question": "Which statement best represents a threat to social identity? A young woman with a rare disorder:",
       "choices": [
-        "Elevated, because the pituitary compensates for the tumor",
-        "Suppressed, because of negative feedback on the hypothalamus and pituitary",
-        "Unchanged, because T4 does not influence TSH secretion",
-        "Elevated, because thyrotropin-releasing hormone secretion increases"
+        "believes that others treat her as less capable, and then she starts to see herself as deficient.",
+        "becomes discouraged when she hears that others with rare disorders are treated as less capable.",
+        "hides her disorder from others in order to project more confidence in social situations.",
+        "reveals her disorder to friends, who mistakenly assume that it is a social limitation."
       ],
-      "correct_answer": "Suppressed, because of negative feedback on the hypothalamus and pituitary",
+      "correct_answer": "B",
+      "topic": "Behavioral",
+      "concept": "social identity and self-esteem",
+      "rationale": "Social identity addresses the feelings that individuals derive from their membership in a group. Self-esteem can be undermined by threats to social identity. Option B correctly identifies the connection between an individual's sense of self and their perceived membership in a group \u2014 becoming discouraged by how others in your group are treated threatens your social identity. The other options do not clearly identify this group membership connection.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
+    },
+    {
+      "id": "ps_002",
+      "passage_id": "ps_passage_001",
+      "question": "Over the course of ten years, a rare disorder increases in prevalence such that it eventually affects more than 200,000 people in the United States. Based on the passage and this scenario, which prediction is most consistent with the sociological paradigm of symbolic interactionism?",
+      "choices": [
+        "As the number of affected individuals increases, government research funding increases.",
+        "Affected individuals are less likely to conceal their condition as it becomes less stigmatized.",
+        "As more people with the condition are treated, it receives less attention as a health concern.",
+        "Insurance coverage for the condition becomes more likely as more people require treatment."
+      ],
+      "correct_answer": "B",
+      "topic": "Behavioral",
+      "concept": "symbolic interactionism and social stigma",
+      "rationale": "Symbolic interactionism focuses on how meaning is constructed through small-scale social interactions. Social stigma is closely associated with symbolic interactionism. As a condition becomes more common it becomes less stigmatized, making individuals less likely to conceal it. The incorrect options make predictions about large-scale social changes which are not consistent with symbolic interactionism.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
+    },
+    {
+      "id": "ps_003",
+      "passage_id": "ps_passage_001",
+      "question": "Which research project best represents a macrosociological approach to studying the social support networks mentioned in the passage?",
+      "choices": [
+        "A researcher follows the conversation of participants who post messages in an online support forum.",
+        "A researcher interviews patients who participate in a local hospital's support group for rare disorders.",
+        "A researcher surveys patients for reasons that they joined an online support group for their disorder.",
+        "A researcher tracks how the number of websites dedicated to rare disorders has changed over time."
+      ],
+      "correct_answer": "D",
+      "topic": "Behavioral",
+      "concept": "macrosociology vs microsociology research methods",
+      "rationale": "Tracking changes in websites provides data on the availability of information about rare disorders at a societal level, aligned with a macrosociological approach. The other options are microsociological because they result in data based on small-scale interactions or individual decisions.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
+    },
+    {
+      "id": "cars_001",
+      "passage_id": "cars_passage_001",
+      "passage": "The Wealth of Nations (1776) popularized 'the invisible hand,' the idea that an individual who intends only personal gain is, as it were, led by an invisible hand to promote the public interest. Adam Smith did not assert that this principle was invariably true, but it contributed to a tendency of thought that has since remained dominant, preventing action based on rational analysis: the assumption that decisions reached individually will collectively be the best decisions for society as a whole. If this assumption is correct, it justifies the continuance of the U.S. policy of laissez-faire in many issues affecting business, the environment, and the family. If it is not correct, U.S. citizens need to re-examine their individual freedoms to see which are defensible. The rebuttal to the invisible hand theory could be called 'the tragedy of the commons.' Picture a pasture open to all. It can be expected that each herder will try to keep as many cattle as possible on this commons. Such an arrangement may work reasonably well for centuries because tribal wars, poaching, and disease keep the numbers of both human and beast far below the carrying capacity of the land. Finally, however, comes the day of reckoning. As a rational being, each herder seeks to maximize personal gain. Since the herder would receive all the proceeds from the sale of the additional animal, the positive component of this utility is nearly +1. Since the effects of overgrazing are shared by all the herders, the negative utility for any particular decision-maker is some fraction of -1. Adding the component utilities, the rational herder concludes that the only sensible course is to add another animal. Ruin is the destination toward which all rush, each pursuing the right to use a public resource. The social arrangements that would produce responsibility in this scenario create coercion. The only kind of coercion recommended is mutual coercion, agreed to by a majority of those affected. Every new enclosure of the commons involves the infringement of somebody's personal freedom. But those subject to the logic of the commons are free only to bring on universal ruin. Once they acknowledge the logic of mutual coercion, they become free to pursue other goals.",
+      "question": "According to the passage, the decisive factor in determining whether someone's actions should be subject to coercion is whether the actions:",
+      "choices": [
+        "are determined solely by self-interest.",
+        "affect collectively held resources.",
+        "degrade the natural environment.",
+        "are commonly considered immoral."
+      ],
+      "correct_answer": "B",
+      "topic": "CARS",
+      "concept": "argument analysis and main idea",
+      "rationale": "The passage argument is not that all actions determined by self-interest should be regulated \u2014 only those in which the gain of one represents a loss to all and voluntary restraint is unlikely. Coercion is needed in circumstances where resources are held collectively, so that self-interest compels each to increase gain without limit in a world that is limited.",
+      "source": "AAMC Sample Questions",
+      "held_out": true
+    },
+    {
+      "id": "cars_002",
+      "passage_id": "cars_passage_001",
+      "question": "The passage argument suggests that national parks might benefit from which of the following?",
+      "choices": [
+        "I only \u2014 restriction of recreational use by means of fees.",
+        "III only \u2014 opening of additional facilities to the public.",
+        "I and II only \u2014 fees and selling facilities to private investors.",
+        "II and III only \u2014 privatization and opening additional facilities."
+      ],
+      "correct_answer": "A",
+      "topic": "CARS",
+      "concept": "applying passage argument to new scenarios",
+      "rationale": "Since everyone has the right to use a public resource, pressure on national parks increases as population increases. Therefore these lands would benefit from fees that reduced public use. Opening additional parklands would only expose more resources to the tragedy of the commons, not solve it.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
+    },
+    {
+      "id": "cars_003",
+      "passage_id": "cars_passage_001",
+      "question": "Some communities with expanding populations have for centuries successfully managed commonly held land. An appropriate clarification of the passage would be the stipulation that the author's argument applies only to:",
+      "choices": [
+        "the future.",
+        "unregulated resources.",
+        "conditions of social instability.",
+        "resources that are not managed locally."
+      ],
+      "correct_answer": "B",
+      "topic": "CARS",
+      "concept": "identifying scope and limitations of an argument",
+      "rationale": "Communities that managed commonly held land successfully would necessarily have infringed on personal freedom through some form of coercion. To accommodate these cases, the author's argument appropriately applies only to unregulated resources where voluntary restraint is absent.",
+      "source": "AAMC Sample Questions",
+      "held_out": false
+    },
+    {
+      "id": "q_001",
+      "passage_id": "oc_passage_001",
+      "passage": "Terpenes are major biosynthetic building blocks. Steroids, for example, are derivatives of the terpene squalene and the terpenoid lanosterol. The difference between terpenes and terpenoids is that terpenes are hydrocarbons, whereas terpenoids contain additional functional groups. Terpenes are derived biosynthetically from units of isoprene, which has the molecular formula C5H8. Isoprene units can be linked together \"head to tail\" (i.e., from one end of the longest chain to the other end from another molecule) to form linear chains, or they may be arranged to form rings. The isoprene unit is thus one of nature's common building blocks.",
+      "question": "How many different stereoisomers of lanosterol are possible?",
+      "choices": [
+        "Fewer than 10",
+        "Between 10 and 50",
+        "Between 50 and 100",
+        "More than 100"
+      ],
+      "correct_answer": "D",
+      "topic": "Organic-Chemistry",
+      "concept": "stereoisomerism and complex molecules",
+      "source": "mcat-prep.com",
+      "held_out": true
+    },
+    {
+      "id": "q_006",
+      "passage_id": "cp_passage_002",
+      "passage": "The essential stages in the manufacture of H2SO3 involve the burning of sulfur or roasting of sulfide ores in air to produce SO2. This is then mixed with air, purified, and passed over a vanadium catalyst (either VO3- or V2O5) at 450 degrees Celsius. Thus, the following reaction occurs. Reaction I: 2SO2(g) + O2(g) \u2194 2SO3(g)    \u0394H = -197 kJ mol-1. If the SO2 is very carefully dissolved in water, sulfurous acid (H2SO3) is obtained. The first proton of this acid ionizes as if from a strong acid, while the second ionizes as if from a weak acid. Reaction II: H2SO3 + H2O \u2192 H3O+ + HSO3-. Reaction III: HSO3- + H2O \u2194 H3O+ + SO3 2-   Ka = 5.0 x 10-6. The concentration of H2SO3 in antiseptic fluid was determined by titration with 0.10 M NaOH (strong base). Two equivalence points were determined using 30 ml and 60 ml of NaOH, respectively.",
+      "question": "What is the oxidation number of sulfur in sulfurous acid?",
+      "choices": [
+        "+3",
+        "+4",
+        "+5",
+        "+6"
+      ],
+      "correct_answer": "B",
+      "topic": "General-Chemistry",
+      "concept": "oxidation states",
+      "source": "mcat-prep.com",
+      "held_out": true
+    },
+    {
+      "id": "q_007",
+      "passage_id": "cp_passage_002",
+      "question": "What is the percent by mass of oxygen in sulfurous acid?",
+      "choices": [
+        "31.9%",
+        "19.7%",
+        "39.0%",
+        "58.5%"
+      ],
+      "correct_answer": "C",
+      "topic": "General-Chemistry",
+      "concept": "percent composition by mass",
+      "source": "mcat-prep.com",
+      "held_out": false
+    },
+    {
+      "id": "q_bio_001",
+      "passage_id": "bio_passage_001",
+      "passage": "In an attempt to develop a vaccine for pneumonia, Fred Griffith performed a series of experiments in 1928 using mice and two strains of the pneumococcus bacteria: a virulent encapsulated strain and a nonvirulent unencapsulated strain. The encapsulated strain was called the \"smooth strain\" because the colonies looked smooth on a culture plate due to their polysaccharide capsules, whereas the unencapsulated strain was denoted as the \"rough strain\" due to the irregularity of its surface.",
+      "question": "A colony of smooth strain bacteria is grown on a culture containing an experimental drug that cleaves nucleic acid base sequences wherever adenine is paired with uracil. Which of the following processes will be directly affected?\n\nI. Transcription\nII. Translation\nIII. Transformation",
+      "choices": [
+        "I only",
+        "I and II only",
+        "I and III only",
+        "I, II, and III"
+      ],
+      "correct_answer": "C",
       "topic": "Biology",
-      "concept": "Endocrine negative feedback and the thyroid axis"
+      "concept": "rna structure and genetic processes",
+      "source": "khan/kaplan",
+      "held_out": true
     },
     {
-      "id": 34,
-      "passage": "A genetic counselor studies an X-linked recessive disorder. A woman who is a phenotypically normal carrier of the recessive allele (one normal and one mutant X chromosome) has children with a man who does not carry the allele and is phenotypically normal. The couple asks about the likelihood that their sons will be affected.",
-      "question": "What is the expected outcome for this couple's children?",
+      "id": "q_bio_002",
+      "passage_id": "bio_passage_001",
+      "question": "If Griffith had injected a fifth group of mice with a combination of heat-killed rough strain and heat-killed smooth strain, would the mice have died?",
       "choices": [
-        "1/2 of their sons will be affected",
-        "1/4 of their sons will be affected",
-        "All of their daughters will be affected",
-        "None of their offspring can be affected"
+        "No, because the heat-killed rough strain cannot infect mice.",
+        "No, because the heat-killed smooth strain cannot transform mice cells.",
+        "Yes, because the heat-killed rough strain is transformed into the smooth strain.",
+        "Yes, because the mice do not have acquired immunity to pneumococcus bacteria."
       ],
-      "correct_answer": "1/2 of their sons will be affected",
+      "correct_answer": "B",
       "topic": "Biology",
-      "concept": "X-linked recessive inheritance"
+      "concept": "griffith's transformation experiment and bacterial infection",
+      "source": "khan/kaplan",
+      "held_out": false
     },
     {
-      "id": 35,
-      "passage": "In regions where malaria is endemic, the allele for sickle cell hemoglobin (HbS) persists at a high frequency despite causing severe disease in homozygotes. Individuals homozygous for the normal allele are susceptible to malaria, and individuals homozygous for HbS suffer from sickle cell anemia. Heterozygous individuals are resistant to severe malaria and do not typically develop significant sickle cell disease.",
-      "question": "The maintenance of the HbS allele at high frequency in malaria-endemic regions is best explained by which mechanism?",
+      "id": "q_phys_003",
+      "passage_id": null,
+      "question": "In which of the following cases will the normal force on a box be the greatest?",
       "choices": [
-        "Directional selection favoring the homozygous recessive genotype",
-        "Random genetic drift in a small population",
-        "Balancing selection through a heterozygote advantage",
-        "A recent population bottleneck"
+        "When the box is placed in a stationary elevator",
+        "When the box is placed in an elevator moving upwards at constant velocity",
+        "When the box is placed in an elevator accelerating downward",
+        "When the box is placed in an elevator accelerating upward"
       ],
-      "correct_answer": "Balancing selection through a heterozygote advantage",
-      "topic": "Biology",
-      "concept": "Natural selection and heterozygote advantage"
-    },
-    {
-      "id": 36,
-      "passage": "A chemist studies a reaction that is endothermic (ΔH > 0) and that proceeds with an increase in the disorder of the system (ΔS > 0). The chemist measures the extent of the reaction at several temperatures and uses the relationship ΔG = ΔH - TΔS to predict when the reaction will proceed spontaneously in the forward direction.",
-      "question": "Under what conditions will this reaction be spontaneous?",
-      "choices": [
-        "At high temperatures, where the TΔS term exceeds ΔH",
-        "At all temperatures, regardless of the value of T",
-        "At low temperatures only, where ΔH dominates",
-        "Never, because ΔH is positive"
-      ],
-      "correct_answer": "At high temperatures, where the TΔS term exceeds ΔH",
-      "topic": "General-Chemistry",
-      "concept": "Gibbs free energy and temperature dependence of spontaneity"
-    },
-    {
-      "id": 37,
-      "passage": "A student titrates a solution of a weak monoprotic acid with a strong base, sodium hydroxide, while monitoring the pH. As base is added, the pH rises gradually through a buffering region and then rises sharply near the equivalence point. At the equivalence point, all of the weak acid has been converted to its conjugate base.",
-      "question": "What is the expected pH at the equivalence point of this titration?",
-      "choices": [
-        "Exactly 7, because the acid has been fully neutralized",
-        "Less than 7, because of the excess weak acid remaining",
-        "Equal to the pKa of the weak acid",
-        "Greater than 7, because the conjugate base undergoes hydrolysis"
-      ],
-      "correct_answer": "Greater than 7, because the conjugate base undergoes hydrolysis",
-      "topic": "General-Chemistry",
-      "concept": "Weak acid-strong base titration and equivalence point pH"
-    },
-    {
-      "id": 38,
-      "passage": "A chemist prepares two aqueous solutions of equal molality: one of glucose, a nonelectrolyte, and one of sodium chloride, which dissociates completely into sodium and chloride ions. Both solutions are cooled, and the chemist measures the temperature at which each begins to freeze, comparing them to pure water.",
-      "question": "Which solution will have the lower freezing point, and why?",
-      "choices": [
-        "The glucose solution, because glucose is a larger molecule",
-        "The NaCl solution, because it dissociates into approximately twice as many particles",
-        "Both solutions freeze at the same temperature, because they are equal in molality",
-        "Neither, because freezing point is independent of dissolved solutes"
-      ],
-      "correct_answer": "The NaCl solution, because it dissociates into approximately twice as many particles",
-      "topic": "General-Chemistry",
-      "concept": "Colligative properties and the van't Hoff factor"
-    },
-    {
-      "id": 39,
-      "passage": "A chemistry student examines first ionization energies across the second period of the periodic table. The general trend is an increase in ionization energy from left to right, consistent with increasing effective nuclear charge. However, the student notices that the first ionization energy of oxygen is slightly lower than that of nitrogen, which precedes it.",
-      "question": "Which of the following best explains why the first ionization energy of oxygen is lower than that of nitrogen?",
-      "choices": [
-        "Oxygen has a smaller nuclear charge than nitrogen",
-        "Nitrogen has a substantially larger atomic radius than oxygen",
-        "Removing an electron from oxygen relieves electron–electron repulsion in a doubly occupied 2p orbital",
-        "Oxygen has a completely filled 2p subshell that is easily disrupted"
-      ],
-      "correct_answer": "Removing an electron from oxygen relieves electron–electron repulsion in a doubly occupied 2p orbital",
-      "topic": "General-Chemistry",
-      "concept": "Periodic trends and ionization energy anomalies"
-    },
-    {
-      "id": 40,
-      "passage": "A chemist prepares a saturated solution of silver chloride (AgCl), a sparingly soluble salt with a small solubility product constant (Ksp). To a portion of this solution, the chemist adds solid sodium chloride, which dissolves completely and substantially increases the chloride ion concentration. The temperature is held constant throughout.",
-      "question": "What happens to the molar solubility of AgCl after the sodium chloride is added?",
-      "choices": [
-        "Solubility increases because of the higher ionic strength",
-        "Solubility is unchanged because Ksp is a constant",
-        "Solubility first increases and then decreases",
-        "Solubility decreases because of the common-ion effect"
-      ],
-      "correct_answer": "Solubility decreases because of the common-ion effect",
-      "topic": "General-Chemistry",
-      "concept": "Solubility equilibria and the common-ion effect"
-    },
-    {
-      "id": 41,
-      "passage": "An organic chemist records the proton (1H) NMR spectrum of pure ethanol. The molecule contains a methyl group (CH3) and a methylene group (CH2) that are adjacent to one another, in addition to a hydroxyl proton. The chemist applies the n+1 rule to predict the splitting pattern of each set of chemically equivalent protons, ignoring exchange of the hydroxyl proton.",
-      "question": "Based on the n+1 rule, what splitting pattern is expected for the methylene (CH2) protons, which are adjacent to the three methyl protons?",
-      "choices": [
-        "A triplet",
-        "A quartet",
-        "A doublet",
-        "A singlet"
-      ],
-      "correct_answer": "A quartet",
-      "topic": "Organic-Chemistry",
-      "concept": "1H NMR spectroscopy and spin-spin splitting (n+1 rule)"
-    },
-    {
-      "id": 42,
-      "passage": "A medicinal chemist synthesizes a drug candidate whose structure contains three distinct tetrahedral carbon atoms, each bonded to four different substituents. None of the stereocenters is related to another by an internal mirror plane, so no meso forms arise. The chemist wants to know the maximum number of distinct stereoisomers the molecule could have.",
-      "question": "What is the maximum number of stereoisomers possible for a molecule with three stereocenters and no meso compounds?",
-      "choices": [
-        "8",
-        "6",
-        "3",
-        "4"
-      ],
-      "correct_answer": "8",
-      "topic": "Organic-Chemistry",
-      "concept": "Stereochemistry and the 2^n rule for stereoisomers"
-    },
-    {
-      "id": 43,
-      "passage": "An organic chemist carries out an elimination reaction on 2-bromo-2-methylbutane. When a small, unhindered base is used, the more highly substituted alkene predominates, in accordance with Zaitsev's rule. However, when the bulky base potassium tert-butoxide is used instead, the product distribution shifts markedly.",
-      "question": "When the bulky base potassium tert-butoxide is used, which product is expected to predominate, and why?",
-      "choices": [
-        "The more substituted (Zaitsev) alkene, because it is thermodynamically most stable",
-        "A carbocation rearrangement product, because bulky bases promote rearrangement",
-        "The less substituted (Hofmann) alkene, because steric hindrance of the base favors abstraction of a less hindered proton",
-        "An SN2 substitution product exclusively, because the bulky base is a strong nucleophile"
-      ],
-      "correct_answer": "The less substituted (Hofmann) alkene, because steric hindrance of the base favors abstraction of a less hindered proton",
-      "topic": "Organic-Chemistry",
-      "concept": "Elimination reactions: Zaitsev versus Hofmann products"
-    },
-    {
-      "id": 44,
-      "passage": "An organic chemist evaluates several cyclic, fully conjugated molecules for aromatic character. Aromaticity requires a molecule to be cyclic, planar, and fully conjugated, and to contain 4n+2 π electrons in its conjugated ring system according to Hückel's rule. Molecules that are cyclic and fully conjugated but contain 4n π electrons are instead antiaromatic and destabilized.",
-      "question": "Which of the following species satisfies Hückel's rule and is therefore aromatic?",
-      "choices": [
-        "Cyclobutadiene, with 4 π electrons",
-        "Cyclooctatetraene, with 8 π electrons",
-        "The cyclopentadienyl cation, with 4 π electrons",
-        "Benzene, with 6 π electrons"
-      ],
-      "correct_answer": "Benzene, with 6 π electrons",
-      "topic": "Organic-Chemistry",
-      "concept": "Aromaticity and Hückel's rule"
-    },
-    {
-      "id": 45,
-      "passage": "An organic chemist compares the reactivity of a series of carboxylic acid derivatives toward nucleophilic acyl substitution: an acyl chloride, an ester, an amide, and a carboxylate ion. Reactivity in these reactions depends on both the leaving-group ability of the substituent and the degree to which that substituent donates electron density into the carbonyl by resonance, which reduces the carbonyl's electrophilicity.",
-      "question": "Which of these carboxylic acid derivatives is the most reactive toward nucleophilic acyl substitution?",
-      "choices": [
-        "The acyl chloride",
-        "The amide",
-        "The ester",
-        "The carboxylate ion"
-      ],
-      "correct_answer": "The acyl chloride",
-      "topic": "Organic-Chemistry",
-      "concept": "Reactivity of carboxylic acid derivatives in nucleophilic acyl substitution"
-    },
-    {
-      "id": 46,
-      "passage": "A fluid dynamics demonstration uses an incompressible, nonviscous fluid flowing steadily through a horizontal pipe that narrows from a wide section to a constricted section. The volume flow rate is constant throughout the pipe, so the continuity equation (A1v1 = A2v2) applies. A pressure gauge is placed at both the wide and the narrow sections.",
-      "question": "Compared with the wide section, what happens to the fluid velocity and pressure in the narrow section of the pipe?",
-      "choices": [
-        "Both the velocity and the pressure increase",
-        "Both the velocity and the pressure decrease",
-        "The velocity increases and the pressure decreases",
-        "The velocity decreases and the pressure increases"
-      ],
-      "correct_answer": "The velocity increases and the pressure decreases",
+      "correct_answer": "D",
       "topic": "Physics-and-Math",
-      "concept": "Fluid dynamics: continuity equation and Bernoulli's principle"
+      "concept": "normal force and newton's laws of motion",
+      "source": "khan/kaplan",
+      "held_out": true
     },
     {
-      "id": 47,
-      "passage": "A student builds a simple direct-current circuit containing two identical 4-ohm resistors connected in parallel across an ideal battery. The student wants to determine the single equivalent resistance that could replace the two parallel resistors without changing the total current drawn from the battery.",
-      "question": "What is the equivalent resistance of two 4-ohm resistors connected in parallel?",
+      "id": "q_psych_004",
+      "passage_id": "ps_passage_002",
+      "passage": "A group of executives from a health food company hope to develop and market new pre-cooked healthy dinner packages that contain whole foods and are minimally processed. Because they are unsure of market demands, they prepare at great length for a large focus group at their headquarters. To gather the most information possible, they contact equal numbers of nutrition experts, specialty grocers, individuals who are beginning a dietary change and individuals who are considering a dietary change and invite them to participate. They prepare a series of questions and talking points and have their research staff present them to the group. During the meeting, they quickly find the following: 95% of participants believe that it is important to eat healthy foods that are minimally processed and are made up of easy to pronounce ingredients; 10% of participants choose these types of food on a daily basis; 15% of participants would purchase a pre-made health product. The executives are perplexed and want to determine why participants are unwilling to purchase a pre-made health product. They conduct additional focus groups and find that the participants continue to purchase and consume empty calorie foods, despite knowing that they do not promote health. When asked why they do this, participants stated: \"Empty calorie foods taste good so they are worth eating.\", \"The chances of developing an illness or health problem are not high, so I will continue to eat in the way that I currently eat.\", \"Empty calorie foods are less expensive and do not spoil as quickly as whole, minimally processed foods.\" The executives realize that there is a large discrepancy between what the participants believe in regards to nutrition and how they actually behave. They decide to focus their strategies on helping individuals to behave in ways that are more consistent with their beliefs.",
+      "question": "Based on what you know about behavioral change, which of these strategies would be most effective in helping these participants using a cognitive dissonance approach?",
       "choices": [
-        "8 Ω",
-        "2 Ω",
-        "4 Ω",
-        "0.5 Ω"
+        "Requiring participants to develop and present a critique of the nutritional content of their favorite unhealthy foods.",
+        "Showing participants a film that examines the obesity crisis in America and links it to dietary choices and processed foods specifically.",
+        "Handing out a pamphlet that outlines the development of processed foods, specifically highlighting aspects that will disgust participants.",
+        "Developing warning labels for junk foods and sticking them on products, so that participants are directly confronted with information."
       ],
-      "correct_answer": "2 Ω",
-      "topic": "Physics-and-Math",
-      "concept": "DC circuits and resistors in parallel"
+      "correct_answer": "A",
+      "topic": "Behavioral",
+      "concept": "cognitive dissonance and behavioral change",
+      "source": "khan/kaplan",
+      "held_out": false
     },
     {
-      "id": 48,
-      "passage": "A stationary observer stands beside a road as an ambulance with its siren on drives past at constant speed. As the ambulance approaches, the observer hears a pitch higher than the siren's actual frequency. The observer then listens carefully as the ambulance moves away into the distance.",
-      "question": "As the ambulance moves away from the stationary observer, the frequency of the siren heard by the observer is:",
+      "id": "q_psych_005",
+      "passage_id": "ps_passage_003",
+      "passage": "Tim is a 24 year-old PhD candidate at a large university. Over the past six months, his behavior has changed and become increasingly bizarre. Though originally very enthusiastic about graduate school, he states that he is no longer interested in pursuing a degree and has no motivation to continue with school. He used to drink alcohol socially, but has withdrawn his friends and is not currently using any substances. He has no history of drug or alcohol abuse. He is unable to concentrate on work and tells friends and family that he believes someone has been following him when he leaves the house, and spying on him in his bedroom at night. Police bring him to a state psychiatric hospital after he throws his cell phone against a bus window and causes a public disturbance. Hospital staff members comment that they often hear him whispering frantically when he is alone, as though he is having a conversation with another person. When asked about his behavior, Tim states the following: \"I couldn't. I couldn't use my phone anymore \u2013 they're listening... and I just couldn't.\" \"The agents are listening. They're after me and I can't get away.\" \"I am wanted by the government. I'm sitting in an office building right now and I see tear gas coming up from the floor. Can you smell the poison they're releasing into the air?\" \"The president wants to kill me, the agents all tell me it's useless to fight it... I can't go on.\" \"I was born to end the world and bring down the government in this dismal country.\" \"I had to stop drinking because my cups are all poisoned by government agents.\" The psychiatrist diagnoses Tim with schizophrenia and prescribes an antipsychotic. After 5 weeks on the medication, Tim shows minor improvements but the changes are not drastic. He continues to claim that he is a target of the government and is meant to bring down the country's infrastructure. He occasionally claims to see agents hiding under the floorboards and above his head in ceiling tiles. In addition, he refuses to drink any beverages because he believes they have been poisoned. He is required to stay at the psychiatric hospital and receive treatment as an inpatient, because his psychiatrist believes he is a danger to himself and others.",
+      "question": "Which of Tim's relatives has the highest risk of developing schizophrenia?",
       "choices": [
-        "Higher than the emitted frequency",
-        "Equal to the emitted frequency",
-        "Increasing continuously as the ambulance recedes",
-        "Lower than the emitted frequency"
+        "Tim's mother",
+        "Tim's fraternal grandmother",
+        "Tim's future son",
+        "Tim's identical twin brother"
       ],
-      "correct_answer": "Lower than the emitted frequency",
-      "topic": "Physics-and-Math",
-      "concept": "The Doppler effect for sound"
-    },
-    {
-      "id": 49,
-      "passage": "In a mechanics demonstration, a small object of mass m is released from rest at a height h above the ground and falls freely. Air resistance is negligible, so mechanical energy is conserved throughout the fall. An instructor asks students to determine the object's speed at the moment just before it strikes the ground using conservation of energy.",
-      "question": "Using conservation of mechanical energy, what is the object's speed just before it hits the ground?",
-      "choices": [
-        "√(2gh)",
-        "√(gh)",
-        "2gh",
-        "gh"
-      ],
-      "correct_answer": "√(2gh)",
-      "topic": "Physics-and-Math",
-      "concept": "Conservation of mechanical energy in free fall"
-    },
-    {
-      "id": 50,
-      "passage": "A radiochemist works with a sample of a radioactive isotope that has a half-life of 8 days. The sample decays by first-order kinetics, so a fixed fraction of the remaining nuclei decays in each half-life. The chemist stores the sample and measures its remaining activity 24 days later.",
-      "question": "What fraction of the original radioactive nuclei remains after 24 days?",
-      "choices": [
-        "1/4",
-        "1/8",
-        "1/16",
-        "1/2"
-      ],
-      "correct_answer": "1/8",
-      "topic": "Physics-and-Math",
-      "concept": "Radioactive decay and half-life"
+      "correct_answer": "D",
+      "topic": "Behavioral",
+      "concept": "schizophrenia genetics and heritability",
+      "source": "khan/kaplan",
+      "held_out": false
     }
   ]
 }

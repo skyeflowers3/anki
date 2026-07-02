@@ -72,24 +72,84 @@ MIN_ANSWERED = 3
 PERFORMANCE_TABLE = "speedrun_performance"
 
 QUESTIONS_PATH = Path(__file__).resolve().parent / "questions.json"
+GENERATED_PATH = Path(__file__).resolve().parent / "generated_questions.json"
+
+# Set to False to skip questions.json entirely and serve only AI-generated
+# questions (generated_questions.json with eval_passed: true).
+# The file is kept on disk; flip back to True to restore it.
+USE_MANUAL_QUESTIONS = False
 
 
 @dataclass
 class Question:
     """A single MCAT-style multiple choice question loaded from JSON."""
 
-    id: int
-    passage: str
+    id: str | int
     question: str
     choices: list[str]
     correct_answer: str
     topic: str
-    concept: str
+    # Optional / may not be present on every record.
+    passage: str = ""
+    passage_id: str = ""
+    concept: str = ""
+    rationale: str = ""
+    source: str = ""
+    source_citation: str = ""
+    source_text: str = ""
+    generated_by: str = ""
+    format_reference: str = ""
+    # True for questions that came from generated_questions.json and passed eval.
+    ai_generated: bool = False
+
+
+_QUESTION_FIELDS = {f.name for f in Question.__dataclass_fields__.values()}  # type: ignore[attr-defined]
+
+
+def _questions_from_file(path: Path, *, ai_generated: bool = False) -> list[Question]:
+    """Load questions from *path*, tagging each with *ai_generated*."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    out = []
+    for q in data.get("questions", []):
+        fields = {k: v for k, v in q.items() if k in _QUESTION_FIELDS}
+        fields["ai_generated"] = ai_generated
+        out.append(Question(**fields))
+    return out
 
 
 def load_questions(path: Path = QUESTIONS_PATH) -> list[Question]:
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
-    return [Question(**q) for q in data["questions"]]
+    """Load questions, preferring AI-generated ones with manual as fallback.
+
+    Rules:
+    • generated_questions.json — primary source; only eval_passed: true questions.
+    • questions.json           — fallback; included when USE_MANUAL_QUESTIONS is True
+                                 or when generated_questions.json is missing/empty.
+    • Deduplicated by id; generated questions win on collision.
+    """
+    seen: dict[str | int, Question] = {}
+
+    # Primary: AI-generated questions
+    try:
+        if GENERATED_PATH.exists():
+            raw = json.loads(GENERATED_PATH.read_text(encoding="utf-8"))
+            for q in raw.get("questions", []):
+                if not q.get("eval_passed", False):
+                    continue
+                qid: str | int = q.get("id", "")
+                fields = {k: v for k, v in q.items() if k in _QUESTION_FIELDS}
+                fields["ai_generated"] = True
+                seen[qid] = Question(**fields)
+    except Exception:  # noqa: BLE001
+        pass
+
+    # Fallback: manual questions.json (always when USE_MANUAL_QUESTIONS, or when
+    # generated pool is empty so the student always has something to work with).
+    if USE_MANUAL_QUESTIONS or not seen:
+        for q in _questions_from_file(path, ai_generated=False):
+            if q.id not in seen:  # generated question wins on collision
+                seen[q.id] = q
+
+    return list(seen.values())
 
 
 @dataclass
@@ -177,7 +237,14 @@ def record_answer(
     """Persist one two-step answer and return (concept_correct, answer_correct)."""
     ensure_table(col)
     concept_correct = 1 if chosen_concept == question.concept else 0
-    answer_correct = 1 if chosen_answer == question.correct_answer else 0
+    # correct_answer is a letter ("A"–"D"); chosen_answer is the full choice text.
+    # Derive the chosen letter by position so comparisons are letter-based.
+    _letters = ["A", "B", "C", "D", "E", "F"]
+    try:
+        chosen_letter = _letters[question.choices.index(chosen_answer)]
+    except (ValueError, IndexError):
+        chosen_letter = ""
+    answer_correct = 1 if chosen_letter == question.correct_answer else 0
     col.db.execute(
         f"""
         insert into {PERFORMANCE_TABLE}
@@ -206,7 +273,7 @@ def reset_answers(col: Collection) -> None:
     col.db.execute(f"delete from {PERFORMANCE_TABLE}")
 
 
-def questions_by_id(path: Path = QUESTIONS_PATH) -> dict[int, Question]:
+def questions_by_id(path: Path = QUESTIONS_PATH) -> dict[str | int, Question]:
     return {q.id: q for q in load_questions(path)}
 
 
@@ -248,6 +315,14 @@ def questions_for_client(path: Path = QUESTIONS_PATH) -> list[dict]:
     happens server-side in `grade_question`.
     """
     questions = load_questions(path)
+
+    # Build a passage lookup so follow-on questions (same passage_id, no inline
+    # passage text) can still display their shared passage.
+    passage_by_id: dict[str, str] = {}
+    for q in questions:
+        if q.passage and q.passage_id:
+            passage_by_id.setdefault(q.passage_id, q.passage)
+
     concepts_by_topic: dict[str, list[str]] = {}
     all_concepts: list[str] = []
     for q in questions:
@@ -258,24 +333,30 @@ def questions_for_client(path: Path = QUESTIONS_PATH) -> list[dict]:
     client: list[dict] = []
     for q in questions:
         # Seed per question so the choice order is stable across re-renders.
-        rng = random.Random(q.id)
-        client.append(
-            {
-                "id": q.id,
-                "passage": q.passage,
-                "question": q.question,
-                "choices": q.choices,
-                "concept_choices": _concept_options(
-                    q, concepts_by_topic, all_concepts, rng
-                ),
-                "topic": q.topic,
-            }
+        rng = random.Random(str(q.id))
+        # Use the question's own passage if present; otherwise look up via passage_id.
+        passage = q.passage or (
+            passage_by_id.get(q.passage_id, "") if q.passage_id else ""
         )
+        entry: dict = {
+            "id": q.id,
+            "passage": passage,
+            "question": q.question,
+            "choices": q.choices,
+            "concept_choices": _concept_options(
+                q, concepts_by_topic, all_concepts, rng
+            ),
+            "topic": q.topic,
+            "ai_generated": q.ai_generated,
+            # Only populated for AI questions; empty string for manual ones.
+            "source_citation": q.source_citation,
+        }
+        client.append(entry)
     return client
 
 
 def grade_question(
-    col: Collection, question_id: int, concept: str | None, answer: str | None
+    col: Collection, question_id: str | int, concept: str | None, answer: str | None
 ) -> dict:
     """Grade a two-step answer (concept + answer) and record the answer.
 
@@ -548,6 +629,16 @@ QUIZ_CSS = """
 .mcat-verdict-row .verdict.incorrect { color: #d64545; }
 .mcat-verdict-row .note { opacity: 0.75; font-size: 13px; }
 .mcat-quiz-actions { margin-top: 16px; }
+.mcat-ai-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #7c6ef5; border: 1px solid #7c6ef5;
+    border-radius: 4px; padding: 1px 6px; margin-bottom: 6px;
+    opacity: 0.85;
+}
+.mcat-source-citation {
+    font-size: 11px; opacity: 0.55; margin-top: 6px; font-style: italic;
+}
 </style>
 """
 
@@ -579,10 +670,17 @@ QUIZ_JS = """
         let html = '<div class="mcat-quiz-progress">Question ' + (idx + 1) +
                    ' of ' + QUESTIONS.length + '</div>';
         html += '<div class="mcat-quiz-topic">' + esc(q.topic) + '</div>';
+        if (q.ai_generated) {
+            html += '<div class="mcat-ai-badge">AI-generated</div>';
+        }
         if (q.passage) {
             html += '<div class="mcat-quiz-passage">' + esc(q.passage) + '</div>';
         }
         html += '<div class="mcat-quiz-question">' + esc(q.question) + '</div>';
+        if (q.ai_generated && q.source_citation) {
+            html += '<div class="mcat-source-citation">Source: ' +
+                    esc(q.source_citation) + '</div>';
+        }
         return html;
     }
 
@@ -650,7 +748,7 @@ QUIZ_JS = """
         pycmd("srq:grade:" + encodeURIComponent(payload), function (res) {
             if (!res || res.error) return;
 
-            const correctIdx = q.choices.indexOf(res.correct_answer);
+            const correctIdx = LETTERS.indexOf(res.correct_answer);
             quizEl.querySelectorAll(".mcat-choice").forEach(function (btn) {
                 const i = parseInt(btn.getAttribute("data-i"), 10);
                 btn.disabled = true;
@@ -690,7 +788,7 @@ QUIZ_JS = """
 """
 
 
-def client_questions_for_ids(ids: list[int], path: Path = QUESTIONS_PATH) -> list[dict]:
+def client_questions_for_ids(ids: list[str | int], path: Path = QUESTIONS_PATH) -> list[dict]:
     """Client question dicts (no correct answers) for the given ids, in order."""
     by_id = {q["id"]: q for q in questions_for_client(path)}
     return [by_id[i] for i in ids if i in by_id]

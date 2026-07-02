@@ -199,7 +199,7 @@ class BlockPlan:
     reason: str  # short, student-facing line shown before the block
     topic: str | None = None
     size: int = 0
-    question_ids: list[int] = field(default_factory=list)
+    question_ids: list[str | int] = field(default_factory=list)
     gap_type: GapType | None = None
 
 
@@ -259,8 +259,8 @@ def highest_points_at_stake(
     return max(candidates, key=lambda t: (t.points_at_stake, t.name))
 
 
-def _questions_by_topic(topics: list[str]) -> dict[str, list[int]]:
-    grouped: dict[str, list[int]] = {name: [] for name in topics}
+def _questions_by_topic(topics: list[str]) -> dict[str, list[str | int]]:
+    grouped: dict[str, list[str | int]] = {name: [] for name in topics}
     for q in performance_score.load_questions():
         if q.topic in grouped:
             grouped[q.topic].append(q.id)
@@ -268,13 +268,13 @@ def _questions_by_topic(topics: list[str]) -> dict[str, list[int]]:
 
 
 def weighted_interleave(
-    pools: dict[str, list[int]],
+    pools: dict[str, list[str | int]],
     stats: dict[str, TopicStats],
     size: int,
     *,
     include_topic: str | None = None,
     rng: random.Random | None = None,
-) -> list[int]:
+) -> list[str | int]:
     """Pick a mixed block of ids, weighting topics by points-at-stake.
 
     ``pools`` maps a topic to the ids available for it (question ids or card
@@ -294,7 +294,7 @@ def weighted_interleave(
         ts = stats.get(topic)
         return max(ts.points_at_stake, 1e-6) if ts is not None else 1e-6
 
-    chosen: list[int] = []
+    chosen: list[str | int] = []
     if include_topic and pools.get(include_topic):
         chosen.append(pools[include_topic].pop())
 
@@ -310,12 +310,12 @@ def weighted_interleave(
 
 def select_interleaved_questions(
     stats: dict[str, TopicStats],
-    questions_by_topic: dict[str, list[int]],
+    questions_by_topic: dict[str, list[str | int]],
     size: int,
     *,
     include_topic: str | None = None,
     rng: random.Random | None = None,
-) -> list[int]:
+) -> list[str | int]:
     """Pick a mixed block of question ids, weighting topics by points-at-stake.
 
     Only topics with an established memory score are eligible for question
@@ -331,11 +331,11 @@ def select_interleaved_questions(
 
 def select_topic_questions(
     topic: str,
-    questions_by_topic: dict[str, list[int]],
+    questions_by_topic: dict[str, list[str | int]],
     size: int,
     *,
     rng: random.Random | None = None,
-) -> list[int]:
+) -> list[str | int]:
     """Pick up to ``size`` question ids from a single topic."""
     rng = rng or random.Random()
     ids = list(questions_by_topic.get(topic, []))
@@ -494,7 +494,7 @@ class SpeedrunSession:
     def _plan_mixed(
         self,
         stats: dict[str, TopicStats],
-        questions_by_topic: dict[str, list[int]],
+        questions_by_topic: dict[str, list[str | int]],
     ) -> BlockPlan | None:
         """A mixed, points-at-stake-weighted block across all in-scope topics.
 
@@ -557,7 +557,7 @@ class SpeedrunSession:
     def _plan_remediation(
         self,
         stats: dict[str, TopicStats],
-        questions_by_topic: dict[str, list[int]],
+        questions_by_topic: dict[str, list[str | int]],
     ) -> BlockPlan | None:
         assert self.focus_topic is not None
         topic = self.focus_topic
@@ -597,7 +597,7 @@ class SpeedrunSession:
     def _fallback_to_flashcards(
         self,
         stats: dict[str, TopicStats],
-        questions_by_topic: dict[str, list[int]],
+        questions_by_topic: dict[str, list[str | int]],
     ) -> BlockPlan | None:
         """Interleaved mode has no question-eligible topics: remediate instead.
 

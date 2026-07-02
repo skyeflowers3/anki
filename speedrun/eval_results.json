@@ -1,0 +1,84 @@
+[
+  {
+    "timestamp": "2026-07-02T21:57:53.999615+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 3,
+    "questions_passed": 3,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8708,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Biology": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "biology_generated_001"
+  },
+  {
+    "timestamp": "2026-07-02T21:58:43.653386+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 3,
+    "questions_passed": 3,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8625,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Biochemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "biochemistry_generated_001"
+  },
+  {
+    "timestamp": "2026-07-02T21:58:59.073019+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 3,
+    "questions_passed": 3,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8333,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "General-Chemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "general_chemistry_generated_001"
+  },
+  {
+    "timestamp": "2026-07-02T21:59:08.944482+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 3,
+    "questions_passed": 3,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8583,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Physics-and-Math": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "physics_and_math_generated_001"
+  },
+  {
+    "timestamp": "2026-07-02T21:59:24.312281+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 3,
+    "questions_passed": 2,
+    "questions_failed": 1,
+    "pass_rate": 0.6667,
+    "wrong_answer_rate": 0.3333,
+    "avg_score": 0.8292,
+    "failed_question_ids": [
+      "behavioral_gen_003"
+    ],
+    "held_out_coverage": {
+      "Behavioral": "fallback"
+    },
+    "fallback_count": 3,
+    "passage_id": "behavioral_generated_001"
+  }
+]

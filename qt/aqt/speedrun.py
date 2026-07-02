@@ -194,6 +194,9 @@ class SpeedrunController:
         # Session structure: SESSION_BLOCKS blocks, then a summary screen.
         self._blocks_done = 0
         self._baseline: dict[str, dict[str, float | None]] = {}
+        # Question IDs served in the current session; passed to the generation
+        # trigger so it can count how many *unseen* questions remain per topic.
+        self._seen_question_ids: set[str | int] = set()
 
         # Flashcard-block delegation state.
         self._fc_active = False
@@ -284,12 +287,46 @@ class SpeedrunController:
         if plan is None:
             self._show_done("That's all for now - great work.")
             return
+        # When a question block is coming up, check whether any of the topics
+        # involved are running low on approved questions and, if so, start
+        # background AI generation so the pool stays stocked for future blocks.
+        if plan.kind == "questions":
+            self._maybe_trigger_generation(plan)
         if not self._served_any:
             # First block: drop straight in, no transition screen.
             self._served_any = True
             self._start_block(plan)
         else:
             self._show_transition(plan, stats)
+
+    def _maybe_trigger_generation(self, plan: Any) -> None:
+        """Fire background generation for topics with fewer than threshold questions.
+
+        Runs the check and enqueues a daemon thread synchronously but returns
+        immediately — the student session is never blocked.  All exceptions are
+        swallowed so this can never crash the app.
+        """
+        try:
+            from speedrun.auto_generator import maybe_trigger_generation
+        except ModuleNotFoundError:
+            repo_root = Path(aqt.__file__).resolve().parents[2]
+            if str(repo_root) not in sys.path:
+                sys.path.insert(0, str(repo_root))
+            from speedrun.auto_generator import maybe_trigger_generation
+        except Exception:  # noqa: BLE001
+            return  # module unavailable — silently skip
+
+        try:
+            seen = self._seen_question_ids
+            if plan.topic:
+                # Focused block: only the one in-scope topic matters.
+                maybe_trigger_generation(plan.topic, seen_ids=seen)
+            else:
+                # Mixed block: check every in-scope topic.
+                for topic in self.topic_decks:
+                    maybe_trigger_generation(topic, seen_ids=seen)
+        except Exception:  # noqa: BLE001
+            pass  # never surface generation errors to the student
 
     def _start_block(self, plan: Any) -> None:
         self._block_results = []
@@ -319,6 +356,7 @@ class SpeedrunController:
         self.session = self.speedrun_loop.SpeedrunSession(list(self.topic_decks))
         self._blocks_done = 0
         self._served_any = False
+        self._seen_question_ids = set()
         self._baseline = self._section_scores()
         self.serve_next()
 
@@ -375,6 +413,10 @@ class SpeedrunController:
         self._render(_shell("", inner, block_label=self._block_label()))
 
     def _show_question_block(self, plan: Any) -> None:
+        # Record these IDs as seen before rendering so the generation trigger
+        # (fired in serve_next just before this) has an accurate unseen count
+        # for subsequent blocks.
+        self._seen_question_ids.update(plan.question_ids)
         questions = self.performance_score.client_questions_for_ids(plan.question_ids)
         inner = self.performance_score.render_question_block(questions)
         self._render(_shell(plan.reason, inner, block_label=self._block_label()))
@@ -573,6 +615,11 @@ class SpeedrunController:
 
         if self._ended:
             return
+        # If the user navigated away (e.g. clicked Decks) while the flashcard
+        # block was running, respect that navigation instead of overriding it.
+        if self.mw.state not in ("review", SPEEDRUN_STATE):
+            self.end(navigated=True)
+            return
         if answered == 0 and not was_mixed:
             # No cards were available for this topic; don't loop on it.
             self._abort_remediation()
@@ -616,7 +663,7 @@ class SpeedrunController:
             payload = json.loads(unquote(encoded))
             res = self.performance_score.grade_question(
                 self.mw.col,
-                int(payload["id"]),
+                payload["id"],
                 payload.get("concept"),
                 payload.get("answer"),
             )
@@ -629,6 +676,26 @@ class SpeedrunController:
         return res
 
 
+def _purge_orphaned_speedrun_decks(mw: aqt.main.AnkiQt) -> None:
+    """Remove any leftover 'Speedrun (mixed block)' filtered decks.
+
+    These can accumulate if Anki was quit mid-session before cleanup ran.
+    """
+    col = mw.col
+    to_remove = [
+        DeckId(int(d["id"]))
+        for d in col.decks.all()
+        if d.get("name", "").startswith("Speedrun (mixed block)")
+        and d.get("dyn", 0)  # filtered decks have dyn=1
+    ]
+    for did in to_remove:
+        try:
+            col.sched.empty_filtered_deck(did)
+            col.decks.remove([did])
+        except Exception:
+            pass
+
+
 def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
     """Launch the Speedrun loop only for the top-level AnKing-MCAT deck.
 
@@ -636,6 +703,7 @@ def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
     """
     if deck.get("name", "") != MCAT_ROOT:
         return False
+    _purge_orphaned_speedrun_decks(mw)
     existing = getattr(mw, "_speedrun_controller", None)
     if existing is not None:
         existing.end()

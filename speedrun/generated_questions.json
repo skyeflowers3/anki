@@ -1,0 +1,501 @@
+{
+  "questions": [
+    {
+      "id": "biology_gen_001",
+      "passage_id": "biology_generated_001",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "A group of researchers aimed to investigate the role of glycolysis in energy extraction and storage in living cells. They conducted an experiment using both prokaryotic and eukaryotic cells to analyze the glycolysis pathway. The cells were cultured in a controlled environment and provided with glucose as a primary energy source. Two experimental conditions were established: one in which cells were exposed to normal glucose levels and another where cells were treated with glucose analogs that inhibit the action of GLUT proteins, thereby affecting facilitated diffusion. In both conditions, researchers measured the concentration of pyruvate and ATP production to determine the efficiency of glycolysis. To further understand the role of oxygen, the experiment was conducted under both aerobic and anaerobic conditions. Interestingly, the results revealed that pyruvate production was unaffected by the presence or absence of oxygen, confirming that glycolysis is an anaerobic process. However, ATP production was significantly reduced in the presence of GLUT inhibitors, indicating that glucose transport into cells is crucial for efficient energy extraction via glycolysis. These findings underscore the importance of facilitated diffusion in glucose uptake and the anaerobic nature of glycolysis in cellular metabolism.",
+      "question": "Given that glycolysis is an anaerobic process, what is the primary reason ATP production was reduced in the presence of GLUT inhibitors?",
+      "choices": [
+        "GLUT inhibitors block oxygen transport into the cell.",
+        "GLUT inhibitors prevent glucose from entering the cell.",
+        "GLUT inhibitors disrupt mitochondrial function.",
+        "GLUT inhibitors directly deplete ATP stores."
+      ],
+      "correct_answer": "B",
+      "concept": "facilitated diffusion and glucose metabolism",
+      "rationale": "The correct answer is B because GLUT inhibitors prevent glucose from entering the cell, thereby reducing the substrate available for glycolysis and subsequent ATP production. A is incorrect because GLUT inhibitors do not affect oxygen transport; glycolysis is anaerobic and does not require oxygen. C is incorrect because GLUT inhibitors do not directly affect mitochondria; glycolysis occurs in the cytoplasm. D is incorrect because GLUT inhibitors do not directly deplete ATP but rather reduce its production by limiting glucose uptake.",
+      "eval_score": 0.9125,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The question matches MCAT difficulty and style well, with a clear correct answer and plausible distractors.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biology_gen_002",
+      "passage_id": "biology_generated_001",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "Why might glycolysis be considered a universal metabolic pathway among organisms, despite variations in oxygen availability?",
+      "choices": [
+        "It operates under anaerobic conditions.",
+        "It requires specialized organelles only found in eukaryotes.",
+        "It produces more ATP than oxidative phosphorylation.",
+        "It relies on oxygen as a final electron acceptor."
+      ],
+      "correct_answer": "A",
+      "concept": "anaerobic metabolic pathways",
+      "rationale": "The correct answer is A because glycolysis does not require oxygen and can function in both aerobic and anaerobic environments, making it a universal pathway. B is incorrect because glycolysis occurs in the cytoplasm and does not require specialized organelles. C is incorrect because glycolysis produces less ATP than oxidative phosphorylation. D is incorrect because glycolysis does not rely on oxygen as a final electron acceptor; this is characteristic of oxidative phosphorylation.",
+      "eval_score": 0.8625,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.7,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The question is appropriately challenging and the correct answer is clear, but the lack of a passage reduces style alignment with MCAT standards.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biology_gen_003",
+      "passage_id": "biology_generated_001",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "How does the presence of oxygen affect the overall efficiency of glucose metabolism, despite glycolysis being anaerobic?",
+      "choices": [
+        "Oxygen allows glycolysis to produce more ATP per glucose molecule.",
+        "Oxygen is required for the transport of glucose into the cell.",
+        "Oxygen enables the complete oxidation of pyruvate in the mitochondria.",
+        "Oxygen is necessary for the reduction of NAD+ to NADH in glycolysis."
+      ],
+      "correct_answer": "C",
+      "concept": "aerobic respiration and energy yield",
+      "rationale": "The correct answer is C because oxygen allows for the complete oxidation of pyruvate in the mitochondria via the citric acid cycle and oxidative phosphorylation, greatly increasing ATP yield. A is incorrect because glycolysis itself is anaerobic and produces the same amount of ATP regardless of oxygen presence. B is incorrect as oxygen is not needed for glucose transport; this is facilitated by GLUT proteins. D is incorrect because NAD+ is reduced to NADH during glycolysis without the need for oxygen.",
+      "eval_score": 0.8375,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.7,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question is moderately challenging and conceptually appropriate, but lacks a passage; the correct answer is clear, and distractors are plausible yet clearly incorrect.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biochemistry_gen_001",
+      "passage_id": "biochemistry_generated_001",
+      "topic": "Biochemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Energy and Metabolism, https://openstax.org/books/biology-2e/pages/6-1-energy-and-metabolism",
+      "source_text": "Energy and Metabolism Scientists use the term bioenergetics to discuss the concept of energy flow ( ) through living systems, such as cells. Cellular processes such as the building and breaking down of complex molecules occur through stepwise chemical reactions. Some of these chemical reactions are spontaneous and release energy, whereas others require energy to proceed. Just as living things must continually consume food to replenish what has been used, cells must continually produce more energy to replenish that used by the many energy-requiring chemical reactions that constantly take place. All of the chemical reactions that take place inside cells, including those that use energy and those that release energy, are the cell\u2019s metabolism . Metabolism of Carbohydrates The metabolism of sugar (a simple carbohydrate) is a classic example of the many cellular processes that use and produce energy. Living things consume sugar as a major energy source, because sugar molecules have a great deal of energy stored within their bonds. The breakdown of glucose, a simple sugar, is described by the equation: Carbohydrates that are consumed have their origins in photosynthesizing organisms like plants ( ). During photosynthesis, plants use the energy of sunlight to convert carbon dioxide gas (CO 2 ) into sugar molecules, like glucose (C 6 H 12 O 6 ).",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers investigated the metabolic pathways involved in the breakdown of glucose, a simple sugar, within living cells. In a controlled laboratory experiment, they monitored the energy release and consumption during the conversion of glucose (C6H12O6) into usable cellular energy. Using isotopic labeling techniques, the scientists traced the carbon atoms from glucose as they underwent enzymatic reactions. This allowed them to map the stepwise chemical reactions involved in glucose catabolism. They found that the breakdown of glucose occurs in a series of reactions, each either releasing or requiring energy, in a process known as cellular respiration. The researchers specifically focused on the glycolytic pathway, noting that this pathway not only breaks down glucose but also plays a crucial role in the cell's overall metabolism by linking to other metabolic pathways. By measuring the ATP produced and consumed during these reactions, they confirmed that glycolysis is a critical energy-yielding step. Their findings provided deeper insights into how living organisms efficiently harness and manage energy from carbohydrate metabolism, revealing the intricate balance between energy-releasing and energy-requiring reactions in cellular bioenergetics.",
+      "question": "In the glycolytic pathway, which step is most likely to be affected if an enzyme inhibitor specifically targets the initial substrate binding of glucose?",
+      "choices": [
+        "Conversion of glucose to glucose-6-phosphate",
+        "Conversion of fructose-6-phosphate to fructose-1,6-bisphosphate",
+        "Conversion of phosphoenolpyruvate to pyruvate",
+        "Oxidation of glyceraldehyde-3-phosphate to 1,3-bisphosphoglycerate"
+      ],
+      "correct_answer": "A",
+      "concept": "enzyme inhibition and glycolysis",
+      "rationale": "The initial step in glycolysis is the conversion of glucose to glucose-6-phosphate, which is catalyzed by hexokinase. An inhibitor affecting the substrate binding of glucose would most likely target this step. Choices B, C, and D involve steps that occur later in glycolysis and would not be directly affected by an inhibitor specific to glucose binding.",
+      "eval_score": 0.925,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.95,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not as subtle as the gold standard.",
+      "eval_held_out_ids": [
+        "bb_002"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biochemistry_gen_002",
+      "passage_id": "biochemistry_generated_001",
+      "topic": "Biochemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Energy and Metabolism, https://openstax.org/books/biology-2e/pages/6-1-energy-and-metabolism",
+      "source_text": "Energy and Metabolism Scientists use the term bioenergetics to discuss the concept of energy flow ( ) through living systems, such as cells. Cellular processes such as the building and breaking down of complex molecules occur through stepwise chemical reactions. Some of these chemical reactions are spontaneous and release energy, whereas others require energy to proceed. Just as living things must continually consume food to replenish what has been used, cells must continually produce more energy to replenish that used by the many energy-requiring chemical reactions that constantly take place. All of the chemical reactions that take place inside cells, including those that use energy and those that release energy, are the cell\u2019s metabolism . Metabolism of Carbohydrates The metabolism of sugar (a simple carbohydrate) is a classic example of the many cellular processes that use and produce energy. Living things consume sugar as a major energy source, because sugar molecules have a great deal of energy stored within their bonds. The breakdown of glucose, a simple sugar, is described by the equation: Carbohydrates that are consumed have their origins in photosynthesizing organisms like plants ( ). During photosynthesis, plants use the energy of sunlight to convert carbon dioxide gas (CO 2 ) into sugar molecules, like glucose (C 6 H 12 O 6 ).",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "Which of the following is a direct consequence of the glycolytic pathway's integration with other metabolic pathways?",
+      "choices": [
+        "Increased production of carbon dioxide",
+        "The ability for gluconeogenesis to occur",
+        "The generation of NADH and ATP",
+        "The utilization of fatty acids for energy"
+      ],
+      "correct_answer": "B",
+      "concept": "metabolic pathway integration",
+      "rationale": "The glycolytic pathway connects with gluconeogenesis, allowing for the synthesis of glucose from non-carbohydrate sources. While C is true, it is a product of glycolysis itself, not a direct consequence of its integration with other pathways. A involves a process primarily in the citric acid cycle, and D is more related to the beta-oxidation of fatty acids.",
+      "eval_score": 0.825,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.75,
+        "answer_defensible": 0.9,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question's difficulty and style are close to the gold standard, with a clear correct answer and plausible distractors, though the passage context is missing.",
+      "eval_held_out_ids": [
+        "bb_002"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biochemistry_gen_003",
+      "passage_id": "biochemistry_generated_001",
+      "topic": "Biochemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Energy and Metabolism, https://openstax.org/books/biology-2e/pages/6-1-energy-and-metabolism",
+      "source_text": "Energy and Metabolism Scientists use the term bioenergetics to discuss the concept of energy flow ( ) through living systems, such as cells. Cellular processes such as the building and breaking down of complex molecules occur through stepwise chemical reactions. Some of these chemical reactions are spontaneous and release energy, whereas others require energy to proceed. Just as living things must continually consume food to replenish what has been used, cells must continually produce more energy to replenish that used by the many energy-requiring chemical reactions that constantly take place. All of the chemical reactions that take place inside cells, including those that use energy and those that release energy, are the cell\u2019s metabolism . Metabolism of Carbohydrates The metabolism of sugar (a simple carbohydrate) is a classic example of the many cellular processes that use and produce energy. Living things consume sugar as a major energy source, because sugar molecules have a great deal of energy stored within their bonds. The breakdown of glucose, a simple sugar, is described by the equation: Carbohydrates that are consumed have their origins in photosynthesizing organisms like plants ( ). During photosynthesis, plants use the energy of sunlight to convert carbon dioxide gas (CO 2 ) into sugar molecules, like glucose (C 6 H 12 O 6 ).",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "During the experiment, isotopic labeling was used to trace carbon atoms. Which of the following analytical techniques would most likely be used to track these isotopically labeled carbon atoms throughout glycolysis?",
+      "choices": [
+        "Mass spectrometry",
+        "Nuclear magnetic resonance (NMR) spectroscopy",
+        "Infrared (IR) spectroscopy",
+        "Ultraviolet-visible (UV-Vis) spectroscopy"
+      ],
+      "correct_answer": "A",
+      "concept": "analytical techniques for isotopic labeling",
+      "rationale": "Mass spectrometry is the most suitable technique for tracking isotopically labeled atoms due to its ability to precisely measure mass and differentiate between isotopes. NMR (B) is used for structural information at the atomic level, IR (C) is used for identifying functional groups, and UV-Vis (D) is used for quantifying concentration changes, none of which specifically track isotopes.",
+      "eval_score": 0.8375,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.7,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question's difficulty is appropriate for MCAT, but the lack of a passage reduces style match; the correct answer is clear, and distractors are plausible but not as challenging as gold standard.",
+      "eval_held_out_ids": [
+        "bb_002"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "general_chemistry_gen_001",
+      "passage_id": "general_chemistry_generated_001",
+      "topic": "General-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Chemistry 2e, Chemical Reaction Rates, https://openstax.org/books/chemistry-2e/pages/12-1-chemical-reaction-rates",
+      "source_text": "Chemical Reaction Rates A rate is a measure of how some property varies with time. Speed is a familiar rate that expresses the distance traveled by an object in a given amount of time. Wage is a rate that represents the amount of money earned by a person working for a given amount of time. Likewise, the rate of a chemical reaction is a measure of how much reactant is consumed, or how much product is produced, by the reaction in a given amount of time. The rate of reaction is the change in the amount of a reactant or product per unit time. Reaction rates are therefore determined by measuring the time dependence of some property that can be related to reactant or product amounts. Rates of reactions that consume or produce gaseous substances, for example, are conveniently determined by measuring changes in volume or pressure. For reactions involving one or more colored substances, rates may be monitored via measurements of light absorption. For reactions involving aqueous electrolytes, rates may be measured via changes in a solution\u2019s conductivity. For reactants and products in solution, their relative amounts (concentrations) are conveniently used for purposes of expressing reaction rates.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In an investigative study, researchers explored the rate of a chemical reaction involving the conversion of substance A, a colored reactant, into product B, a colorless compound, in an aqueous solution. The reaction was monitored using spectrophotometry to measure changes in light absorption over time, specifically focusing on the decrease in absorbance at a wavelength corresponding to substance A. By recording these absorbance changes at regular intervals, the researchers were able to determine the rate at which substance A was consumed. Concurrently, the conductivity of the solution was measured to assess the formation of ions during the reaction. The experiment was conducted at constant temperature and pressure to ensure that the changes in absorption and conductivity were solely due to the reaction progress. The researchers noted that the reaction rate increased with higher initial concentrations of substance A. This study provided insights into the kinetics of the reaction, revealing that the rate could be effectively measured by tracking the decrease in colored reactant concentration and corresponding changes in solution conductivity, both of which are indicative of the conversion of reactants to products over time.",
+      "question": "Which factor primarily explains the increase in reaction rate with higher initial concentrations of substance A in the study described?",
+      "choices": [
+        "Increased frequency of collisions between reactant molecules",
+        "Increased temperature accelerating molecular motion",
+        "Enhanced light absorption by substance A",
+        "Increased pressure of the reaction environment"
+      ],
+      "correct_answer": "A",
+      "concept": "collision theory and reaction kinetics",
+      "rationale": "The correct answer is A. According to collision theory, higher concentrations of reactants increase the frequency of collisions between reactant molecules, thereby increasing the reaction rate. B is incorrect because temperature was held constant in the study. C is incorrect because light absorption changes were used to measure the reaction rate, not to influence it. D is incorrect as the pressure was also held constant and is not relevant in this context.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the MCAT format, the correct answer is clear and well-supported, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "q_006"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "general_chemistry_gen_002",
+      "passage_id": "general_chemistry_generated_001",
+      "topic": "General-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Chemistry 2e, Chemical Reaction Rates, https://openstax.org/books/chemistry-2e/pages/12-1-chemical-reaction-rates",
+      "source_text": "Chemical Reaction Rates A rate is a measure of how some property varies with time. Speed is a familiar rate that expresses the distance traveled by an object in a given amount of time. Wage is a rate that represents the amount of money earned by a person working for a given amount of time. Likewise, the rate of a chemical reaction is a measure of how much reactant is consumed, or how much product is produced, by the reaction in a given amount of time. The rate of reaction is the change in the amount of a reactant or product per unit time. Reaction rates are therefore determined by measuring the time dependence of some property that can be related to reactant or product amounts. Rates of reactions that consume or produce gaseous substances, for example, are conveniently determined by measuring changes in volume or pressure. For reactions involving one or more colored substances, rates may be monitored via measurements of light absorption. For reactions involving aqueous electrolytes, rates may be measured via changes in a solution\u2019s conductivity. For reactants and products in solution, their relative amounts (concentrations) are conveniently used for purposes of expressing reaction rates.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "Why would measuring the conductivity of the solution provide information about the reaction progress?",
+      "choices": [
+        "Conductivity is directly proportional to the concentration of colored reactants.",
+        "Conductivity changes indicate the formation of ionized products.",
+        "Conductivity changes reflect changes in temperature of the solution.",
+        "Conductivity is unaffected by the concentration of ions in solution."
+      ],
+      "correct_answer": "B",
+      "concept": "conductivity and ionic solutions",
+      "rationale": "The correct answer is B. Conductivity measurements are used to assess the formation of ions, which indicates reaction progress when ionized products are formed. A is incorrect because conductivity is related to ions, not colored reactants. C is incorrect, as conductivity primarily depends on ion concentration rather than temperature changes. D is incorrect because conductivity is indeed affected by the concentration of ions in the solution.",
+      "eval_score": 0.85,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.75,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question's difficulty is appropriate, but the lack of a passage reduces style match; the correct answer is clear, and distractors are plausible but not as nuanced as gold standard.",
+      "eval_held_out_ids": [
+        "q_006"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "general_chemistry_gen_003",
+      "passage_id": "general_chemistry_generated_001",
+      "topic": "General-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Chemistry 2e, Chemical Reaction Rates, https://openstax.org/books/chemistry-2e/pages/12-1-chemical-reaction-rates",
+      "source_text": "Chemical Reaction Rates A rate is a measure of how some property varies with time. Speed is a familiar rate that expresses the distance traveled by an object in a given amount of time. Wage is a rate that represents the amount of money earned by a person working for a given amount of time. Likewise, the rate of a chemical reaction is a measure of how much reactant is consumed, or how much product is produced, by the reaction in a given amount of time. The rate of reaction is the change in the amount of a reactant or product per unit time. Reaction rates are therefore determined by measuring the time dependence of some property that can be related to reactant or product amounts. Rates of reactions that consume or produce gaseous substances, for example, are conveniently determined by measuring changes in volume or pressure. For reactions involving one or more colored substances, rates may be monitored via measurements of light absorption. For reactions involving aqueous electrolytes, rates may be measured via changes in a solution\u2019s conductivity. For reactants and products in solution, their relative amounts (concentrations) are conveniently used for purposes of expressing reaction rates.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "What role does spectrophotometry serve in the experimental study described?",
+      "choices": [
+        "It provides a direct measure of ion concentration in solution.",
+        "It allows for the determination of product formation rate by measuring absorbance changes.",
+        "It measures the change in temperature of the solution over time.",
+        "It determines the pressure change of the reaction environment."
+      ],
+      "correct_answer": "B",
+      "concept": "spectrophotometry and reaction monitoring",
+      "rationale": "The correct answer is B. Spectrophotometry is used to measure changes in light absorbance, which can be correlated with the concentration of a colored reactant, thus allowing determination of the reaction rate. A is incorrect because spectrophotometry does not measure ion concentration. C is incorrect as spectrophotometry is not used for temperature measurements. D is incorrect because pressure is not measured by spectrophotometry.",
+      "eval_score": 0.75,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.7,
+        "style_match": 0.5,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question is moderately challenging but lacks a passage, reducing style match; the correct answer is clear, and distractors are plausible but not perfectly aligned with MCAT style.",
+      "eval_held_out_ids": [
+        "q_006"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "physics_and_math_gen_001",
+      "passage_id": "physics_and_math_generated_001",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "A team of physicists conducted an experiment to analyze the work done by variable forces on a particle as it moved along a curved path. The setup involved a particle placed on a frictionless track, where multiple forces acted on it as it traveled from point A to point B. Sensors were strategically placed along the path to measure the force magnitude and direction at various points. The physicists aimed to calculate the total work done on the particle by these forces by integrating the dot product of force and displacement vectors over the entire path. The experiment focused on cases where the forces varied as functions of position, making the calculation of work more complex. In one scenario, the particle moved uphill against a gravitational force, while another force applied horizontally assisted its motion. The angle between the force and displacement vectors varied continuously along the path. By measuring the displacement and forces at infinitesimal intervals, the researchers were able to approximate the total work done using a series of integrals. This experiment provided insights into how work is calculated in systems where forces are not constant, highlighting the relevance of vector magnitudes and angles in determining the work done in such dynamic systems.",
+      "question": "In the described experiment, the physicists used integrals to calculate the work done by variable forces. Which mathematical method would be most appropriate to evaluate these integrals if the force is a continuous function of position?",
+      "choices": [
+        "Trapezoidal rule",
+        "Simpson's rule",
+        "Riemann sums",
+        "Analytical integration"
+      ],
+      "correct_answer": "D",
+      "concept": "calculus and integration techniques",
+      "rationale": "Analytical integration is the direct evaluation of integrals using calculus and is the most accurate method when a continuous function is known. The other methods are numerical approximations used when an analytical solution is difficult or impossible to find due to the complexity of the function.",
+      "eval_score": 0.8875,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.8,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The difficulty and style are close to the gold standard, with a clear correct answer and strong distractors, though the passage is more detailed than typical MCAT questions.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "physics_and_math_gen_002",
+      "passage_id": "physics_and_math_generated_001",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "When calculating the work done on the particle, the angle between the force and displacement vectors varied continuously. What additional information is required to calculate the work done at each segment of the path?",
+      "choices": [
+        "The mass of the particle",
+        "The velocity of the particle",
+        "The magnitude of the force and the displacement",
+        "The time taken to traverse each segment"
+      ],
+      "correct_answer": "C",
+      "concept": "work as a dot product of force and displacement",
+      "rationale": "To calculate the work done at each segment, the magnitude of the force, the displacement, and the angle between them are needed, as work is the dot product of force and displacement. Mass, velocity, and time are not directly needed to calculate work in this context.",
+      "eval_score": 0.85,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.75,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question is moderately challenging and conceptually similar to the gold standard, but lacks a passage; the correct answer is clear, and distractors are plausible but not as nuanced as gold.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "physics_and_math_gen_003",
+      "passage_id": "physics_and_math_generated_001",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "If the particle in the experiment moves uphill and experiences a gravitational force, what type of energy change occurs, and how does it relate to the work done?",
+      "choices": [
+        "Kinetic energy increases; work is positive.",
+        "Potential energy decreases; work is negative.",
+        "Kinetic energy decreases; work is negative.",
+        "Potential energy increases; work is positive."
+      ],
+      "correct_answer": "D",
+      "concept": "work-energy principle and potential energy",
+      "rationale": "As the particle moves uphill against gravitational force, its potential energy increases, which corresponds to positive work done against gravity. Kinetic energy changes are not directly considered in the scenario described, and potential energy increases, not decreases.",
+      "eval_score": 0.8375,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.7,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question's difficulty is appropriate, but the lack of a passage reduces style match; the correct answer is clear, and distractors are plausible but not as nuanced as gold.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "behavioral_gen_001",
+      "passage_id": "behavioral_generated_001",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts\u2014brains and hormones and cells with genetic codes\u2014these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let\u2019s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia\u2014and the particular genetic mutation that causes it\u2014die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers are investigating the genetic basis of psychological disorders by examining the role of sickle-cell anemia in behavioral outcomes. In a recent study, two sisters diagnosed with sickle-cell anemia were observed over several years to explore how their genetic condition might influence their psychological development. The disorder, characterized by crescent-shaped red blood cells that impede blood flow, causes symptoms such as severe pain and high fever. Despite these shared genetic and physiological challenges, the sisters exhibited markedly different psychological and behavioral responses. One sister developed symptoms of depression and anxiety, frequently expressing feelings of hopelessness, while the other sister showed resilience, maintaining a positive outlook and active social life despite her physical symptoms. The study aimed to identify factors contributing to these differing outcomes, considering variables such as social support, coping mechanisms, and the presence of additional genetic mutations. By focusing on such cases, researchers hope to understand better the interplay between genetic disorders and psychological health, potentially leading to targeted interventions for individuals with similar genetic profiles. This investigation raises questions about the extent to which genetic predispositions affect psychological resilience and the potential for psychological interventions in managing genetic disorders.",
+      "question": "Based on the passage, which factor is most likely to influence psychological resilience in individuals with genetic disorders such as sickle-cell anemia?",
+      "choices": [
+        "The severity of physiological symptoms experienced.",
+        "The presence of social support networks.",
+        "The specific genetic mutation involved.",
+        "The age at which the disorder is diagnosed."
+      ],
+      "correct_answer": "B",
+      "concept": "psychological resilience and social support",
+      "rationale": "The passage highlights the role of social support and coping mechanisms in the differing psychological outcomes of the two sisters with sickle-cell anemia. Social support networks are known to bolster psychological resilience. Option A is incorrect because the passage suggests that both sisters shared similar physiological challenges, yet had different psychological outcomes. Option C is incorrect as the passage does not specify that the genetic mutation alone determines psychological resilience. Option D is irrelevant as the passage does not mention the age of diagnosis affecting resilience.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not as nuanced as the gold set.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "behavioral_gen_002",
+      "passage_id": "behavioral_generated_001",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts\u2014brains and hormones and cells with genetic codes\u2014these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let\u2019s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia\u2014and the particular genetic mutation that causes it\u2014die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "How might a researcher investigate the influence of genetic mutations on psychological disorders using a behavioral genetic approach?",
+      "choices": [
+        "Conducting a twin study to compare psychological outcomes in identical and fraternal twins.",
+        "Analyzing the impact of a specific genetic mutation on blood flow in sickle-cell anemia patients.",
+        "Surveying a population with sickle-cell anemia to determine the prevalence of depression.",
+        "Interviewing individuals with sickle-cell anemia about their personal experiences with social support."
+      ],
+      "correct_answer": "A",
+      "concept": "behavioral genetics and study design",
+      "rationale": "A twin study allows researchers to separate genetic influences from environmental ones by comparing identical (sharing nearly all genes) and fraternal twins (sharing about half). Option B focuses on physiological rather than psychological outcomes. Option C is descriptive and does not address genetic influence directly. Option D focuses on social factors rather than genetic.",
+      "eval_score": 0.85,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.75,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question's difficulty is appropriate for MCAT, the style lacks a passage, the correct answer is clear, and distractors are plausible but not as challenging as gold.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "behavioral_gen_003",
+      "passage_id": "behavioral_generated_001",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts\u2014brains and hormones and cells with genetic codes\u2014these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let\u2019s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia\u2014and the particular genetic mutation that causes it\u2014die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "question": "Which psychological intervention is most likely to benefit individuals with genetic disorders in managing their condition, based on the study's focus?",
+      "choices": [
+        "Cognitive-behavioral therapy to address negative thought patterns.",
+        "Pharmacotherapy to alleviate physical symptoms.",
+        "Psychoeducation about genetic disorders.",
+        "Group therapy to enhance social support."
+      ],
+      "correct_answer": "D",
+      "concept": "psychological interventions and social support",
+      "rationale": "The passage emphasizes the role of social support in managing psychological outcomes of genetic disorders. Group therapy can provide such support. Option A could help with individual thought patterns but doesn't address the social aspect highlighted. Option B focuses on physical rather than psychological symptoms. Option C might increase understanding but does not actively provide social support.",
+      "eval_score": 0.7375,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.75,
+        "style_match": 0.6,
+        "answer_defensible": 0.9,
+        "distractors_quality": 0.7
+      },
+      "eval_reasoning": "The question's difficulty is reasonable but lacks a passage for context; the style is less passage-based than typical MCAT questions; the correct answer is defensible, and distractors are plausible but not deeply challenging.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    }
+  ]
+}
