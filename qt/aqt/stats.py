@@ -37,12 +37,12 @@ def _memory_score_module():
     is not on sys.path by default, so add it relative to the aqt package.
     """
     try:
-        from speedrun import memory_score
+        from aqt.speedrun import memory_score
     except ModuleNotFoundError:
         repo_root = Path(aqt.__file__).resolve().parents[2]
         if str(repo_root) not in sys.path:
             sys.path.insert(0, str(repo_root))
-        from speedrun import memory_score
+        from aqt.speedrun import memory_score
 
     return memory_score
 
@@ -56,12 +56,12 @@ def _performance_score_module():
     running from source.
     """
     try:
-        from speedrun import performance_score
+        from aqt.speedrun import performance_score
     except ModuleNotFoundError:
         repo_root = Path(aqt.__file__).resolve().parents[2]
         if str(repo_root) not in sys.path:
             sys.path.insert(0, str(repo_root))
-        from speedrun import performance_score
+        from aqt.speedrun import performance_score
 
     return performance_score
 

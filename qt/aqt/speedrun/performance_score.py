@@ -37,7 +37,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import random
 import sys
 import time
 from dataclasses import dataclass
@@ -50,14 +49,14 @@ if TYPE_CHECKING:
 # Make the in-tree `anki` package importable when run as a standalone CLI, and
 # make the sibling `memory_score` module importable in both run modes. See the
 # equivalent bootstrap in memory_score.py for details.
-_REPO_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 for _p in (_REPO_ROOT / "pylib", _REPO_ROOT / "out" / "pylib"):
     if _p.is_dir() and str(_p) not in sys.path:
         sys.path.insert(0, str(_p))
 
 try:
     # Imported as part of the `speedrun` package (e.g. from the desktop UI).
-    from speedrun import memory_score
+    from . import memory_score
 except ImportError:
     # Run as a script: speedrun/ is on sys.path[0], so import the sibling.
     import memory_score  # type: ignore[import-not-found,no-redef]

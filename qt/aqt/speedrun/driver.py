@@ -18,11 +18,14 @@ only wires that logic to the Qt UI and the scheduler.
 
 from __future__ import annotations
 
+import logging
 import random
 import sys
 from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+_log = logging.getLogger("speedrun.qt")
 
 import aqt
 from anki.decks import DeckId
@@ -47,22 +50,26 @@ SPEEDRUN_STATE: str = "speedrun"
 def _modules():
     """Import the shared speedrun logic modules (see stats.py for rationale)."""
     try:
-        from speedrun import performance_score, speedrun_loop
+        from aqt.speedrun import performance_score, speedrun_loop
     except ModuleNotFoundError:
         repo_root = Path(aqt.__file__).resolve().parents[2]
         if str(repo_root) not in sys.path:
             sys.path.insert(0, str(repo_root))
-        from speedrun import performance_score, speedrun_loop
+        from aqt.speedrun import performance_score, speedrun_loop
 
     return speedrun_loop, performance_score
 
 
-def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId]:
+def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId | None]:
     """Map each in-scope topic (subdeck) to a deck id, within the selection.
 
     Topics are the AnKing-MCAT subdecks known to the loop (Behavioral,
     Biochemistry, ...). Reviewing a topic's deck naturally includes any of its
     child decks.
+
+    Questions-only topics (e.g. CARS) that have no flashcard deck are included
+    with a ``None`` deck id so question blocks can serve them even though no
+    flashcard review is possible.
     """
     speedrun_loop, _ = _modules()
     known = speedrun_loop.POINTS_WEIGHTS
@@ -71,7 +78,7 @@ def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId]:
         return {}
     root_name = root["name"]
 
-    topics: dict[str, DeckId] = {}
+    topics: dict[str, DeckId | None] = {}
     for entry in mw.col.decks.all_names_and_ids(
         skip_empty_default=True, include_filtered=False
     ):
@@ -92,6 +99,15 @@ def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId]:
                 did = mw.col.decks.id_for_name(ancestor)
                 if did is not None:
                     topics[comp] = did
+
+    # Inject questions-only topics (no flashcard deck) so they participate in
+    # question blocks even when there is no matching deck in the collection.
+    _, _perf = _modules()
+    _ms = speedrun_loop.memory_score  # already imported inside speedrun_loop
+    for name in _ms.QUESTIONS_ONLY_TOPICS:
+        if name in known and name not in topics:
+            topics[name] = None  # no deck; flashcard blocks skip it
+
     return topics
 
 
@@ -208,6 +224,9 @@ class SpeedrunController:
         # Per-question (concept_correct, answer_correct) results for the block
         # currently in progress, used for block-level routing.
         self._block_results: list[tuple[bool, bool]] = []
+        # Temporary store for concept-grading results between srq:grade_concept
+        # and srq:grade_answer (keyed by question id).
+        self._pending_concept: dict[str | int, dict] = {}
 
     # -- lifecycle -----------------------------------------------------------
 
@@ -307,12 +326,12 @@ class SpeedrunController:
         swallowed so this can never crash the app.
         """
         try:
-            from speedrun.auto_generator import maybe_trigger_generation
+            from aqt.speedrun.auto_generator import maybe_trigger_generation
         except ModuleNotFoundError:
             repo_root = Path(aqt.__file__).resolve().parents[2]
             if str(repo_root) not in sys.path:
                 sys.path.insert(0, str(repo_root))
-            from speedrun.auto_generator import maybe_trigger_generation
+            from aqt.speedrun.auto_generator import maybe_trigger_generation
         except Exception:  # noqa: BLE001
             return  # module unavailable — silently skip
 
@@ -412,13 +431,35 @@ class SpeedrunController:
         )
         self._render(_shell("", inner, block_label=self._block_label()))
 
+    def _get_api_key(self) -> str:
+        """Return OPENAI_API_KEY, loading .env if needed."""
+        import os
+        from pathlib import Path as _Path
+
+        key = os.environ.get("OPENAI_API_KEY", "").strip()
+        if not key:
+            env_path = _Path(__file__).parent.parent.parent.parent / ".env"
+            if env_path.exists():
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line.startswith("OPENAI_API_KEY="):
+                        key = line.split("=", 1)[1].strip().strip("\"'")
+                        if key:
+                            os.environ["OPENAI_API_KEY"] = key
+                        break
+        return key
+
     def _show_question_block(self, plan: Any) -> None:
         # Record these IDs as seen before rendering so the generation trigger
         # (fired in serve_next just before this) has an accurate unseen count
         # for subsequent blocks.
         self._seen_question_ids.update(plan.question_ids)
+        self._pending_concept.clear()
         questions = self.performance_score.client_questions_for_ids(plan.question_ids)
-        inner = self.performance_score.render_question_block(questions)
+        ai_available = bool(self._get_api_key())
+        inner = self.performance_score.render_question_block(
+            questions, ai_available=ai_available
+        )
         self._render(_shell(plan.reason, inner, block_label=self._block_label()))
 
     def _show_done(self, message: str) -> None:
@@ -487,7 +528,7 @@ class SpeedrunController:
             return
         deck_id = self.topic_decks.get(self._current_plan.topic)
         if deck_id is None:
-            # Nothing to review; skip remediation to avoid looping.
+            # No flashcard deck for this topic (e.g. CARS, or topic not found).
             self._abort_remediation()
             return
         self._begin_reviewer(deck_id, self._current_plan.size)
@@ -508,6 +549,9 @@ class SpeedrunController:
         stats = self._stats()
         pools: dict[str, list[int]] = {}
         for topic, deck_id in self.topic_decks.items():
+            if deck_id is None:
+                # Questions-only topic (e.g. CARS) — no flashcard deck.
+                continue
             if topic in self.session.exhausted_topics:
                 continue
             deck = col.decks.get(deck_id)
@@ -641,6 +685,12 @@ class SpeedrunController:
     # -- bridge --------------------------------------------------------------
 
     def on_bridge_cmd(self, cmd: str) -> Any:
+        if cmd.startswith("srq:grade_concept:"):
+            return self._grade_concept(cmd[len("srq:grade_concept:") :])
+        if cmd.startswith("srq:grade_answer:"):
+            return self._grade_answer_step(cmd[len("srq:grade_answer:") :])
+        if cmd.startswith("srq:explain:"):
+            return self._explain(cmd[len("srq:explain:") :])
         if cmd.startswith("srq:grade:"):
             return self._grade(cmd[len("srq:grade:") :])
         if cmd == "sr:continue":
@@ -655,7 +705,94 @@ class SpeedrunController:
             self.end()
         return False
 
+    def _grade_concept(self, encoded: str) -> Any:
+        """Step 1: AI-grade the free-response concept answer and cache the result."""
+        import json
+        from urllib.parse import unquote
+
+        try:
+            payload = json.loads(unquote(encoded))
+            qid = payload["id"]
+            response = payload.get("response", "")
+        except Exception as exc:
+            return {"error": str(exc)}
+
+        # Look up the question to get concept/rationale for grading.
+        question = self.performance_score.questions_by_id().get(qid)
+        if question is None:
+            return {"ai_unavailable": True}
+
+        result = self.performance_score.grade_concept_with_ai(
+            question, response, self._get_api_key()
+        )
+        # Cache so grade_answer_step can read it without the client re-sending.
+        self._pending_concept[qid] = result
+        return result
+
+    def _grade_answer_step(self, encoded: str) -> Any:
+        """Step 2: Grade the MC answer and persist the full attempt to DB."""
+        import json
+        from urllib.parse import unquote
+
+        try:
+            payload = json.loads(unquote(encoded))
+            qid = payload["id"]
+            answer = payload.get("answer", "")
+            # Server cache is the authority for concept grading results.
+            # Use None sentinel so we can distinguish "graded wrong" from "never graded".
+            pending = self._pending_concept.pop(qid, None)
+            concept_was_graded = pending is not None
+            concept_correct = bool((pending or {}).get("concept_correct", False))
+            application_correct = bool((pending or {}).get("application_correct", False))
+        except Exception as exc:
+            return {"error": str(exc)}
+
+        try:
+            res = self.performance_score.grade_answer_for_session(
+                self.mw.col,
+                qid,
+                answer,
+                concept_correct=concept_correct,
+                application_correct=application_correct,
+            )
+        except Exception as exc:
+            return {"error": str(exc)}
+
+        if "error" not in res:
+            self._block_results.append(
+                (bool(res["concept_correct"]), bool(res["answer_correct"]))
+            )
+            # Tell the JS whether concept grading actually ran so it can decide
+            # whether to show the concept verdict.
+            res["concept_was_graded"] = concept_was_graded
+        return res
+
+    def _explain(self, encoded: str) -> Any:
+        """Step 3: Generate a wrong-answer explanation with GPT-4o."""
+        import json
+        from urllib.parse import unquote
+
+        try:
+            payload = json.loads(unquote(encoded))
+            qid = payload["id"]
+        except Exception as exc:
+            return {"error": str(exc)}
+
+        question = self.performance_score.questions_by_id().get(qid)
+        if question is None:
+            return {"error": f"unknown question id {qid}"}
+
+        return self.performance_score.generate_explanation_with_ai(
+            question,
+            payload.get("chosen_answer", ""),
+            bool(payload.get("concept_correct", False)),
+            bool(payload.get("application_correct", False)),
+            bool(payload.get("answer_correct", False)),
+            self._get_api_key(),
+        )
+
     def _grade(self, encoded: str) -> Any:
+        """Legacy single-step grader (kept for CLI backward compat)."""
         import json
         from urllib.parse import unquote
 
@@ -696,6 +833,46 @@ def _purge_orphaned_speedrun_decks(mw: aqt.main.AnkiQt) -> None:
             pass
 
 
+def _ensure_auto_sync(mw: aqt.main.AnkiQt) -> None:
+    """Enable sync-on-open/close if the user has a sync account configured.
+
+    This ensures that phone reviews are reflected on the desktop after the
+    next app open, satisfying the offline-first sync requirement without any
+    extra user setup step.
+    """
+    try:
+        if mw.pm.sync_auth() is not None and not mw.pm.auto_syncing_enabled():
+            mw.pm.profile["autoSync"] = True
+            _log.info("Speedrun enabled auto-sync on open/close.")
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _start_question_sync_pull() -> None:
+    """Background-pull questions from Firestore into the local cache.
+
+    Spawns a daemon thread so app startup is never blocked.
+    """
+    import threading
+
+    def _run() -> None:
+        try:
+            from aqt.speedrun.question_sync import maybe_pull_into_local_cache
+        except ModuleNotFoundError:
+            repo_root = Path(aqt.__file__).resolve().parents[2]
+            if str(repo_root) not in sys.path:
+                sys.path.insert(0, str(repo_root))
+            from aqt.speedrun.question_sync import maybe_pull_into_local_cache
+        except Exception:  # noqa: BLE001
+            return
+        try:
+            maybe_pull_into_local_cache()
+        except Exception:  # noqa: BLE001
+            pass
+
+    threading.Thread(target=_run, daemon=True, name="speedrun-sync-pull").start()
+
+
 def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
     """Launch the Speedrun loop only for the top-level AnKing-MCAT deck.
 
@@ -703,6 +880,8 @@ def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
     """
     if deck.get("name", "") != MCAT_ROOT:
         return False
+    _ensure_auto_sync(mw)
+    _start_question_sync_pull()
     _purge_orphaned_speedrun_decks(mw)
     existing = getattr(mw, "_speedrun_controller", None)
     if existing is not None:

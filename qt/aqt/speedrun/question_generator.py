@@ -75,7 +75,7 @@ _PASSAGE_MAX_WORDS = 250
 
 def _load_dotenv() -> None:
     """Load a .env file from the repo root into os.environ (no dependencies)."""
-    env_path = Path(__file__).parent.parent / ".env"
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
     if not env_path.exists():
         return
     for line in env_path.read_text(encoding="utf-8").splitlines():
@@ -152,7 +152,7 @@ def _load_examples(n: int, topic: str | None = None) -> list[dict]:
     held-out set is reserved exclusively for eval scoring.
     """
     try:
-        from speedrun.eval import load_style_examples  # type: ignore[import]
+        from .eval import load_style_examples  # type: ignore[import]
 
         return load_style_examples(topic, n)
     except ImportError:
@@ -657,12 +657,12 @@ def main(argv: list[str] | None = None) -> None:
         return
 
     try:
-        from speedrun.eval import (  # type: ignore[import]
+        from .eval import (  # type: ignore[import]
             print_summary,
             run_eval,
             save_results,
         )
-        from speedrun.eval import (
+        from .eval import (
             save_generated as eval_save_generated,
         )
     except ImportError:

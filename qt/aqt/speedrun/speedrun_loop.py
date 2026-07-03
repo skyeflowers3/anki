@@ -63,13 +63,13 @@ from typing import TYPE_CHECKING, Callable
 if TYPE_CHECKING:
     from anki.collection import Collection
 
-_REPO_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 for _p in (_REPO_ROOT / "pylib", _REPO_ROOT / "out" / "pylib"):
     if _p.is_dir() and str(_p) not in sys.path:
         sys.path.insert(0, str(_p))
 
 try:
-    from speedrun import memory_score, performance_score
+    from . import memory_score, performance_score
 except ImportError:
     import memory_score  # type: ignore[import-not-found,no-redef]
     import performance_score  # type: ignore[import-not-found,no-redef]

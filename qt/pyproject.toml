@@ -86,6 +86,8 @@ ankiw = "aqt:run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["aqt"]
+# hatchling includes all files inside declared packages, so JSON/XML data
+# files under aqt/speedrun/ are automatically bundled in the wheel.
 exclude = ["aqt/data", "**/*.ui"]
 
 [tool.hatch.version]

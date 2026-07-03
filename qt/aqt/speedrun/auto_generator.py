@@ -65,7 +65,7 @@ def unseen_question_count(topic: str, seen_ids: set[str | int]) -> int:
 
     count = 0
     try:
-        from speedrun.performance_score import USE_MANUAL_QUESTIONS  # type: ignore[import-not-found]
+        from .performance_score import USE_MANUAL_QUESTIONS
 
         if USE_MANUAL_QUESTIONS and _QUESTIONS_PATH.exists():
             data = json.loads(_QUESTIONS_PATH.read_text(encoding="utf-8"))
@@ -218,10 +218,8 @@ def _generate(topic: str, count: int) -> None:
 
 def _fetch_source(topic: str) -> tuple[str, str] | None:
     try:
-        try:
-            from speedrun.openstax_fetcher import fetch_topic  # type: ignore[import]
-        except ImportError:
-            from openstax_fetcher import fetch_topic  # type: ignore[import-not-found,no-redef]
+        from .openstax_fetcher import fetch_topic
+
         return fetch_topic(topic)
     except Exception as exc:  # noqa: BLE001
         _log.warning("openstax_fetcher import/call failed for %r: %s", topic, exc)
@@ -237,10 +235,8 @@ def _call_generator(
     count: int,
 ) -> list[dict]:
     try:
-        try:
-            from speedrun.question_generator import generate_from_source  # type: ignore[import]
-        except ImportError:
-            from question_generator import generate_from_source  # type: ignore[import-not-found,no-redef]
+        from .question_generator import generate_from_source
+
         return generate_from_source(
             client=client,
             topic=topic,
@@ -259,18 +255,13 @@ def _eval_and_save(
 ) -> None:
     """Run eval on *questions*, then merge-save to generated_questions.json."""
     try:
-        try:
-            from speedrun.eval import (  # type: ignore[import]
-                run_eval,
-                save_generated as eval_save,
-                save_results,
-            )
-        except ImportError:
-            from eval import (  # type: ignore[import-not-found,no-redef]
-                run_eval,
-                save_generated as eval_save,
-                save_results,
-            )
+        from .eval import (
+            run_eval,
+            save_results,
+        )
+        from .eval import (
+            save_generated as eval_save,
+        )
     except ImportError:
         _log.warning("eval module unavailable — saving questions without eval.")
         _save_raw(questions)
@@ -340,10 +331,8 @@ def _merge_save(annotated: list[dict], save_fn: object) -> None:
 
     # Push each newly approved question to Firestore for cross-device sync.
     try:
-        try:
-            from speedrun.question_sync import push_question  # type: ignore[import-not-found]
-        except ImportError:
-            from question_sync import push_question  # type: ignore[import-not-found,no-redef]
+        from .question_sync import push_question
+
         for q in annotated:
             if q.get("eval_passed", False):
                 push_question(q)
@@ -353,7 +342,7 @@ def _merge_save(annotated: list[dict], save_fn: object) -> None:
 
 def _load_dotenv() -> None:
     """Load .env from the repo root into os.environ (no third-party deps)."""
-    env_path = Path(__file__).parent.parent / ".env"
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
     if not env_path.exists():
         return
     for line in env_path.read_text(encoding="utf-8").splitlines():

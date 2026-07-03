@@ -52,7 +52,7 @@ if TYPE_CHECKING:
 # the hand-written source under pylib; together they form the `anki` namespace
 # package. When imported from inside the running app, `anki` is already
 # importable and these become harmless no-ops.
-_REPO_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 for _p in (_REPO_ROOT / "pylib", _REPO_ROOT / "out" / "pylib"):
     if _p.is_dir() and str(_p) not in sys.path:
         sys.path.insert(0, str(_p))

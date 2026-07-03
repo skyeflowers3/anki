@@ -500,6 +500,7 @@ class AnkiQt(QMainWindow):
         if not self.loadCollection():
             return
 
+        self._maybe_import_bundled_mcat_deck()
         self.setup_sound()
         self.flags = FlagManager(self)
         # show main window
@@ -555,6 +556,49 @@ class AnkiQt(QMainWindow):
         refresh_reviewer_on_day_rollover_change()
         gui_hooks.profile_did_open()
         self.maybe_auto_sync_on_open_close(_onsuccess)
+
+    def _maybe_import_bundled_mcat_deck(self) -> None:
+        """Silently import the bundled MCAT deck on first launch if absent.
+
+        Looks for ``aqt/speedrun/mcat_deck.apkg`` next to the speedrun package.
+        Skips silently if the file is not present or the deck already exists.
+        """
+        from pathlib import Path
+
+        # Run at most once per profile.
+        if self.pm.meta.get("speedrun_deck_imported"):
+            return
+
+        apkg_path = Path(__file__).parent / "speedrun" / "mcat_deck.apkg"
+        if not apkg_path.exists():
+            return
+
+        # Check whether the root deck already exists in the collection.
+        try:
+            existing = self.col.decks.id_for_name("AnKing-MCAT")
+        except Exception:
+            existing = None
+
+        if existing is not None:
+            self.pm.meta["speedrun_deck_imported"] = True
+            self.pm.save()
+            return
+
+        # Import silently in a background thread.
+        from aqt.operations import QueryOp
+
+        def do_import(col: Collection) -> None:
+            from anki.importing.apkg import AnkiPackageImporter
+
+            imp = AnkiPackageImporter(col, str(apkg_path))
+            imp.run()
+
+        def on_done(_: None) -> None:
+            self.pm.meta["speedrun_deck_imported"] = True
+            self.pm.save()
+            self.reset()
+
+        QueryOp(parent=self, op=do_import, success=on_done).run_in_background()
 
     def unloadProfile(self, onsuccess: Callable) -> None:
         def callback() -> None:
