@@ -66,6 +66,19 @@ def _performance_score_module():
     return performance_score
 
 
+def _readiness_score_module():
+    """Import the Speedrun MCAT readiness-score module."""
+    try:
+        from aqt.speedrun import readiness_score
+    except ModuleNotFoundError:
+        repo_root = Path(aqt.__file__).resolve().parents[2]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from aqt.speedrun import readiness_score
+
+    return readiness_score
+
+
 class NewDeckStats(QDialog):
     """New deck stats."""
 
@@ -146,6 +159,14 @@ class NewDeckStats(QDialog):
         performance_layout.addWidget(self.performance_web)
         self.tabs.addTab(performance_tab, "MCAT Performance")
 
+        self.readiness_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_READINESS)
+        self.readiness_web.set_bridge_command(self._on_bridge_cmd, self)
+        readiness_tab = QWidget()
+        readiness_layout = QVBoxLayout(readiness_tab)
+        readiness_layout.setContentsMargins(0, 0, 0, 0)
+        readiness_layout.addWidget(self.readiness_web)
+        self.tabs.addTab(readiness_tab, "MCAT Readiness")
+
         layout.insertWidget(0, self.tabs, stretch=1)
 
     def reject(self) -> None:
@@ -158,6 +179,9 @@ class NewDeckStats(QDialog):
         if getattr(self, "performance_web", None):
             self.performance_web.cleanup()
             self.performance_web = None  # type: ignore
+        if getattr(self, "readiness_web", None):
+            self.readiness_web.cleanup()
+            self.readiness_web = None  # type: ignore
         saveGeom(self, self.name)
         aqt.dialogs.markClosed("NewDeckStats")
         QDialog.reject(self)
@@ -220,6 +244,7 @@ class NewDeckStats(QDialog):
         self.form.web.load_sveltekit_page("graphs")
         self._refresh_memory()
         self._refresh_performance()
+        self._refresh_readiness()
 
     def _refresh_memory(self) -> None:
         memory_web = getattr(self, "memory_web", None)
@@ -252,6 +277,21 @@ class NewDeckStats(QDialog):
                 "</div>"
             )
         performance_web.stdHtml(body, context=self)
+
+    def _refresh_readiness(self) -> None:
+        readiness_web = getattr(self, "readiness_web", None)
+        if readiness_web is None:
+            return
+        try:
+            readiness_score = _readiness_score_module()
+            body = readiness_score.render_html(self.mw.col)
+        except Exception as exc:
+            body = (
+                "<div style='padding:20px'>"
+                f"Unable to compute the MCAT readiness score: {exc}"
+                "</div>"
+            )
+        readiness_web.stdHtml(body, context=self)
 
 
 class DeckStats(QDialog):

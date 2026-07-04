@@ -1,20 +1,29 @@
-"""Sync AI-generated questions to/from Firebase Firestore.
+"""Sync AI-generated questions and performance records to/from Firebase Firestore.
 
 Pushes eval-passed questions to a Firestore collection after generation and
 pulls them down at app startup, keeping the question pool consistent across
 reinstalls and multiple machines.
 
+Also syncs answer records so performance scores and adaptive ordering are
+identical on every device sharing the same SPEEDRUN_SYNC_ID.
+
 Requires in .env (or environment):
     FIREBASE_PROJECT_ID=brillianter-app
     FIREBASE_API_KEY=<web-api-key>
+    SPEEDRUN_SYNC_ID=<shared UUID — same on every device you want to sync>
+
+SPEEDRUN_SYNC_ID is auto-generated on first run and written back to .env if
+the file exists, or stored only in memory otherwise.
 
 All network calls are best-effort — a missing key or network error never
 blocks or crashes a study session.
 
 Public API
 ----------
-push_question(question)          — call after a question passes eval
-maybe_pull_into_local_cache()    — call on app start (run in a daemon thread)
+push_question(question)                  — call after a question passes eval
+maybe_pull_into_local_cache()            — call on app start (run in a daemon thread)
+push_performance_record(record)          — call after each quiz answer
+maybe_sync_performance(col)              — call at Speedrun session start
 """
 
 from __future__ import annotations
@@ -33,12 +42,18 @@ _log = logging.getLogger("speedrun.question_sync")
 
 _GENERATED_PATH = Path(__file__).resolve().parent / "generated_questions.json"
 _COLLECTION = "speedrun_questions"
+_PERF_COLLECTION = "speedrun_performance"
 _TIMEOUT = 10  # seconds per HTTP request
 _PAGE_SIZE = 300
 
 # Cached anonymous Firebase ID token and its expiry (Unix timestamp).
+# Persisted to disk so restarts skip the re-auth round-trip.
 _id_token: str = ""
 _token_expires: float = 0.0
+_TOKEN_CACHE_FILE = Path(__file__).resolve().parent / ".firebase_token_cache.json"
+
+# Cached sync identity — generated once per process, persisted to .env.
+_sync_id: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -74,6 +89,57 @@ def _base_url(project: str) -> str:
         f"https://firestore.googleapis.com/v1/projects/{project}"
         f"/databases/(default)/documents/{_COLLECTION}"
     )
+
+
+def _perf_base_url(project: str, sync_id: str) -> str:
+    return (
+        f"https://firestore.googleapis.com/v1/projects/{project}"
+        f"/databases/(default)/documents/{_PERF_COLLECTION}"
+        f"/{sync_id}/records"
+    )
+
+
+def _get_sync_id() -> str:
+    """Return a persistent SPEEDRUN_SYNC_ID, generating one on first call.
+
+    The ID is read from the environment / .env file.  If absent it is
+    generated as a UUID4 hex string and written back to .env (if that file
+    exists) so it survives restarts.  On all devices that should share
+    performance data, set SPEEDRUN_SYNC_ID to the same value in .env.
+    """
+    import uuid
+
+    global _sync_id
+    if _sync_id:
+        return _sync_id
+
+    _load_dotenv()
+    existing = os.environ.get("SPEEDRUN_SYNC_ID", "").strip()
+    if existing:
+        _sync_id = existing
+        return _sync_id
+
+    # Generate a new ID and try to persist it.
+    new_id = uuid.uuid4().hex
+    _sync_id = new_id
+    os.environ["SPEEDRUN_SYNC_ID"] = new_id
+
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if env_path.exists():
+        try:
+            text = env_path.read_text(encoding="utf-8")
+            text = text.rstrip("\n") + f"\nSPEEDRUN_SYNC_ID={new_id}\n"
+            env_path.write_text(text, encoding="utf-8")
+            _log.info("Generated new SPEEDRUN_SYNC_ID=%s and saved to .env.", new_id)
+        except Exception:  # noqa: BLE001
+            _log.info("Generated new SPEEDRUN_SYNC_ID=%s (in-memory only).", new_id)
+    else:
+        _log.info(
+            "Generated SPEEDRUN_SYNC_ID=%s (no .env found; set this in .env on "
+            "all devices you want to sync).",
+            new_id,
+        )
+    return _sync_id
 
 
 # ---------------------------------------------------------------------------
@@ -159,12 +225,24 @@ def _ssl_ctx() -> ssl.SSLContext:
 def _anon_token(api_key: str) -> str:
     """Return a cached Firebase anonymous ID token, refreshing when near expiry.
 
+    Token is persisted to disk so restarts skip re-authentication.
     Requires Anonymous Authentication to be enabled in the Firebase project:
     Firebase Console → Authentication → Sign-in methods → Anonymous → Enable
     """
     import time
 
     global _id_token, _token_expires
+
+    # Load persisted token on first call.
+    if not _id_token:
+        try:
+            if _TOKEN_CACHE_FILE.exists():
+                data = json.loads(_TOKEN_CACHE_FILE.read_text(encoding="utf-8"))
+                _id_token = data.get("token", "")
+                _token_expires = float(data.get("expires", 0))
+        except Exception:  # noqa: BLE001
+            pass
+
     if _id_token and time.time() < _token_expires - 60:
         return _id_token
     url = (
@@ -181,6 +259,14 @@ def _anon_token(api_key: str) -> str:
             _id_token = data.get("idToken", "")
             expires_in = int(data.get("expiresIn", 3600))
             _token_expires = time.time() + expires_in
+            # Persist so next restart skips this round-trip.
+            try:
+                _TOKEN_CACHE_FILE.write_text(
+                    json.dumps({"token": _id_token, "expires": _token_expires}),
+                    encoding="utf-8",
+                )
+            except Exception:  # noqa: BLE001
+                pass
             return _id_token
     except urllib.error.HTTPError as exc:
         if exc.code == 400:
@@ -316,3 +402,152 @@ def maybe_pull_into_local_cache() -> None:
             )
     except Exception as exc:  # noqa: BLE001
         _log.warning("maybe_pull_into_local_cache failed: %s", exc)
+
+
+# ---------------------------------------------------------------------------
+# Performance record sync
+# ---------------------------------------------------------------------------
+
+
+def push_performance_record(record: dict) -> None:
+    """Write one answer record to Firestore. No-op if not configured.
+
+    ``record`` must include a ``sync_key`` field (uuid4 hex) which becomes
+    the Firestore document ID so the same record is never written twice.
+    """
+    cfg = _config()
+    if not cfg:
+        return
+    project, key = cfg
+    sync_key = record.get("sync_key")
+    if not sync_key:
+        return
+    sync_id = _get_sync_id()
+    url = (
+        f"{_perf_base_url(project, sync_id)}/{sync_key}"
+        f"?key={urllib.parse.quote(key, safe='')}"
+    )
+    result = _http(url, method="PATCH", body=_to_firestore(record))
+    if result:
+        _log.debug("Pushed performance record %s.", sync_key)
+    else:
+        _log.debug("Failed to push performance record %s.", sync_key)
+
+
+def _pull_performance_since(
+    project: str, key: str, sync_id: str, since_ts: int
+) -> list[dict]:
+    """Fetch performance records with answered_at > since_ts via Firestore runQuery.
+
+    Using a structured query instead of a collection list lets us filter
+    server-side so we only download records we don't already have locally.
+    """
+    parent = (
+        f"https://firestore.googleapis.com/v1/projects/{project}"
+        f"/databases/(default)/documents/{_PERF_COLLECTION}/{sync_id}"
+    )
+    url = f"{parent}:runQuery?key={urllib.parse.quote(key, safe='')}"
+
+    structured_query: dict = {"from": [{"collectionId": "records"}]}
+    if since_ts > 0:
+        structured_query["where"] = {
+            "fieldFilter": {
+                "field": {"fieldPath": "answered_at"},
+                "op": "GREATER_THAN",
+                "value": {"integerValue": str(since_ts)},
+            }
+        }
+
+    result = _http(url, method="POST", body={"structuredQuery": structured_query})
+    if not result:
+        return []
+
+    # runQuery returns a JSON array; each element may have a "document" key.
+    items = result if isinstance(result, list) else []
+    records: list[dict] = []
+    for item in items:
+        doc = item.get("document") if isinstance(item, dict) else None
+        if not doc:
+            continue
+        try:
+            r = _from_firestore(doc)
+            if r:
+                records.append(r)
+        except Exception:  # noqa: BLE001
+            pass
+    return records
+
+
+def pull_performance_records() -> list[dict]:
+    """Fetch all performance records for this sync identity from Firestore."""
+    cfg = _config()
+    if not cfg:
+        return []
+    project, key = cfg
+    sync_id = _get_sync_id()
+    return _pull_performance_since(project, key, sync_id, since_ts=0)
+
+
+def maybe_sync_performance(col: Any) -> None:
+    """Pull only new remote performance records and merge them into the local DB.
+
+    Incremental: queries Firestore for records with answered_at greater than
+    the local maximum so only genuinely new records are downloaded.
+    Batch-inserts all new rows in a single executemany call.
+    """
+    try:
+        from aqt.speedrun.performance_score import PERFORMANCE_TABLE, ensure_table
+
+        ensure_table(col)
+
+        # Only fetch records newer than what we already have.
+        row = col.db.first(f"select max(answered_at) from {PERFORMANCE_TABLE}")
+        since_ts = int(row[0]) if row and row[0] else 0
+
+        cfg = _config()
+        if not cfg:
+            return
+        project, key = cfg
+        sync_id = _get_sync_id()
+
+        remote = _pull_performance_since(project, key, sync_id, since_ts)
+        if not remote:
+            _log.debug("Performance sync: no new records since ts=%d.", since_ts)
+            return
+
+        rows = [
+            [
+                int(r.get("answered_at") or 0),
+                str(r.get("question_id", "")),
+                str(r.get("topic", "")),
+                str(r.get("concept", "")),
+                str(r.get("chosen_concept", "")),
+                str(r.get("correct_concept", "")),
+                str(r.get("chosen_answer", "")),
+                str(r.get("correct_answer", "")),
+                int(r.get("concept_correct") or 0),
+                int(r.get("application_correct") or 0),
+                int(r.get("answer_correct") or 0),
+                r.get("sync_key", ""),
+            ]
+            for r in remote
+            if r.get("sync_key")
+        ]
+
+        if rows:
+            col.db.executemany(
+                f"""
+                insert or ignore into {PERFORMANCE_TABLE}
+                    (answered_at, question_id, topic, concept, chosen_concept,
+                     correct_concept, chosen_answer, correct_answer,
+                     concept_correct, application_correct, answer_correct,
+                     sync_key)
+                values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                rows,
+            )
+            _log.info(
+                "Synced %d new performance record(s) from Firestore.", len(rows)
+            )
+    except Exception as exc:  # noqa: BLE001
+        _log.warning("maybe_sync_performance failed: %s", exc)

@@ -747,6 +747,21 @@ class SpeedrunController:
         except Exception as exc:
             return {"error": str(exc)}
 
+        # Look up the question now so we always have fallback info even on error.
+        question = self.performance_score.questions_by_id().get(qid)
+
+        def _fallback(exc: Exception) -> dict:
+            """Return enough info for the JS to show the correct answer/concept."""
+            if question is None:
+                return {"error": str(exc)}
+            return {
+                "error": str(exc),
+                "fallback": True,
+                "correct_answer": question.correct_answer,
+                "correct_concept": question.concept,
+                "rationale": question.rationale or question.concept,
+            }
+
         try:
             res = self.performance_score.grade_answer_for_session(
                 self.mw.col,
@@ -756,15 +771,17 @@ class SpeedrunController:
                 application_correct=application_correct,
             )
         except Exception as exc:
-            return {"error": str(exc)}
+            return _fallback(exc)
 
-        if "error" not in res:
-            self._block_results.append(
-                (bool(res["concept_correct"]), bool(res["answer_correct"]))
-            )
-            # Tell the JS whether concept grading actually ran so it can decide
-            # whether to show the concept verdict.
-            res["concept_was_graded"] = concept_was_graded
+        if "error" in res:
+            return _fallback(Exception(res["error"]))
+
+        self._block_results.append(
+            (bool(res["concept_correct"]), bool(res["answer_correct"]))
+        )
+        # Tell the JS whether concept grading actually ran so it can decide
+        # whether to show the concept verdict.
+        res["concept_was_graded"] = concept_was_graded
         return res
 
     def _explain(self, encoded: str) -> Any:
@@ -849,7 +866,7 @@ def _ensure_auto_sync(mw: aqt.main.AnkiQt) -> None:
 
 
 def _start_question_sync_pull() -> None:
-    """Background-pull questions from Firestore into the local cache.
+    """Background-pull questions and performance records from Firestore.
 
     Spawns a daemon thread so app startup is never blocked.
     """
@@ -857,16 +874,28 @@ def _start_question_sync_pull() -> None:
 
     def _run() -> None:
         try:
-            from aqt.speedrun.question_sync import maybe_pull_into_local_cache
+            from aqt.speedrun.question_sync import (
+                maybe_pull_into_local_cache,
+                maybe_sync_performance,
+            )
         except ModuleNotFoundError:
             repo_root = Path(aqt.__file__).resolve().parents[2]
             if str(repo_root) not in sys.path:
                 sys.path.insert(0, str(repo_root))
-            from aqt.speedrun.question_sync import maybe_pull_into_local_cache
+            from aqt.speedrun.question_sync import (
+                maybe_pull_into_local_cache,
+                maybe_sync_performance,
+            )
         except Exception:  # noqa: BLE001
             return
         try:
             maybe_pull_into_local_cache()
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            mw = aqt.mw
+            if mw and mw.col:
+                maybe_sync_performance(mw.col)
         except Exception:  # noqa: BLE001
             pass
 

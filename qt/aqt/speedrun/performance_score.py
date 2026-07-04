@@ -275,7 +275,8 @@ def ensure_table(col: Collection) -> None:
             correct_answer text not null,
             concept_correct integer not null,
             application_correct integer not null default 0,
-            answer_correct integer not null
+            answer_correct integer not null,
+            sync_key text unique
         )
         """
     )
@@ -284,6 +285,16 @@ def ensure_table(col: Collection) -> None:
         col.db.execute(
             f"alter table {PERFORMANCE_TABLE} add column "
             f"application_correct integer not null default 0"
+        )
+    except Exception:  # noqa: BLE001 — column already exists
+        pass
+    # Migrate tables created before sync_key was added.
+    # NOTE: SQLite does not allow UNIQUE in ALTER TABLE ADD COLUMN; the
+    # uniqueness is enforced at the application level (uuid4 keys) and by
+    # the CREATE TABLE definition for newly-created tables.
+    try:
+        col.db.execute(
+            f"alter table {PERFORMANCE_TABLE} add column sync_key text"
         )
     except Exception:  # noqa: BLE001 — column already exists
         pass
@@ -304,6 +315,8 @@ def record_answer(
     interactive quiz flow; the legacy CLI path leaves them False and relies on
     the caller to compute them before this call.
     """
+    import uuid
+
     ensure_table(col)
     _letters = ["A", "B", "C", "D", "E", "F"]
     try:
@@ -311,15 +324,17 @@ def record_answer(
     except (ValueError, IndexError):
         chosen_letter = ""
     answer_correct = 1 if chosen_letter == question.correct_answer else 0
+    sync_key = uuid.uuid4().hex
+    answered_at = int(time.time())
     col.db.execute(
         f"""
         insert into {PERFORMANCE_TABLE}
             (answered_at, question_id, topic, concept, chosen_concept,
              correct_concept, chosen_answer, correct_answer,
-             concept_correct, application_correct, answer_correct)
-        values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             concept_correct, application_correct, answer_correct, sync_key)
+        values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        int(time.time()),
+        answered_at,
         question.id,
         question.topic,
         question.concept,
@@ -330,8 +345,41 @@ def record_answer(
         int(concept_correct),
         int(application_correct),
         answer_correct,
+        sync_key,
+    )
+    # Push to Firestore in a fire-and-forget thread so the quiz never stalls.
+    _push_performance_async(
+        {
+            "sync_key": sync_key,
+            "answered_at": answered_at,
+            "question_id": str(question.id),
+            "topic": question.topic,
+            "concept": question.concept,
+            "chosen_concept": chosen_concept,
+            "correct_concept": question.concept,
+            "chosen_answer": chosen_answer,
+            "correct_answer": question.correct_answer,
+            "concept_correct": int(concept_correct),
+            "application_correct": int(application_correct),
+            "answer_correct": answer_correct,
+        }
     )
     return bool(concept_correct), bool(application_correct), bool(answer_correct)
+
+
+def _push_performance_async(record: dict) -> None:
+    """Push one performance record to Firestore in a daemon thread."""
+    import threading
+
+    def _run() -> None:
+        try:
+            from aqt.speedrun.question_sync import push_performance_record
+
+            push_performance_record(record)
+        except Exception:  # noqa: BLE001
+            pass
+
+    threading.Thread(target=_run, daemon=True, name="speedrun-perf-push").start()
 
 
 def grade_concept_with_ai(
@@ -375,6 +423,7 @@ def grade_concept_with_ai(
                 {"role": "user", "content": f"Student response: {response}"},
             ],
             temperature=0.2,
+            timeout=30.0,
         )
         raw = (resp.choices[0].message.content or "").strip()
         raw = _re.sub(r"^```(?:json)?\s*", "", raw)
@@ -419,6 +468,7 @@ def grade_answer_for_session(
         "concept_correct": concept_correct,
         "application_correct": application_correct,
         "correct_concept": question.concept,
+        "rationale": question.rationale or "",
     }
 
 
@@ -492,6 +542,7 @@ def generate_explanation_with_ai(
                 {"role": "user", "content": prompt},
             ],
             temperature=0.3,
+            timeout=30.0,
         )
         raw = (resp.choices[0].message.content or "").strip()
         raw = _re.sub(r"^```(?:json)?\s*", "", raw)
@@ -619,8 +670,12 @@ def fetch_topic_last_practiced(col: Collection) -> dict[str, float]:
 
 
 def build_sections(results: dict[str, TopicResult]) -> list[SectionPerformance]:
+    # SECTION_ORDER covers B/B, C/P, P/S — all flashcard-backed sections.
+    # CARS has no flashcard deck so it is absent from SECTION_ORDER, but it
+    # does have practice questions and must appear in the performance display.
+    section_codes = list(memory_score.SECTION_ORDER) + ["CARS"]
     sections: list[SectionPerformance] = []
-    for code in memory_score.SECTION_ORDER:
+    for code in section_codes:
         topics = [
             results[name]
             for name, section in memory_score.SUBDECK_TO_SECTION.items()
@@ -831,63 +886,114 @@ def render_html(sections: list[SectionPerformance]) -> str:
 
 QUIZ_CSS = """
 <style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 .mcat-quiz-card {
     border: 1px solid rgba(128,128,128,0.3); border-radius: 8px;
     padding: 16px 18px; margin-top: 4px;
+    animation: fadeIn 0.2s ease;
 }
-.mcat-quiz-progress { opacity: 0.6; font-size: 12px; margin-bottom: 8px; }
-.mcat-quiz-topic { font-size: 12px; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.04em; }
-.mcat-quiz-passage { font-size: 13px; opacity: 0.85; margin: 8px 0; line-height: 1.5; }
-.mcat-quiz-question { font-size: 15px; font-weight: 600; margin: 12px 0; line-height: 1.4; }
+/* Progress bar */
+.mcat-progress-wrap { margin-bottom: 12px; }
+.mcat-progress-bar {
+    height: 3px; border-radius: 2px; overflow: hidden;
+    background: rgba(128,128,128,0.18); margin-bottom: 6px;
+}
+.mcat-progress-fill {
+    height: 100%; border-radius: 2px;
+    background: #7c6ef5; transition: width 0.35s ease;
+}
+.mcat-progress-row { display: flex; align-items: center; gap: 0; }
+.mcat-progress-text { opacity: 0.55; font-size: 12px; }
+.mcat-streak {
+    margin-left: 10px; font-size: 12px; font-weight: 700;
+    color: #e67e22; animation: fadeIn 0.25s ease;
+}
+/* Topic / badges */
+.mcat-quiz-topic {
+    font-size: 11px; font-weight: 700; opacity: 0.6;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;
+}
+.mcat-ai-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #7c6ef5; border: 1px solid #7c6ef5;
+    border-radius: 4px; padding: 1px 6px; margin: 2px 0 4px; opacity: 0.85;
+}
+.mcat-source-citation { font-size: 11px; opacity: 0.5; margin-top: 4px; font-style: italic; }
+/* Passage */
+.mcat-quiz-passage { font-size: 13px; opacity: 0.85; margin: 8px 0; line-height: 1.55; }
+.mcat-passage-toggle-wrap { margin: 8px 0 4px; }
+.mcat-passage-toggle {
+    background: rgba(128,128,128,0.1); border: 1px solid rgba(128,128,128,0.25);
+    border-radius: 4px; padding: 3px 10px; font-size: 12px; cursor: pointer;
+    color: inherit; font-family: inherit; opacity: 0.75;
+}
+.mcat-passage-toggle:hover { opacity: 1; background: rgba(128,128,128,0.18); }
+.mcat-passage-full {
+    margin-top: 8px; font-size: 13px; line-height: 1.55; opacity: 0.85;
+    border-left: 3px solid rgba(124,110,245,0.4); padding-left: 10px;
+}
+/* Question */
+.mcat-quiz-question { font-size: 15px; font-weight: 600; margin: 10px 0 14px; line-height: 1.45; }
+.mcat-quiz-prompt { font-size: 14px; font-weight: 700; opacity: 0.7; margin: 12px 0 10px; }
+/* Choices */
 .mcat-quiz-choices { display: flex; flex-direction: column; gap: 8px; }
 .mcat-choice {
     text-align: left; padding: 10px 12px; font-size: 14px; color: inherit;
     border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
     background: transparent; cursor: pointer; line-height: 1.4;
+    transition: border-color 0.2s, background 0.2s;
 }
-.mcat-choice:hover:not(:disabled) { background: rgba(125,125,255,0.12); }
+.mcat-choice:hover:not(:disabled) { background: rgba(124,110,245,0.1); border-color: rgba(124,110,245,0.5); }
 .mcat-choice:disabled { cursor: default; }
 .mcat-choice .letter { font-weight: 700; margin-right: 8px; }
-.mcat-choice.correct { border-color: #2e9e5b; background: rgba(46,158,91,0.18); }
-.mcat-choice.incorrect { border-color: #d64545; background: rgba(214,69,69,0.18); }
-.mcat-quiz-prompt { font-size: 15px; font-weight: 700; margin: 14px 0 10px; }
-.mcat-quiz-feedback { margin-top: 16px; font-size: 14px; }
-.mcat-verdict-row { margin-top: 4px; }
-.mcat-verdict-row .verdict { font-weight: 700; }
-.mcat-verdict-row .verdict.correct { color: #2e9e5b; }
-.mcat-verdict-row .verdict.incorrect { color: #d64545; }
-.mcat-verdict-row .note { opacity: 0.75; font-size: 13px; }
-.mcat-quiz-actions { margin-top: 16px; }
-.mcat-ai-badge {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: #7c6ef5; border: 1px solid #7c6ef5;
-    border-radius: 4px; padding: 1px 6px; margin-bottom: 6px;
-    opacity: 0.85;
-}
-.mcat-source-citation {
-    font-size: 11px; opacity: 0.55; margin-top: 6px; font-style: italic;
-}
-/* Step 1 – concept free response */
+.mcat-choice.correct  { border-color: #2e9e5b; background: rgba(46,158,91,0.15); }
+.mcat-choice.incorrect { border-color: #d64545; background: rgba(214,69,69,0.15); }
+/* Concept input */
 .mcat-concept-input {
     width: 100%; min-height: 80px; box-sizing: border-box;
     padding: 10px 12px; font-size: 14px; font-family: inherit; color: inherit;
     border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
     background: transparent; resize: vertical; line-height: 1.5; margin: 4px 0 12px;
 }
-.mcat-concept-input:focus { outline: none; border-color: rgba(125,125,255,0.6); }
+.mcat-concept-input:focus { outline: none; border-color: rgba(124,110,245,0.6); }
 .mcat-concept-input:disabled { opacity: 0.45; }
-/* Thinking / loading indicator */
-.mcat-thinking { opacity: 0.6; font-size: 13px; font-style: italic; }
-/* Step 3 – explanation panel */
+/* Feedback */
+.mcat-quiz-feedback { margin-top: 14px; font-size: 14px; animation: fadeIn 0.2s ease; }
+.mcat-verdict-row { margin-top: 5px; }
+.mcat-verdict-row .verdict { font-weight: 700; }
+.mcat-verdict-row .verdict.correct  { color: #2e9e5b; }
+.mcat-verdict-row .verdict.incorrect { color: #d64545; }
+.mcat-verdict-row .note { opacity: 0.7; font-size: 13px; }
+/* Explanation panel */
 .mcat-explanation {
-    margin-top: 14px; padding: 12px 14px;
-    border: 1px solid rgba(128,128,128,0.25); border-radius: 6px;
-    background: rgba(128,128,128,0.06); font-size: 13px; line-height: 1.55;
+    margin-top: 12px; padding: 12px 14px;
+    border: 1px solid rgba(128,128,128,0.22); border-radius: 6px;
+    background: rgba(128,128,128,0.05); font-size: 13px; line-height: 1.6;
 }
 .mcat-explanation-row { margin-bottom: 8px; }
 .mcat-explanation-row:last-child { margin-bottom: 0; }
 .mcat-explanation-label { font-weight: 700; }
+/* Review card */
+.mcat-review-divider {
+    border: none; border-top: 1px solid rgba(128,128,128,0.2); margin: 16px 0;
+}
+.mcat-review-stem {
+    font-size: 14px; font-weight: 600; line-height: 1.45;
+    opacity: 0.9; margin-bottom: 14px;
+}
+/* Actions row */
+.mcat-quiz-actions { margin-top: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mcat-thinking { opacity: 0.6; font-size: 13px; font-style: italic; }
+.sr-btn-secondary {
+    background: transparent; border: 1px solid rgba(128,128,128,0.4);
+    border-radius: 6px; padding: 7px 14px; font-size: 14px;
+    cursor: pointer; color: inherit; font-family: inherit; opacity: 0.75;
+}
+.sr-btn-secondary:hover { opacity: 1; background: rgba(128,128,128,0.1); }
 </style>
 """
 
@@ -920,9 +1026,10 @@ QUIZ_JS = """
     if (!quizEl) return;
 
     let idx = 0;
-    // Stores the concept-grading result between step 1 and step 3.
-    // null when AI is unavailable (step 1 skipped).
     let conceptResult = null;
+    let consecutiveCorrect = 0;
+    // Stored so the Review card's Back button can restore the result view.
+    let _lastGrade = null; // { res, conceptWasGraded, choiceIndex, correctIdx }
 
     function esc(s) {
         const d = document.createElement("div");
@@ -930,15 +1037,42 @@ QUIZ_JS = """
         return d.innerHTML;
     }
 
-    function stem(q) {
-        let html = '<div class="mcat-quiz-progress">Question ' + (idx + 1) +
-                   ' of ' + QUESTIONS.length + '</div>';
+    // ── Progress bar + streak ─────────────────────────────────────────────────
+
+    function progressHtml() {
+        const pct = Math.round((idx / QUESTIONS.length) * 100);
+        let streak = "";
+        if (consecutiveCorrect >= 2) {
+            streak = '<span class="mcat-streak">\U0001F525 ' +
+                     consecutiveCorrect + ' in a row!</span>';
+        }
+        return '<div class="mcat-progress-wrap">' +
+               '<div class="mcat-progress-bar">' +
+               '<div class="mcat-progress-fill" style="width:' + pct + '%"></div></div>' +
+               '<div class="mcat-progress-row">' +
+               '<span class="mcat-progress-text">Question ' + (idx + 1) +
+               ' of ' + QUESTIONS.length + '</span>' + streak +
+               '</div></div>';
+    }
+
+    // ── Question stem (passage full or collapsed) ─────────────────────────────
+
+    function stem(q, collapsePassage) {
+        let html = progressHtml();
         html += '<div class="mcat-quiz-topic">' + esc(q.topic) + '</div>';
         if (q.ai_generated) {
             html += '<div class="mcat-ai-badge">AI-generated</div>';
         }
         if (q.passage) {
-            html += '<div class="mcat-quiz-passage">' + esc(q.passage) + '</div>';
+            if (collapsePassage) {
+                html += '<div class="mcat-passage-toggle-wrap">' +
+                        '<button class="mcat-passage-toggle" id="sr-passage-btn">' +
+                        '\U0001F4DA Show passage</button>' +
+                        '<div id="sr-passage-full" class="mcat-passage-full" style="display:none">' +
+                        esc(q.passage) + '</div></div>';
+            } else {
+                html += '<div class="mcat-quiz-passage">' + esc(q.passage) + '</div>';
+            }
         }
         html += '<div class="mcat-quiz-question">' + esc(q.question) + '</div>';
         if (q.ai_generated && q.source_citation) {
@@ -948,24 +1082,34 @@ QUIZ_JS = """
         return html;
     }
 
+    function attachPassageToggle() {
+        const btn = document.getElementById("sr-passage-btn");
+        if (!btn) return;
+        btn.addEventListener("click", function () {
+            const panel = document.getElementById("sr-passage-full");
+            if (!panel) return;
+            const open = panel.style.display !== "none";
+            panel.style.display = open ? "none" : "block";
+            btn.textContent = open ? "\U0001F4DA Show passage"
+                                   : "\U0001F4DA Hide passage";
+        });
+    }
+
     // ── Step 1: concept free response ────────────────────────────────────────
 
     function renderConcept() {
         conceptResult = null;
-        if (!AI_AVAILABLE) {
-            renderAnswer();
-            return;
-        }
+        _lastGrade = null;
+        if (!AI_AVAILABLE) { renderAnswer(); return; }
         const q = QUESTIONS[idx];
-        let html = '<div class="mcat-quiz-card">' + stem(q);
+        let html = '<div class="mcat-quiz-card">' + stem(q, false);
         html += '<div class="mcat-quiz-prompt">What concept is this question testing?</div>';
         html += '<textarea class="mcat-concept-input" id="sr-concept-input" ' +
                 'placeholder="Type your response\u2026" rows="3"></textarea>';
-        html += '<div class="mcat-quiz-actions" id="sr-concept-actions">';
-        html += '<button class="sr-btn" id="sr-concept-submit">Submit</button>';
-        html += '</div></div>';
+        html += '<div class="mcat-quiz-actions" id="sr-concept-actions">' +
+                '<button class="sr-btn" id="sr-concept-submit">Submit</button>' +
+                '</div></div>';
         quizEl.innerHTML = html;
-
         const ta = document.getElementById("sr-concept-input");
         ta.focus();
         document.getElementById("sr-concept-submit").addEventListener("click",
@@ -978,11 +1122,10 @@ QUIZ_JS = """
     }
 
     function submitConcept(response) {
-        const q = QUESTIONS[idx];
         document.getElementById("sr-concept-input").disabled = true;
         document.getElementById("sr-concept-actions").innerHTML =
             '<span class="mcat-thinking">Analyzing your response\u2026</span>';
-
+        const q = QUESTIONS[idx];
         const payload = JSON.stringify({ id: q.id, response: response });
         pycmd("srq:grade_concept:" + encodeURIComponent(payload), function (res) {
             conceptResult = (res && !res.error) ? res : { ai_unavailable: true };
@@ -990,11 +1133,11 @@ QUIZ_JS = """
         });
     }
 
-    // ── Step 2: multiple choice ───────────────────────────────────────────────
+    // ── Step 2: multiple choice (passage collapsed) ───────────────────────────
 
     function renderAnswer() {
         const q = QUESTIONS[idx];
-        let html = '<div class="mcat-quiz-card">' + stem(q);
+        let html = '<div class="mcat-quiz-card">' + stem(q, !!q.passage);
         if (AI_AVAILABLE) {
             html += '<div class="mcat-quiz-prompt">Now select the best answer.</div>';
         }
@@ -1004,12 +1147,10 @@ QUIZ_JS = """
                     '<span class="letter">' + LETTERS[i] + '.</span>' +
                     esc(choice) + '</button>';
         });
-        html += '</div>';
-        html += '<div class="mcat-quiz-feedback" id="sr-feedback"></div>';
-        html += '<div class="mcat-quiz-actions" id="sr-actions"></div>';
-        html += '</div>';
+        html += '</div><div class="mcat-quiz-feedback" id="sr-feedback"></div>' +
+                '<div class="mcat-quiz-actions" id="sr-actions"></div></div>';
         quizEl.innerHTML = html;
-
+        attachPassageToggle();
         quizEl.querySelectorAll(".mcat-choice").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 submitAnswer(parseInt(btn.getAttribute("data-i"), 10));
@@ -1019,24 +1160,33 @@ QUIZ_JS = """
 
     function submitAnswer(choiceIndex) {
         const q = QUESTIONS[idx];
-        quizEl.querySelectorAll(".mcat-choice").forEach(function (b) {
-            b.disabled = true;
-        });
+        quizEl.querySelectorAll(".mcat-choice").forEach(function (b) { b.disabled = true; });
         document.getElementById("sr-actions").innerHTML =
             '<span class="mcat-thinking">Grading\u2026</span>';
 
         const cc = conceptResult ? !!conceptResult.concept_correct : false;
         const ac = conceptResult ? !!conceptResult.application_correct : false;
         const payload = JSON.stringify({
-            id: q.id,
-            answer: q.choices[choiceIndex],
-            concept_correct: cc,
-            application_correct: ac,
+            id: q.id, answer: q.choices[choiceIndex],
+            concept_correct: cc, application_correct: ac,
         });
         pycmd("srq:grade_answer:" + encodeURIComponent(payload), function (res) {
-            if (!res || res.error) return;
+            if (!res || res.error) {
+                document.getElementById("sr-actions").innerHTML = "";
+                var fb = "";
+                if (res && res.fallback) {
+                    fb += verdictRow("Answer", false,
+                        "correct answer is " + esc(res.correct_answer) + ".");
+                    fb += explanationHtml("", res.rationale);
+                } else {
+                    fb = '<div class="mcat-verdict-row">' +
+                         '<span class="verdict incorrect">Could not record answer \u2014 please try again.</span></div>';
+                }
+                document.getElementById("sr-feedback").innerHTML = fb;
+                showNextButton();
+                return;
+            }
 
-            // Highlight correct / chosen choice.
             const correctIdx = LETTERS.indexOf(res.correct_answer);
             quizEl.querySelectorAll(".mcat-choice").forEach(function (btn) {
                 const i = parseInt(btn.getAttribute("data-i"), 10);
@@ -1044,79 +1194,115 @@ QUIZ_JS = """
                 else if (i === choiceIndex) btn.classList.add("incorrect");
             });
 
-            // Use the server's authoritative flag — don't rely on client-side
-            // conceptResult state which can be stale or unavailable.
             const conceptWasGraded = !!res.concept_was_graded;
-            const needsExplanation = !res.answer_correct ||
+            const anythingWrong = !res.answer_correct ||
                 (conceptWasGraded && !res.concept_correct);
 
-            if (needsExplanation) {
-                fetchExplanation(q, q.choices[choiceIndex], res, choiceIndex, correctIdx);
+            // Update streak.
+            if (!anythingWrong) {
+                consecutiveCorrect++;
             } else {
-                showFeedback(res, conceptWasGraded, choiceIndex, correctIdx);
+                consecutiveCorrect = 0;
+            }
+
+            _lastGrade = { res: res, conceptWasGraded: conceptWasGraded,
+                           choiceIndex: choiceIndex, correctIdx: correctIdx };
+
+            showVerdicts(res, conceptWasGraded, correctIdx);
+
+            if (anythingWrong) {
+                // Offer a Review card instead of inline explanation.
+                document.getElementById("sr-actions").innerHTML =
+                    '<button class="sr-btn" id="sr-review">Review explanation \u2192</button>';
+                document.getElementById("sr-review").addEventListener("click",
+                    function () { renderReview(); });
+            } else {
                 showNextButton();
             }
         });
     }
 
-    // ── Step 3: explanation ───────────────────────────────────────────────────
+    // ── Step 3: Review card ───────────────────────────────────────────────────
 
-    function fetchExplanation(q, chosenAnswer, gradeRes, choiceIndex, correctIdx) {
-        document.getElementById("sr-actions").innerHTML =
-            '<span class="mcat-thinking">Generating explanation\u2026</span>';
+    function renderReview() {
+        if (!_lastGrade) { advance(); return; }
+        const { res, conceptWasGraded, choiceIndex, correctIdx } = _lastGrade;
+        const q = QUESTIONS[idx];
 
-        const payload = JSON.stringify({
-            id: q.id,
-            chosen_answer: chosenAnswer,
-            concept_correct: gradeRes.concept_correct,
-            application_correct: gradeRes.application_correct,
-            answer_correct: gradeRes.answer_correct,
-        });
-        pycmd("srq:explain:" + encodeURIComponent(payload), function (res) {
-            showFeedback(gradeRes, !!gradeRes.concept_was_graded,
-                         choiceIndex, correctIdx);
-            showExplanationPanel(gradeRes, res || {});
-            showNextButton();
-        });
-    }
-
-    function showFeedback(gradeRes, showConceptVerdict, choiceIndex, correctIdx) {
-        let fb = "";
-        if (showConceptVerdict) {
-            // Show the AI's one-sentence reasoning so the student can see why
-            // their response was accepted or rejected.
-            const conceptNote = (conceptResult && conceptResult.feedback)
-                ? conceptResult.feedback : "";
-            fb += verdictRow("Concept", gradeRes.concept_correct, conceptNote);
+        let html = '<div class="mcat-quiz-card">' + progressHtml();
+        html += '<div class="mcat-quiz-topic">' + esc(q.topic) + '</div>';
+        // Collapsed passage available for reference.
+        if (q.passage) {
+            html += '<div class="mcat-passage-toggle-wrap">' +
+                    '<button class="mcat-passage-toggle" id="sr-passage-btn">' +
+                    '\U0001F4DA Show passage</button>' +
+                    '<div id="sr-passage-full" class="mcat-passage-full" style="display:none">' +
+                    esc(q.passage) + '</div></div>';
         }
-        fb += verdictRow("Answer", gradeRes.answer_correct,
-            gradeRes.answer_correct ? "" :
-            "correct answer is " + LETTERS[correctIdx] + ".");
-        document.getElementById("sr-feedback").innerHTML = fb;
-    }
+        html += '<div class="mcat-review-stem">' + esc(q.question) + '</div>';
+        html += '<hr class="mcat-review-divider">';
 
-    function showExplanationPanel(gradeRes, explRes) {
-        let html = '<div class="mcat-explanation">';
-        // Concept section: only shown when concept was wrong
-        if (!gradeRes.concept_correct && explRes.concept_explanation) {
-            html += '<div class="mcat-explanation-row">' +
-                    '<span class="mcat-explanation-label">Concept: </span>' +
-                    esc(explRes.concept_explanation) + '</div>';
-        }
-        // Answer section: only shown when answer was wrong
-        if (!gradeRes.answer_correct && explRes.answer_explanation) {
-            html += '<div class="mcat-explanation-row">' +
-                    '<span class="mcat-explanation-label">Answer: </span>' +
-                    esc(explRes.answer_explanation) + '</div>';
-        }
+        // Verdicts.
+        html += '<div class="mcat-quiz-feedback">';
+        html += verdictRowsHtml(res, conceptWasGraded, correctIdx);
+        const conceptFeedback = (conceptWasGraded && !res.concept_correct && conceptResult && conceptResult.feedback)
+            ? conceptResult.feedback : "";
+        html += explanationHtml(conceptFeedback, res.rationale);
         html += '</div>';
-        document.getElementById("sr-feedback").innerHTML += html;
+
+        html += '<div class="mcat-quiz-actions">';
+        html += '<button class="sr-btn-secondary" id="sr-back">\u2190 Back to question</button>';
+        html += nextBtnHtml();
+        html += '</div></div>';
+
+        quizEl.innerHTML = html;
+        attachPassageToggle();
+
+        document.getElementById("sr-back").addEventListener("click", function () {
+            restoreResult();
+        });
+        attachNextButton();
+    }
+
+    function restoreResult() {
+        if (!_lastGrade) { renderAnswer(); return; }
+        const { res, conceptWasGraded, choiceIndex, correctIdx } = _lastGrade;
+        renderAnswer(); // re-renders clean MC card
+        // Re-apply highlights.
+        quizEl.querySelectorAll(".mcat-choice").forEach(function (btn) {
+            btn.disabled = true;
+            const i = parseInt(btn.getAttribute("data-i"), 10);
+            if (i === correctIdx) btn.classList.add("correct");
+            else if (i === choiceIndex) btn.classList.add("incorrect");
+        });
+        showVerdicts(res, conceptWasGraded, correctIdx);
+        document.getElementById("sr-actions").innerHTML =
+            '<button class="sr-btn" id="sr-review">Review explanation \u2192</button>';
+        document.getElementById("sr-review").addEventListener("click",
+            function () { renderReview(); });
     }
 
     // ── Shared helpers ────────────────────────────────────────────────────────
 
+    function showVerdicts(res, conceptWasGraded, correctIdx) {
+        document.getElementById("sr-feedback").innerHTML =
+            verdictRowsHtml(res, conceptWasGraded, correctIdx);
+    }
+
+    function verdictRowsHtml(res, conceptWasGraded, correctIdx) {
+        let html = "";
+        if (conceptWasGraded) {
+            const note = res.concept_correct ? ""
+                : "the correct concept is " + res.correct_concept;
+            html += verdictRow("Concept", res.concept_correct, note);
+        }
+        html += verdictRow("Answer", res.answer_correct,
+            res.answer_correct ? "" : "correct answer is " + LETTERS[correctIdx] + ".");
+        return html;
+    }
+
     function verdictRow(label, ok, note) {
-        const cls = ok ? "correct" : "incorrect";
+        const cls  = ok ? "correct" : "incorrect";
         const word = ok ? "Correct" : "Incorrect";
         let row = '<div class="mcat-verdict-row"><span class="verdict ' + cls + '">' +
                   label + ': ' + word + '</span>';
@@ -1124,19 +1310,45 @@ QUIZ_JS = """
         return row + '</div>';
     }
 
-    function showNextButton() {
+    function explanationHtml(conceptFeedback, rationale) {
+        if (!conceptFeedback && !rationale) return "";
+        let html = '<div class="mcat-explanation">';
+        if (conceptFeedback) {
+            html += '<div class="mcat-explanation-row">' +
+                    '<span class="mcat-explanation-label">Concept: </span>' +
+                    esc(conceptFeedback) + '</div>';
+        }
+        if (rationale) {
+            html += '<div class="mcat-explanation-row">' +
+                    '<span class="mcat-explanation-label">Explanation: </span>' +
+                    esc(rationale) + '</div>';
+        }
+        return html + '</div>';
+    }
+
+    function nextBtnHtml() {
         const last = idx === QUESTIONS.length - 1;
-        const label = last ? "Finish block" : "Next question";
-        document.getElementById("sr-actions").innerHTML =
-            '<button class="sr-btn" id="sr-next">' + label + '</button>';
-        document.getElementById("sr-next").addEventListener("click", function () {
-            if (idx < QUESTIONS.length - 1) {
-                idx++;
-                renderConcept();
-            } else {
-                pycmd("sr:block_done");
-            }
-        });
+        return '<button class="sr-btn" id="sr-next">' +
+               (last ? "Finish block" : "Next question \u2192") + '</button>';
+    }
+
+    function attachNextButton() {
+        const btn = document.getElementById("sr-next");
+        if (btn) btn.addEventListener("click", advance);
+    }
+
+    function showNextButton() {
+        document.getElementById("sr-actions").innerHTML = nextBtnHtml();
+        attachNextButton();
+    }
+
+    function advance() {
+        if (idx < QUESTIONS.length - 1) {
+            idx++;
+            renderConcept();
+        } else {
+            pycmd("sr:block_done");
+        }
     }
 
     renderConcept();

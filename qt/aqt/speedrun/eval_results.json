@@ -115,5 +115,140 @@
     },
     "fallback_count": 0,
     "passage_id": "cars_generated_001"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:40.502147+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 6,
+    "questions_failed": 4,
+    "pass_rate": 0.6,
+    "wrong_answer_rate": 0.4,
+    "avg_score": 0.7412,
+    "failed_question_ids": [
+      "organic_chemistry_gen_002",
+      "organic_chemistry_gen_003",
+      "organic_chemistry_gen_006",
+      "organic_chemistry_gen_010"
+    ],
+    "held_out_coverage": {
+      "Organic-Chemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "organic_chemistry_generated_001"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:39.857733+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.88,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "General-Chemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "general_chemistry_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:40.031017+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8575,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Biochemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "biochemistry_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:40.749668+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8787,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Physics-and-Math": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "physics_and_math_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:41.776259+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8675,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "CARS": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "cars_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:46.202903+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.895,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Biology": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "biology_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:39:49.105003+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 10,
+    "questions_passed": 10,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.8962,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Behavioral": "fallback"
+    },
+    "fallback_count": 10,
+    "passage_id": "behavioral_generated_002"
+  },
+  {
+    "timestamp": "2026-07-04T00:49:31.829898+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 6,
+    "questions_passed": 5,
+    "questions_failed": 1,
+    "pass_rate": 0.8333,
+    "wrong_answer_rate": 0.1667,
+    "avg_score": 0.7708,
+    "failed_question_ids": [
+      "organic_chemistry_gen_013"
+    ],
+    "held_out_coverage": {
+      "Organic-Chemistry": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "organic_chemistry_generated_002"
   }
 ]

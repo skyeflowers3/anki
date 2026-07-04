@@ -51,6 +51,7 @@ class AnkiWebViewKind(Enum):
     DECK_STATS = "deck stats"
     MCAT_MEMORY = "mcat memory"
     MCAT_PERFORMANCE = "mcat performance"
+    MCAT_READINESS = "mcat readiness"
     SPEEDRUN_LOOP = "speedrun loop"
     PREVIEWER = "previewer"
     CHANGE_NOTETYPE = "change notetype"

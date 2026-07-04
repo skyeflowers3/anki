@@ -115,6 +115,10 @@ POINTS_WEIGHTS: dict[str, float] = {
 QUESTION_WEIGHT_FLOOR = 0.15   # floor so perfect scorers still see questions
 QUESTION_DECAY_RATE = 0.15     # urgency grows 15% per day since last practice
 QUESTION_DECAY_DEFAULT_DAYS = 7.0  # assumed days since practice for new topics
+# Deficit used for topics that have no performance score yet (answered < MIN_ANSWERED).
+# Higher than 0.5 so below-threshold topics are weighted more aggressively until
+# they accumulate enough answers to unlock a real score.
+QUESTION_DEFICIT_NO_SCORE = 0.85
 
 
 class Mode(Enum):
@@ -163,7 +167,8 @@ class TopicStats:
         Formula: section_weight × strength_deficit × recency_factor
 
         * strength_deficit = max(1 - performance, FLOOR)
-          No performance data → neutral 0.5 so all new topics start equal.
+          No performance score yet → QUESTION_DEFICIT_NO_SCORE (0.85) so
+          below-threshold topics are served aggressively until they unlock a score.
           Floor of QUESTION_WEIGHT_FLOOR ensures perfect scorers stay visible.
         * recency_factor = 1 + DECAY_RATE × days_since_last_practiced
           Topics not practiced recently grow back in urgency, mimicking FSRS
@@ -172,7 +177,7 @@ class TopicStats:
         deficit = (
             max(1.0 - self.performance, QUESTION_WEIGHT_FLOOR)
             if self.performance is not None
-            else 0.5
+            else QUESTION_DEFICIT_NO_SCORE
         )
         days = (
             self.last_practiced_days_ago

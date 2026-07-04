@@ -9,6 +9,9 @@ service cloud.firestore {
     match /speedrun_performance/{syncId}/records/{recordId} {
       allow read, write: if request.auth != null;
     }
-    // No catch-all: everything outside the speedrun collections is denied by default.
+    // All other collections require authentication
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
   }
 }
