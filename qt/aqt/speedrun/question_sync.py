@@ -32,6 +32,7 @@ import json
 import logging
 import os
 import ssl
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -41,6 +42,7 @@ from typing import Any
 _log = logging.getLogger("speedrun.question_sync")
 
 _GENERATED_PATH = Path(__file__).resolve().parent / "generated_questions.json"
+_OUTBOX_PATH = Path(__file__).resolve().parent / "speedrun_outbox.json"
 _COLLECTION = "speedrun_questions"
 _PERF_COLLECTION = "speedrun_performance"
 _TIMEOUT = 10  # seconds per HTTP request
@@ -54,6 +56,9 @@ _TOKEN_CACHE_FILE = Path(__file__).resolve().parent / ".firebase_token_cache.jso
 
 # Cached sync identity — generated once per process, persisted to .env.
 _sync_id: str = ""
+
+# Protects concurrent reads/writes to the outbox file from multiple threads.
+_outbox_lock = threading.Lock()
 
 
 # ---------------------------------------------------------------------------
@@ -409,19 +414,20 @@ def maybe_pull_into_local_cache() -> None:
 # ---------------------------------------------------------------------------
 
 
-def push_performance_record(record: dict) -> None:
-    """Write one answer record to Firestore. No-op if not configured.
+def _try_push_record(record: dict) -> bool:
+    """Attempt a single Firestore PATCH for one performance record.
 
-    ``record`` must include a ``sync_key`` field (uuid4 hex) which becomes
-    the Firestore document ID so the same record is never written twice.
+    Returns True on success, False on any error (network, auth, etc.).
+    No-op (returns True) when Firestore is not configured so unconfigured
+    installations don't accumulate outbox entries.
     """
     cfg = _config()
     if not cfg:
-        return
+        return True  # not configured — treat as "no sync needed"
     project, key = cfg
     sync_key = record.get("sync_key")
     if not sync_key:
-        return
+        return True  # malformed record — discard rather than loop forever
     sync_id = _get_sync_id()
     url = (
         f"{_perf_base_url(project, sync_id)}/{sync_key}"
@@ -430,25 +436,114 @@ def push_performance_record(record: dict) -> None:
     result = _http(url, method="PATCH", body=_to_firestore(record))
     if result:
         _log.debug("Pushed performance record %s.", sync_key)
-    else:
-        _log.debug("Failed to push performance record %s.", sync_key)
+        return True
+    _log.debug("Failed to push performance record %s — queued in outbox.", sync_key)
+    return False
 
 
-def _pull_performance_since(
-    project: str, key: str, sync_id: str, since_ts: int
-) -> list[dict]:
-    """Fetch performance records with answered_at > since_ts via Firestore runQuery.
+def _append_to_outbox(record: dict) -> None:
+    """Save a failed-push record to the local outbox file for later retry."""
+    with _outbox_lock:
+        pending: list[dict] = []
+        if _OUTBOX_PATH.exists():
+            try:
+                pending = json.loads(_OUTBOX_PATH.read_text(encoding="utf-8"))
+                if not isinstance(pending, list):
+                    pending = []
+            except Exception:  # noqa: BLE001
+                pending = []
+        pending.append(record)
+        try:
+            _OUTBOX_PATH.write_text(
+                json.dumps(pending, ensure_ascii=False), encoding="utf-8"
+            )
+        except Exception as exc:  # noqa: BLE001
+            _log.warning("Could not write outbox: %s", exc)
 
-    Using a structured query instead of a collection list lets us filter
-    server-side so we only download records we don't already have locally.
+
+def flush_outbox() -> None:
+    """Push any previously queued records to Firestore.
+
+    Called at the start of every sync session.  Records that succeed are
+    removed; records that still fail stay in the outbox for the next attempt.
+    The outbox file is deleted when it becomes empty.
     """
-    parent = (
-        f"https://firestore.googleapis.com/v1/projects/{project}"
-        f"/databases/(default)/documents/{_PERF_COLLECTION}/{sync_id}"
-    )
-    url = f"{parent}:runQuery?key={urllib.parse.quote(key, safe='')}"
+    with _outbox_lock:
+        if not _OUTBOX_PATH.exists():
+            return
+        try:
+            pending = json.loads(_OUTBOX_PATH.read_text(encoding="utf-8"))
+            if not isinstance(pending, list):
+                pending = []
+        except Exception:  # noqa: BLE001
+            pending = []
 
-    structured_query: dict = {"from": [{"collectionId": "records"}]}
+    if not pending:
+        return
+
+    still_pending: list[dict] = []
+    for record in pending:
+        if not _try_push_record(record):
+            still_pending.append(record)
+
+    with _outbox_lock:
+        try:
+            if still_pending:
+                _OUTBOX_PATH.write_text(
+                    json.dumps(still_pending, ensure_ascii=False), encoding="utf-8"
+                )
+                _log.info(
+                    "Outbox flush: %d pushed, %d still pending.",
+                    len(pending) - len(still_pending),
+                    len(still_pending),
+                )
+            else:
+                _OUTBOX_PATH.unlink(missing_ok=True)
+                _log.info("Outbox flush: all %d record(s) pushed.", len(pending))
+        except Exception as exc:  # noqa: BLE001
+            _log.warning("Could not update outbox after flush: %s", exc)
+
+
+def push_performance_record(record: dict) -> None:
+    """Write one answer record to Firestore, queuing it offline if unavailable.
+
+    ``record`` must include a ``sync_key`` field (uuid4 hex) which becomes
+    the Firestore document ID so the same record is never written twice.
+    On network failure the record is saved to the local outbox and retried
+    automatically the next time ``maybe_sync_performance`` runs.
+    """
+    if not _try_push_record(record):
+        _append_to_outbox(record)
+
+
+def _run_records_query(
+    project: str, key: str, since_ts: int, *, all_devices: bool
+) -> list[dict]:
+    """Run a Firestore structured query against performance record documents.
+
+    When ``all_devices`` is True a *collection group* query is issued at the
+    database root so records from every device's sync_id are returned.  When
+    False, only the current device's own ``records`` subcollection is queried
+    (kept for the public ``pull_performance_records`` helper).
+    """
+    if all_devices:
+        # Collection group query — parent is the database root, allDescendants
+        # tells Firestore to search every "records" collection at any depth.
+        parent = (
+            f"https://firestore.googleapis.com/v1/projects/{project}"
+            "/databases/(default)/documents"
+        )
+        from_clause: dict = {"collectionId": "records", "allDescendants": True}
+    else:
+        sync_id = _get_sync_id()
+        parent = (
+            f"https://firestore.googleapis.com/v1/projects/{project}"
+            f"/databases/(default)/documents/{_PERF_COLLECTION}/{sync_id}"
+        )
+        from_clause = {"collectionId": "records"}
+
+    url = f"{parent}:runQuery?key={urllib.parse.quote(key, safe='')}"
+    structured_query: dict = {"from": [from_clause]}
     if since_ts > 0:
         structured_query["where"] = {
             "fieldFilter": {
@@ -462,8 +557,7 @@ def _pull_performance_since(
     if not result:
         return []
 
-    # runQuery returns a JSON array; each element may have a "document" key.
-    items = result if isinstance(result, list) else []
+    items: list[Any] = result if isinstance(result, list) else []
     records: list[dict] = []
     for item in items:
         doc = item.get("document") if isinstance(item, dict) else None
@@ -478,14 +572,25 @@ def _pull_performance_since(
     return records
 
 
+def _pull_performance_since(
+    project: str, key: str, sync_id: str, since_ts: int  # noqa: ARG001
+) -> list[dict]:
+    """Fetch records newer than since_ts from ALL devices via collection group query.
+
+    The ``sync_id`` parameter is kept for backward compatibility but is no
+    longer used — the collection group query searches every device's
+    ``records`` subcollection so Android answers reach the desktop automatically.
+    """
+    return _run_records_query(project, key, since_ts, all_devices=True)
+
+
 def pull_performance_records() -> list[dict]:
     """Fetch all performance records for this sync identity from Firestore."""
     cfg = _config()
     if not cfg:
         return []
     project, key = cfg
-    sync_id = _get_sync_id()
-    return _pull_performance_since(project, key, sync_id, since_ts=0)
+    return _run_records_query(project, key, since_ts=0, all_devices=False)
 
 
 def maybe_sync_performance(col: Any) -> None:
@@ -494,7 +599,17 @@ def maybe_sync_performance(col: Any) -> None:
     Incremental: queries Firestore for records with answered_at greater than
     the local maximum so only genuinely new records are downloaded.
     Batch-inserts all new rows in a single executemany call.
+
+    Also flushes the local outbox first so any records that failed to push
+    while offline are sent before the pull begins.
     """
+    # Flush outbox before pulling so records answered while offline reach
+    # Firestore and can propagate to other devices.
+    try:
+        flush_outbox()
+    except Exception as exc:  # noqa: BLE001
+        _log.warning("Outbox flush failed: %s", exc)
+
     try:
         from aqt.speedrun.performance_score import PERFORMANCE_TABLE, ensure_table
 
