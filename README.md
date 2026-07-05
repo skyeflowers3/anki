@@ -4,40 +4,72 @@ Speedrun is an MCAT study app forked from [Anki](https://apps.ankiweb.net). It
 keeps Anki's FSRS scheduler and card storage, but layers an MCAT-focused study
 experience on top: a points-at-stake review queue, per-section memory and
 performance scores, and an adaptive study loop that interleaves flashcards with
-practice questions based on where your recall and application diverge.
+AI-generated practice questions based on where your recall and application
+diverge.
 
 ## What Speedrun adds
 
 - **Points-at-stake review queue** — due cards are ordered by
   `section weight × (1 − FSRS retrievability)`, descending, so high-value weak
   topics surface first instead of plain due order. Implemented in the Rust
-  scheduler (see commit `d4a21dfef`).
+  scheduler (see [Rust change commit](#rust-change-commit)).
 - **Memory score** — reads FSRS retrievability (R) per card straight from the
   collection (via Anki's own `extract_fsrs_retrievability` SQL function),
-  aggregates it into the three MCAT sections (B/B, C/P, P/S), and shows a range.
-  A give-up rule requires a minimum number of reviewed cards per subdeck before
-  a section reports a score.
+  aggregates it into the three MCAT sections (B/B, C/P, P/S), and shows a
+  range. A give-up rule requires a minimum number of reviewed cards per subdeck
+  before a section reports a score.
 - **Performance score** — tracks practice-question accuracy
   (`correct / answered`) per topic, persisted to a `speedrun_performance` table
   inside the collection's SQLite database so results survive between sessions.
-- **Three-mode adaptive study loop** — interleaves flashcard blocks and question
-  blocks, weighting each block by points-at-stake and switching modes based on
-  the gap between a topic's memory score and its performance score.
+- **Readiness score** — combines memory and performance into a single
+  section-level readiness signal, shown in the Stats UI alongside the other
+  scores.
+- **Three-mode adaptive study loop** — interleaves flashcard blocks and
+  question blocks, weighting each block by points-at-stake and switching modes
+  based on the gap between a topic's memory score and its performance score.
 - **Two-step concept-recognition questions** — students identify the underlying
-  concept before answering the question itself.
+  concept (free-response, AI-graded by GPT-4o) before selecting the MC answer,
+  with per-step feedback and an inline explanation card on mistakes.
+- **AI question generation** — GPT-4o generates MCAT-style questions from
+  OpenStax source content; a separate eval pass filters out low-quality
+  questions before they enter the pool. Generated questions are stored in
+  `qt/aqt/speedrun/generated_questions.json`.
+- **Firestore sync** — practice-question records and the question pool are
+  synced to Cloud Firestore so performance data is consistent across devices
+  sharing the same `SPEEDRUN_SYNC_ID`. Sync is incremental on startup (only
+  fetches records newer than the local maximum).
 - **Custom UI** — integrated into Anki's Stats screen and deck overview, plus a
   "Speedrun: MCAT Study Blocks" banner on the deck list and window title.
 
 ## Layout
 
-- `speedrun/` — the custom, mostly self-contained logic:
-  - `memory_score.py` — FSRS-based memory score (usable as a CLI or imported).
-  - `performance_score.py` — practice-question accuracy scoring.
-  - `speedrun_loop.py` — the three-mode adaptive study loop.
-  - `questions.json` — the practice question bank.
-- `qt/aqt/stats.py` — imports the `speedrun` modules to render the memory and
-  performance scores in the desktop Stats UI.
-- `rslib/src/scheduler/` — the points-at-stake queue ordering (Rust).
+```
+qt/aqt/speedrun/          ← integrated Speedrun Qt package (main code)
+  driver.py               ← Qt controller; bridges Python ↔ JS quiz UI
+  speedrun_loop.py        ← three-mode adaptive loop (block planning, routing)
+  memory_score.py         ← FSRS-based memory score per topic/section
+  performance_score.py    ← quiz accuracy score + question-block HTML/JS UI
+  readiness_score.py      ← combined readiness score (memory × performance)
+  auto_generator.py       ← background AI generation trigger
+  question_generator.py   ← GPT-4o question generator (OpenStax → questions)
+  eval.py                 ← question quality eval / filter
+  question_sync.py        ← Firestore sync for questions + performance records
+  openstax_fetcher.py     ← fetches OpenStax source content for generation
+  questions.json          ← curated hand-written question bank
+  generated_questions.json← AI-generated questions (eval-passed)
+  eval_results.json       ← latest eval run output (pass/fail per question)
+  openstax_cache/         ← cached OpenStax HTML/XML (fetched once, reused)
+  DECK_SETUP.md           → see DECK_SETUP.md at repo root
+
+speedrun/                 ← standalone CLI copies of core modules
+  firebase/               ← Firestore project config and security rules
+  (see speedrun/README.md for details)
+
+qt/aqt/stats.py           ← Stats UI, imports the three score modules
+qt/aqt/overview.py        ← triggers the Speedrun loop on AnKing-MCAT study
+qt/aqt/deckbrowser.py     ← "Speedrun: MCAT Study Blocks" deck-list banner
+rslib/src/scheduler/      ← points-at-stake queue ordering (Rust)
+```
 
 Everything else is upstream Anki (`rslib/`, `pylib/`, `qt/`, `ts/`, `proto/`).
 
@@ -55,6 +87,19 @@ Building from source requires the same toolchain as upstream Anki:
 
 Platform-specific setup is documented in `docs/windows.md`, `docs/mac.md`, and
 `docs/linux.md`. Run `just --list` to see every available recipe.
+
+## Environment variables
+
+Create a `.env` file at the repo root (see `.env.example` if present) with:
+
+```
+OPENAI_API_KEY=sk-...          # required for AI question generation + grading
+FIREBASE_PROJECT_ID=...        # required for Firestore sync
+FIREBASE_API_KEY=...           # required for Firestore sync
+SPEEDRUN_SYNC_ID=...           # auto-generated on first run; set the same
+                               # value on every device you want to share
+                               # performance data across
+```
 
 ## Building and running
 
@@ -80,11 +125,12 @@ just test-e2e    # Playwright browser end-to-end tests
 ```
 
 The points-at-stake ordering has Python-level coverage in
-`pylib/tests/test_schedv3.py` (added in commit `d4a21dfef`).
+`pylib/tests/test_schedv3.py` (added in the Rust change commit below).
 
 ## Building the installer
 
 Speedrun uses Anki's Briefcase-based installer (templates in `qt/installer/`).
+See [DECK_SETUP.md](./DECK_SETUP.md) for how to bundle the MCAT deck.
 
 - **Locally**, build the wheels first, then drive the installer script for the
   current platform:
@@ -115,14 +161,13 @@ The current version is read from the `.version` file (currently `26.05`).
   AnKing-MCAT subdeck names (Biology, Biochemistry, General-Chemistry,
   Organic-Chemistry, Physics-and-Math, Behavioral, Essential-Equations). Decks
   named differently won't roll up into the B/B, C/P, and P/S sections.
-- **Small demo question bank** — `questions.json` is a demo set, and the
-  performance give-up threshold (`MIN_ANSWERED`) is only 3. A real question bank
-  should raise it to 10–15 for meaningful accuracy.
+- **Performance give-up threshold** — sections need ≥ 30 answered questions
+  total (and ≥ 10 per topic for 3-topic sections) before showing a score.
+  Topics below threshold are weighted more aggressively in question selection to
+  accelerate coverage.
 - **Memory-score CLI reads a copy** — the CLI opens a temporary copy of the
   collection so it never locks or mutates live data; numbers can lag the live
   collection if it changed since the copy.
-- **Give-up rule can withhold scores** — sections/topics without enough reviewed
-  cards or answered questions show "not enough data" rather than a score.
 - **Fork maintenance** — Speedrun modifies upstream files (`qt/aqt/stats.py`,
   the Rust scheduler); pulling upstream Anki changes may require manual merges.
 

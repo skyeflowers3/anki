@@ -26,3 +26,7 @@ docs/autoapi/
 .complexipy_cache
 .env
 speedrun/openstax_cache/
+
+# Speedrun runtime-generated files (not source)
+qt/aqt/speedrun/.firebase_token_cache.json
+speedrun/firebase/firestore.rules.bak
