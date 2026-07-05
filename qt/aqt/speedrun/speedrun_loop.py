@@ -79,7 +79,7 @@ except ImportError:
 # Switching a topic from flashcards to questions requires an *established*
 # memory score: the student must have reviewed at least this many cards AND
 # have memory above the memory bar. Below either, always serve flashcards.
-QUESTION_REVIEWED_THRESHOLD = 20
+QUESTION_REVIEWED_THRESHOLD = 30
 QUESTION_MEMORY_THRESHOLD = 0.75
 # A topic at/above the memory bar but below this performance has an
 # *application* gap (knows the material but can't apply it to questions).
