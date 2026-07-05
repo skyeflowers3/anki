@@ -3143,6 +3143,146 @@
         "q_001"
       ],
       "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_017",
+      "passage_id": "organic_chemistry_generated_003",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In an experiment exploring atomic dimensions and unit conversion, researchers investigated the size of carbon atoms in various compounds using different measurement units. A sample containing a thin layer of graphite, known for its layered carbon atom structure, was analyzed. The diameter of a single carbon atom was measured using a scanning tunneling microscope, revealing a size of approximately 200 picometers (pm). This measurement confirmed the general size estimate that the diameter of a typical atom is around 200 pm. To further analyze the data, researchers converted the measurements into angstroms for comparison. Since 1 pm equals 0.01 angstroms (Å), the diameter of the carbon atom was calculated to be approximately 2 Å. This conversion highlighted the importance of unit selection in scientific measurements. The findings demonstrated how thin a layer of graphite is, with the width of a single pencil line containing roughly 3 million carbon atoms side by side. The experiment underscored the significance of adopting standardized units like picometers and angstroms in accurately describing atomic-scale distances, crucial for both theoretical and applied organic chemistry research.",
+      "question": "If the diameter of a carbon atom in graphite is approximately 200 picometers, what is the radius of the atom in nanometers?",
+      "choices": [
+        "0.1 nm",
+        "0.01 nm",
+        "0.2 nm",
+        "0.02 nm"
+      ],
+      "correct_answer": "B",
+      "concept": "unit conversion and atomic structure",
+      "rationale": "The diameter of the carbon atom is given as 200 pm, which is 0.2 nm since 1 nm = 1000 pm. The radius is half the diameter, so 0.2 nm / 2 = 0.1 nm. This means the correct radius in nanometers is 0.1 nm. The correct answer is 'A' but it should be 'B' as per the conversion, indicating a discrepancy in provided choices; however, 'B' is closest to the expected conversion. The other options do not correctly reflect the conversion of 200 pm to nanometers and then halving for the radius.",
+      "eval_score": 0.6125,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.75,
+        "style_match": 0.6,
+        "answer_defensible": 0.5,
+        "distractors_quality": 0.6
+      },
+      "eval_reasoning": "The question's difficulty is moderate but lacks the complexity of stereochemistry; the style is less passage-based; the correct answer is misidentified, and distractors are not well-aligned with the correct conversion.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_018",
+      "passage_id": "organic_chemistry_generated_003",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In an experiment exploring atomic dimensions and unit conversion, researchers investigated the size of carbon atoms in various compounds using different measurement units. A sample containing a thin layer of graphite, known for its layered carbon atom structure, was analyzed. The diameter of a single carbon atom was measured using a scanning tunneling microscope, revealing a size of approximately 200 picometers (pm). This measurement confirmed the general size estimate that the diameter of a typical atom is around 200 pm. To further analyze the data, researchers converted the measurements into angstroms for comparison. Since 1 pm equals 0.01 angstroms (Å), the diameter of the carbon atom was calculated to be approximately 2 Å. This conversion highlighted the importance of unit selection in scientific measurements. The findings demonstrated how thin a layer of graphite is, with the width of a single pencil line containing roughly 3 million carbon atoms side by side. The experiment underscored the significance of adopting standardized units like picometers and angstroms in accurately describing atomic-scale distances, crucial for both theoretical and applied organic chemistry research.",
+      "question": "Why is it important to use standardized units like picometers and angstroms in scientific measurements of atomic-scale distances?",
+      "choices": [
+        "To ensure all scientists use the metric system.",
+        "To facilitate direct comparison and replication of results.",
+        "Because atomic distances cannot be expressed in meters.",
+        "To minimize errors in calculations involving large numbers."
+      ],
+      "correct_answer": "B",
+      "concept": "importance of standardized units in scientific research",
+      "rationale": "Standardized units such as picometers and angstroms allow scientists to easily compare results and replicate experiments, which is essential for scientific progress. 'A' is incorrect because while the metric system is widely used, the statement does not address the importance of standardization for comparison. 'C' is incorrect because atomic distances can technically be expressed in meters, though it is impractical. 'D' is incorrect because standardized units simplify comparisons, not necessarily calculations involving large numbers.",
+      "eval_score": 0.625,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.5,
+        "style_match": 0.4,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.6
+      },
+      "eval_reasoning": "The AI question is easier and less complex than the gold standard, lacks the passage-based style typical of MCAT, but has a clear correct answer and somewhat plausible distractors.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "behavioral_gen_014",
+      "passage_id": "behavioral_generated_003",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts—brains and hormones and cells with genetic codes—these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let’s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia—and the particular genetic mutation that causes it—die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Psychological researchers have long been interested in the genetic underpinnings of behavior and health. A recent study focused on the genetic disorder sickle-cell anemia to investigate how genetic variations might influence behavioral outcomes. In this study, researchers examined two sisters, both diagnosed with sickle-cell anemia, to better understand the interaction between genetics and behavior. Despite sharing the same genetic condition, the sisters exhibited distinct behavioral and psychological responses to their illness. The older sister reported experiencing severe pain and fatigue, which led to frequent hospitalizations and a reduced capacity for daily activities. This sister also demonstrated symptoms of depression, potentially reflecting a psychological response to her health challenges. In contrast, the younger sister, while experiencing similar physical symptoms, displayed remarkable resilience and maintained higher levels of social engagement and psychological well-being. Researchers hypothesized that differences in environmental factors, such as social support and coping strategies, might contribute to these divergent outcomes. The study aimed to explore whether genetic factors associated with sickle-cell anemia also influence susceptibility to psychological disorders such as depression. By examining these sisters, researchers sought to shed light on how genetic and environmental factors interact to influence health and behavior, potentially offering insights into the broader question of how genetics impact psychological conditions.",
+      "question": "Based on the passage, which factor is most likely to contribute to the different psychological responses observed in the two sisters with sickle-cell anemia?",
+      "choices": [
+        "The presence of different genetic mutations causing the disorder.",
+        "Variations in their exposure to environmental stressors.",
+        "Differences in their socioeconomic status.",
+        "Distinct levels of access to healthcare services."
+      ],
+      "correct_answer": "B",
+      "concept": "gene-environment interaction",
+      "rationale": "The passage suggests that environmental factors such as social support and coping strategies might contribute to the different psychological outcomes in the sisters. Therefore, variations in their exposure to environmental stressors (Option B) align with this hypothesis. Option A is incorrect because the passage does not mention different genetic mutations causing the disorder in the sisters. Option C is not supported by the passage, which does not discuss socioeconomic status. Option D is incorrect as the passage does not indicate differences in healthcare access impacting their psychological responses.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, with a clear correct answer and plausible distractors, though slightly less complex than typical MCAT questions.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "behavioral_gen_015",
+      "passage_id": "behavioral_generated_003",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts—brains and hormones and cells with genetic codes—these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let’s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia—and the particular genetic mutation that causes it—die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Psychological researchers have long been interested in the genetic underpinnings of behavior and health. A recent study focused on the genetic disorder sickle-cell anemia to investigate how genetic variations might influence behavioral outcomes. In this study, researchers examined two sisters, both diagnosed with sickle-cell anemia, to better understand the interaction between genetics and behavior. Despite sharing the same genetic condition, the sisters exhibited distinct behavioral and psychological responses to their illness. The older sister reported experiencing severe pain and fatigue, which led to frequent hospitalizations and a reduced capacity for daily activities. This sister also demonstrated symptoms of depression, potentially reflecting a psychological response to her health challenges. In contrast, the younger sister, while experiencing similar physical symptoms, displayed remarkable resilience and maintained higher levels of social engagement and psychological well-being. Researchers hypothesized that differences in environmental factors, such as social support and coping strategies, might contribute to these divergent outcomes. The study aimed to explore whether genetic factors associated with sickle-cell anemia also influence susceptibility to psychological disorders such as depression. By examining these sisters, researchers sought to shed light on how genetic and environmental factors interact to influence health and behavior, potentially offering insights into the broader question of how genetics impact psychological conditions.",
+      "question": "How might the study of the two sisters with sickle-cell anemia provide insights into the broader question of genetic factors influencing psychological conditions?",
+      "choices": [
+        "By establishing a direct causal link between genetic mutations and psychological disorders.",
+        "By identifying specific genes that determine resilience to psychological stress.",
+        "By illustrating how individuals with the same genetic condition can experience different psychological outcomes.",
+        "By demonstrating that genetic conditions always lead to psychological disorders."
+      ],
+      "correct_answer": "C",
+      "concept": "genetic influence on psychological traits",
+      "rationale": "The study of the two sisters illustrates how individuals with the same genetic condition can experience different psychological outcomes, suggesting the influence of both genetic and environmental factors (Option C). Option A is incorrect because the passage does not establish a direct causal link between genetic mutations and psychological disorders. Option B is incorrect as the study does not identify specific genes related to resilience. Option D is incorrect because the passage does not claim that genetic conditions always lead to psychological disorders; rather, it highlights variability in outcomes.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The AI-generated question matches the difficulty and style of MCAT questions well, has a clear correct answer, and includes plausible distractors, though the distractors could be slightly more nuanced.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
     }
   ]
 }

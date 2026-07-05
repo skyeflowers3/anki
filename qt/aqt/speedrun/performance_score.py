@@ -781,30 +781,31 @@ def render_text(sections: list[SectionPerformance]) -> str:
 
 _PERFORMANCE_CSS = """
 <style>
-.mcat-perf { max-width: 720px; margin: 0 auto; padding: 20px 16px 40px; }
-.mcat-perf h1 { font-size: 20px; margin: 0 0 4px; }
-.mcat-perf .give-up-rule { opacity: 0.7; font-size: 13px; margin: 0 0 20px; }
+.mcat-perf { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+.mcat-perf h1 { font-size: 22px; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.02em; }
+.mcat-perf .give-up-rule { opacity: 0.55; font-size: 13px; margin: 0 0 24px; line-height: 1.6; }
 .mcat-perf-section {
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 8px;
-    padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 16px;
+    background: rgba(255,255,255,0.025);
 }
 .mcat-perf-section .section-head { display: flex; align-items: baseline; gap: 8px; }
-.mcat-perf-section .section-code { font-weight: 700; font-size: 15px; }
-.mcat-perf-section .section-name { opacity: 0.7; font-size: 13px; }
+.mcat-perf-section .section-code { font-weight: 800; font-size: 15px; }
+.mcat-perf-section .section-name { opacity: 0.55; font-size: 13px; }
 .mcat-perf-score { margin: 10px 0 6px; }
-.mcat-perf-score .value { font-size: 26px; font-weight: 700; }
-.mcat-perf-score .count { opacity: 0.55; font-size: 12px; margin-left: 8px; }
-.mcat-perf-nodata { margin: 10px 0 6px; opacity: 0.75; font-style: italic; }
-table.mcat-perf-topics { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+.mcat-perf-score .value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+.mcat-perf-score .count { opacity: 0.45; font-size: 12px; margin-left: 8px; }
+.mcat-perf-nodata { margin: 10px 0 6px; opacity: 0.55; font-style: italic; font-size: 13px; }
+table.mcat-perf-topics { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
 table.mcat-perf-topics th, table.mcat-perf-topics td {
-    text-align: left; padding: 5px 8px;
-    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    text-align: left; padding: 6px 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
-table.mcat-perf-topics th { opacity: 0.6; font-weight: 600; }
+table.mcat-perf-topics th { opacity: 0.45; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
 table.mcat-perf-topics td.num { text-align: right; font-variant-numeric: tabular-nums; }
-table.mcat-perf-topics td.muted { opacity: 0.5; }
+table.mcat-perf-topics td.muted { opacity: 0.4; }
 </style>
 """
 
@@ -895,113 +896,136 @@ def render_html(sections: list[SectionPerformance]) -> str:
 QUIZ_CSS = """
 <style>
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
+    from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 .mcat-quiz-card {
-    border: 1px solid rgba(128,128,128,0.3); border-radius: 8px;
-    padding: 16px 18px; margin-top: 4px;
-    animation: fadeIn 0.2s ease;
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 14px;
+    padding: 20px 22px; margin-top: 4px;
+    background: rgba(255,255,255,0.025);
+    animation: fadeIn 0.22s ease;
 }
 /* Progress bar */
-.mcat-progress-wrap { margin-bottom: 12px; }
+.mcat-progress-wrap { margin-bottom: 14px; }
 .mcat-progress-bar {
-    height: 3px; border-radius: 2px; overflow: hidden;
-    background: rgba(128,128,128,0.18); margin-bottom: 6px;
+    height: 4px; border-radius: 2px; overflow: hidden;
+    background: rgba(255,255,255,0.08); margin-bottom: 8px;
 }
 .mcat-progress-fill {
     height: 100%; border-radius: 2px;
-    background: #7c6ef5; transition: width 0.35s ease;
+    background: linear-gradient(90deg, #7c6ef5, #9d8fff);
+    transition: width 0.35s ease;
 }
 .mcat-progress-row { display: flex; align-items: center; gap: 0; }
-.mcat-progress-text { opacity: 0.55; font-size: 12px; }
+.mcat-progress-text { opacity: 0.4; font-size: 12px; letter-spacing: 0.02em; }
 .mcat-streak {
     margin-left: 10px; font-size: 12px; font-weight: 700;
-    color: #e67e22; animation: fadeIn 0.25s ease;
+    color: #fbbf24; animation: fadeIn 0.25s ease;
 }
 /* Topic / badges */
 .mcat-quiz-topic {
-    font-size: 11px; font-weight: 700; opacity: 0.6;
-    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;
+    font-size: 11px; font-weight: 700; opacity: 0.4;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;
 }
 .mcat-ai-badge {
     display: inline-block; font-size: 10px; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase;
-    color: #7c6ef5; border: 1px solid #7c6ef5;
-    border-radius: 4px; padding: 1px 6px; margin: 2px 0 4px; opacity: 0.85;
+    color: #9d8fff; border: 1px solid rgba(124,110,245,0.4);
+    background: rgba(124,110,245,0.1);
+    border-radius: 20px; padding: 2px 8px; margin: 2px 0 4px;
 }
-.mcat-source-citation { font-size: 11px; opacity: 0.5; margin-top: 4px; font-style: italic; }
+.mcat-source-citation { font-size: 11px; opacity: 0.4; margin-top: 4px; font-style: italic; }
 /* Passage */
-.mcat-quiz-passage { font-size: 13px; opacity: 0.85; margin: 8px 0; line-height: 1.55; }
+.mcat-quiz-passage { font-size: 13px; opacity: 0.8; margin: 8px 0; line-height: 1.6; }
 .mcat-passage-toggle-wrap { margin: 8px 0 4px; }
 .mcat-passage-toggle {
-    background: rgba(128,128,128,0.1); border: 1px solid rgba(128,128,128,0.25);
-    border-radius: 4px; padding: 3px 10px; font-size: 12px; cursor: pointer;
-    color: inherit; font-family: inherit; opacity: 0.75;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 4px 12px; font-size: 12px; cursor: pointer;
+    color: inherit; font-family: inherit;
+    transition: opacity 0.15s, background 0.15s;
 }
-.mcat-passage-toggle:hover { opacity: 1; background: rgba(128,128,128,0.18); }
+.mcat-passage-toggle:hover { background: rgba(255,255,255,0.09); }
 .mcat-passage-full {
-    margin-top: 8px; font-size: 13px; line-height: 1.55; opacity: 0.85;
-    border-left: 3px solid rgba(124,110,245,0.4); padding-left: 10px;
+    margin-top: 8px; font-size: 13px; line-height: 1.6; opacity: 0.8;
+    border-left: 3px solid rgba(124,110,245,0.5); padding-left: 12px;
 }
 /* Question */
-.mcat-quiz-question { font-size: 15px; font-weight: 600; margin: 10px 0 14px; line-height: 1.45; }
-.mcat-quiz-prompt { font-size: 14px; font-weight: 700; opacity: 0.7; margin: 12px 0 10px; }
+.mcat-quiz-question { font-size: 16px; font-weight: 600; margin: 12px 0 16px; line-height: 1.45; }
+.mcat-quiz-prompt {
+    font-size: 11px; font-weight: 700; opacity: 0.45;
+    text-transform: uppercase; letter-spacing: 0.05em; margin: 14px 0 10px;
+}
 /* Choices */
 .mcat-quiz-choices { display: flex; flex-direction: column; gap: 8px; }
 .mcat-choice {
-    text-align: left; padding: 10px 12px; font-size: 14px; color: inherit;
-    border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
-    background: transparent; cursor: pointer; line-height: 1.4;
-    transition: border-color 0.2s, background 0.2s;
+    text-align: left; padding: 11px 14px; font-size: 14px; color: inherit;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    background: rgba(255,255,255,0.03); cursor: pointer; line-height: 1.4;
+    transition: border-color 0.18s, background 0.18s;
+    font-family: inherit;
 }
-.mcat-choice:hover:not(:disabled) { background: rgba(124,110,245,0.1); border-color: rgba(124,110,245,0.5); }
+.mcat-choice:hover:not(:disabled) { background: rgba(124,110,245,0.1); border-color: rgba(124,110,245,0.45); }
 .mcat-choice:disabled { cursor: default; }
-.mcat-choice .letter { font-weight: 700; margin-right: 8px; }
-.mcat-choice.correct  { border-color: #2e9e5b; background: rgba(46,158,91,0.15); }
-.mcat-choice.incorrect { border-color: #d64545; background: rgba(214,69,69,0.15); }
+.mcat-choice .letter { font-weight: 700; margin-right: 10px; color: rgba(255,255,255,0.45); }
+.mcat-choice.correct  { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.1); }
+.mcat-choice.correct .letter { color: #4ade80; }
+.mcat-choice.incorrect { border-color: rgba(248,113,113,0.5); background: rgba(248,113,113,0.1); }
+.mcat-choice.incorrect .letter { color: #f87171; }
 /* Concept input */
 .mcat-concept-input {
     width: 100%; min-height: 80px; box-sizing: border-box;
-    padding: 10px 12px; font-size: 14px; font-family: inherit; color: inherit;
-    border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
-    background: transparent; resize: vertical; line-height: 1.5; margin: 4px 0 12px;
+    padding: 11px 14px; font-size: 14px; font-family: inherit; color: inherit;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    background: rgba(255,255,255,0.04); resize: vertical; line-height: 1.5; margin: 4px 0 12px;
+    transition: border-color 0.18s;
 }
-.mcat-concept-input:focus { outline: none; border-color: rgba(124,110,245,0.6); }
-.mcat-concept-input:disabled { opacity: 0.45; }
+.mcat-concept-input:focus { outline: none; border-color: rgba(124,110,245,0.55); }
+.mcat-concept-input:disabled { opacity: 0.4; }
 /* Feedback */
-.mcat-quiz-feedback { margin-top: 14px; font-size: 14px; animation: fadeIn 0.2s ease; }
-.mcat-verdict-row { margin-top: 5px; }
-.mcat-verdict-row .verdict { font-weight: 700; }
-.mcat-verdict-row .verdict.correct  { color: #2e9e5b; }
-.mcat-verdict-row .verdict.incorrect { color: #d64545; }
+.mcat-quiz-feedback { margin-top: 14px; font-size: 14px; animation: fadeIn 0.22s ease; }
+.mcat-verdict-row { margin-top: 6px; display: flex; align-items: baseline; gap: 8px; }
+.mcat-verdict-row .verdict {
+    font-weight: 700; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 2px 9px; border-radius: 20px; flex-shrink: 0;
+}
+.mcat-verdict-row .verdict.correct {
+    color: #4ade80; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.28);
+}
+.mcat-verdict-row .verdict.incorrect {
+    color: #f87171; background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.28);
+}
 .mcat-verdict-row .note { opacity: 0.7; font-size: 13px; }
 /* Explanation panel */
 .mcat-explanation {
-    margin-top: 12px; padding: 12px 14px;
-    border: 1px solid rgba(128,128,128,0.22); border-radius: 6px;
-    background: rgba(128,128,128,0.05); font-size: 13px; line-height: 1.6;
+    margin-top: 12px; padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 10px;
+    background: rgba(255,255,255,0.03); font-size: 13px; line-height: 1.65;
 }
-.mcat-explanation-row { margin-bottom: 8px; }
+.mcat-explanation-row { margin-bottom: 10px; }
 .mcat-explanation-row:last-child { margin-bottom: 0; }
-.mcat-explanation-label { font-weight: 700; }
+.mcat-explanation-label {
+    font-weight: 700; opacity: 0.5; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: block; margin-bottom: 3px;
+}
 /* Review card */
 .mcat-review-divider {
-    border: none; border-top: 1px solid rgba(128,128,128,0.2); margin: 16px 0;
+    border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 16px 0;
 }
 .mcat-review-stem {
     font-size: 14px; font-weight: 600; line-height: 1.45;
     opacity: 0.9; margin-bottom: 14px;
 }
 /* Actions row */
-.mcat-quiz-actions { margin-top: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.mcat-thinking { opacity: 0.6; font-size: 13px; font-style: italic; }
+.mcat-quiz-actions { margin-top: 18px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mcat-thinking { opacity: 0.45; font-size: 12px; font-style: italic; }
 .sr-btn-secondary {
-    background: transparent; border: 1px solid rgba(128,128,128,0.4);
-    border-radius: 6px; padding: 7px 14px; font-size: 14px;
-    cursor: pointer; color: inherit; font-family: inherit; opacity: 0.75;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; padding: 8px 16px; font-size: 13px;
+    cursor: pointer; color: inherit; font-family: inherit;
+    transition: background 0.18s, border-color 0.18s;
 }
-.sr-btn-secondary:hover { opacity: 1; background: rgba(128,128,128,0.1); }
+.sr-btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 </style>
 """
 

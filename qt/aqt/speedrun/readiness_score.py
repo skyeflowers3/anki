@@ -284,15 +284,16 @@ def _fmt_age(epoch: float) -> str:
 
 _READINESS_CSS = """
 <style>
-.mcat-readiness { max-width: 720px; margin: 0 auto; padding: 20px 16px 40px; }
-.mcat-readiness h1 { font-size: 20px; margin: 0 0 4px; }
-.mcat-readiness .give-up-rule { opacity: 0.7; font-size: 13px; margin: 0 0 20px; }
+.mcat-readiness { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+.mcat-readiness h1 { font-size: 22px; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.02em; }
+.mcat-readiness .give-up-rule { opacity: 0.55; font-size: 13px; margin: 0 0 24px; line-height: 1.6; }
 
 .readiness-card {
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 8px;
-    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px 22px;
     margin-bottom: 20px;
+    background: rgba(255,255,255,0.025);
 }
 .readiness-main-score {
     display: flex;
@@ -300,46 +301,50 @@ _READINESS_CSS = """
     gap: 12px;
     margin-bottom: 6px;
 }
-.readiness-main-score .label { opacity: 0.65; font-size: 14px; }
-.readiness-main-score .score { font-size: 40px; font-weight: 800; }
-.readiness-range { opacity: 0.75; font-size: 14px; margin-bottom: 4px; }
-.readiness-meta { opacity: 0.6; font-size: 12px; margin-bottom: 14px; }
-.readiness-meta span { margin-right: 14px; }
+.readiness-main-score .label {
+    opacity: 0.45; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; font-weight: 700;
+}
+.readiness-main-score .score { font-size: 44px; font-weight: 800; letter-spacing: -0.03em; }
+.readiness-range { opacity: 0.65; font-size: 14px; margin-bottom: 4px; }
+.readiness-meta { opacity: 0.5; font-size: 12px; margin-bottom: 16px; }
+.readiness-meta span { margin-right: 16px; }
 
-.readiness-conf-low    { color: #c0392b; }
-.readiness-conf-medium { color: #e67e22; }
-.readiness-conf-high   { color: #27ae60; }
+.readiness-conf-low    { color: #f87171; }
+.readiness-conf-medium { color: #fbbf24; }
+.readiness-conf-high   { color: #4ade80; }
 
-.readiness-section-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.readiness-section-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
 .readiness-section-table th,
 .readiness-section-table td {
-    text-align: left; padding: 5px 8px;
-    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    text-align: left; padding: 7px 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
-.readiness-section-table th { opacity: 0.6; font-weight: 600; }
+.readiness-section-table th { opacity: 0.45; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
 .readiness-section-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
-.readiness-section-table td.muted { opacity: 0.5; }
-.readiness-note { opacity: 0.6; font-size: 12px; margin-top: 14px; font-style: italic; }
+.readiness-section-table td.muted { opacity: 0.4; }
+.readiness-note { opacity: 0.45; font-size: 12px; margin-top: 16px; font-style: italic; line-height: 1.6; }
 
 .readiness-blocked {
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 8px;
-    padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 16px;
+    background: rgba(255,255,255,0.025);
 }
-.readiness-blocked h2 { font-size: 15px; font-weight: 700; margin: 0 0 10px; }
+.readiness-blocked h2 { font-size: 15px; font-weight: 700; margin: 0 0 12px; }
 .readiness-blocked-list { list-style: none; padding: 0; margin: 0; font-size: 13px; }
-.readiness-blocked-list li { padding: 4px 0; }
-.readiness-blocked-list li::before { margin-right: 6px; }
-.readiness-blocked-list li.done::before { content: "✓"; color: #27ae60; }
-.readiness-blocked-list li.todo::before { content: "✗"; color: #c0392b; }
-.readiness-blocked-pending { opacity: 0.7; font-size: 12px; margin-left: 6px; }
+.readiness-blocked-list li { padding: 5px 0; }
+.readiness-blocked-list li::before { margin-right: 8px; }
+.readiness-blocked-list li.done::before { content: "✓"; color: #4ade80; font-weight: 700; }
+.readiness-blocked-list li.todo::before { content: "✗"; color: #f87171; font-weight: 700; }
+.readiness-blocked-pending { opacity: 0.5; font-size: 12px; margin-left: 4px; }
 .readiness-recommendation {
-  margin: 14px 0 0;
-  padding: 10px 14px;
-  background: rgba(230, 126, 34, 0.12);
-  border-left: 3px solid #e67e22;
-  border-radius: 6px;
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  background: rgba(251,191,36,0.08);
+  border-left: 3px solid #fbbf24;
+  border-radius: 8px;
   font-size: 13px;
   color: inherit;
 }

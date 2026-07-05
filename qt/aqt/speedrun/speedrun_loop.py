@@ -28,8 +28,7 @@ three modes:
   Flashcards are served until the topic is question-eligible (>= 20 reviewed
   cards AND memory > 75%). Once eligible, question blocks are served and the
   next block is chosen by the *block-level* result pattern (see
-  ``route_after_question_block``). No more than two question blocks are served
-  in a row before returning to flashcards. The topic leaves remediation when the
+  ``route_after_question_block``). The topic leaves remediation when the
   block pattern is mostly concept-right/answer-right, or when a flashcard block
   leaves it solid (eligible AND performance > 65%).
 
@@ -86,13 +85,18 @@ QUESTION_MEMORY_THRESHOLD = 0.75
 APPLICATION_PERFORMANCE_THRESHOLD = 0.55
 # An application gap is considered closed once performance rises above this.
 APPLICATION_CLEARED_THRESHOLD = 0.65
-# Never serve more than this many question blocks in a row on one topic without
-# returning to flashcards (anti-loop guard).
-MAX_CONSECUTIVE_QUESTION_BLOCKS = 2
 
 # Block sizes.
 FLASHCARD_BLOCK_SIZE = 10  # knowledge remediation (spec: 8-10 cards)
 QUESTION_BLOCK_SIZE = 5  # interleaved / application blocks (spec: 4-5 questions)
+
+# Number of question blocks to serve before each flashcard check in mixed mode.
+# After the opener (and after any flashcard block), this many question blocks are
+# guaranteed before the next check.  When all topics have memory above the
+# threshold the flashcard check falls through to more questions, so the session
+# becomes essentially all questions.  A value of 3 gives a ~3:1 Q:FC ratio when
+# some topics still need memory work.
+QUESTION_BLOCKS_PER_FLASHCARD = 3
 
 # Per-subdeck points-at-stake weights, mirroring the Rust scheduler's
 # SECTION_WEIGHTS (rslib/src/storage/card/mod.rs). Points at stake for a topic
@@ -496,15 +500,14 @@ class SpeedrunSession:
         self.focus_gap: GapType | None = None
         self.remediated_topic: str | None = None
         self.started = False
-        # Consecutive question blocks served on the current focus topic, and the
-        # block type the last routing decision forced next (anti-loop guard).
-        self.q_streak = 0
+        # Block type the last routing decision forced next.
         self.next_kind: str | None = None
         # Topics with no reviewable cards; skipped so the loop can't hang on them.
         self.exhausted_topics: set[str] = set()
-        # Mixed-mode alternation flag. The session opens with flashcards, so
-        # the first post-opener call to _plan_mixed targets questions.
-        self._next_mixed_kind: str = "questions"
+        # Mixed-mode question budget.  Counts how many question blocks to serve
+        # before the next flashcard check.  Initialized to QUESTION_BLOCKS_PER_FLASHCARD
+        # because the session opener already provides the first flashcard block.
+        self._mixed_q_until_flash: int = QUESTION_BLOCKS_PER_FLASHCARD
 
     def mark_topic_exhausted(self, topic: str | None) -> None:
         if topic:
@@ -585,28 +588,24 @@ class SpeedrunSession:
         stats: dict[str, TopicStats],
         questions_by_topic: dict[str, list[str | int]],
     ) -> BlockPlan | None:
-        """Alternating question / flashcard blocks across all in-scope topics.
+        """Serve question blocks, checking for flashcard remediation periodically.
 
-        The session alternates between:
-        * Question blocks — drawn from question-eligible topics (memory
-          established, or no flashcard deck like CARS), weighted by
-          question_weight (performance + recency decay).
-        * Flashcard blocks — drawn from ineligible topics (below the memory
-          threshold), weighted by points_at_stake (memory weakness).
+        The session keeps a budget (``_mixed_q_until_flash``): each question block
+        decrements it; when it hits zero, one flashcard check is run.  If topics
+        need flashcard work, one block is served; otherwise questions are served
+        instead.  Either way the budget resets to ``QUESTION_BLOCKS_PER_FLASHCARD``
+        so the next check is ``N`` question blocks later.
 
-        If the intended turn has no qualifying topics (e.g. all topics are
-        already eligible so there is nothing to remediate with flashcards), the
-        turn is skipped and the other type is served instead. This ensures the
-        student always gets a block rather than nothing.
+        This gives an approximately N:1 question-to-flashcard ratio when some
+        topics still have low memory, and pure questions once all topics are above
+        the memory threshold.
         """
-        want = self._next_mixed_kind
-
-        if want == "questions":
+        if self._mixed_q_until_flash > 0:
             ids = select_interleaved_questions(
                 stats, questions_by_topic, QUESTION_BLOCK_SIZE, rng=self.rng
             )
             if ids:
-                self._next_mixed_kind = "flashcards"
+                self._mixed_q_until_flash -= 1
                 return BlockPlan(
                     kind="questions",
                     mode=Mode.INTERLEAVED_DISCOVERY,
@@ -614,22 +613,22 @@ class SpeedrunSession:
                     size=len(ids),
                     question_ids=ids,
                 )
-            # No eligible topics yet — fall through to flashcards without
-            # flipping the flag (next attempt should still try questions).
-            return self._mixed_flashcard_plan(stats)
+            # No eligible topics yet: skip to the flashcard check immediately.
+            self._mixed_q_until_flash = 0
 
-        # want == "flashcards"
+        # Budget exhausted: check whether any topics need flashcard remediation.
         plan = self._mixed_flashcard_plan(stats)
+        # Always reset the budget so the next N blocks are questions regardless
+        # of whether a flashcard block was served or skipped.
+        self._mixed_q_until_flash = QUESTION_BLOCKS_PER_FLASHCARD
         if plan is not None:
-            self._next_mixed_kind = "questions"
             return plan
-        # All topics are eligible — nothing to remediate; serve questions.
+
+        # No flashcard needed: fall back to questions.
         ids = select_interleaved_questions(
             stats, questions_by_topic, QUESTION_BLOCK_SIZE, rng=self.rng
         )
         if ids:
-            # Don't flip: next turn should still be flashcards once some topics
-            # slip below the threshold again.
             return BlockPlan(
                 kind="questions",
                 mode=Mode.INTERLEAVED_DISCOVERY,
@@ -642,24 +641,29 @@ class SpeedrunSession:
     def _mixed_flashcard_plan(
         self, stats: dict[str, TopicStats] | None = None
     ) -> BlockPlan | None:
-        """A mixed flashcard block for ineligible topics only.
+        """A mixed flashcard block for topics whose memory is below the threshold.
 
-        When ``stats`` is provided, only includes topics that are not yet
-        question-eligible (i.e. those still below the memory threshold). If
-        every topic is eligible (or there are no topics), returns None so the
-        caller can fall back to a question block.
+        When ``stats`` is provided, only includes topics whose memory is
+        actually low (below ``QUESTION_MEMORY_THRESHOLD`` or unknown). Topics
+        with memory above the threshold no longer need flashcard remediation
+        even if they haven't yet cleared the reviewed-count gate for question
+        eligibility.  If every topic's memory is already solid (or there are
+        no topics), returns None so the caller can fall back to a question block.
         """
         if not self.topics:
             return None
         if stats is not None:
-            ineligible = [
+            needs_flash = [
                 t for t in self.topics
                 if t not in self.exhausted_topics
                 and t in stats
-                and not stats[t].is_question_eligible
                 and stats[t].has_flashcards
+                and (
+                    stats[t].memory is None
+                    or stats[t].memory <= QUESTION_MEMORY_THRESHOLD
+                )
             ]
-            if not ineligible:
+            if not needs_flash:
                 return None
         return BlockPlan(
             kind="flashcards",
@@ -675,16 +679,15 @@ class SpeedrunSession:
         # Build memory first: below the reviewed/memory bar, always flashcards.
         if not topic_stats.is_question_eligible:
             return "flashcards"
-        # Anti-loop guard: never more than N question blocks in a row.
-        if self.q_streak >= MAX_CONSECUTIVE_QUESTION_BLOCKS:
-            return "flashcards"
-        # Routing from the previous question block may force flashcards.
+        # Topic is question-eligible: memory is already above the threshold, so
+        # flashcards won't help.  Skip the anti-loop guard and let the
+        # block-routing in after_block (route_after_question_block) decide when
+        # to force flashcards based on actual performance patterns.
         if self.next_kind == "flashcards":
             return "flashcards"
         return "questions"
 
     def _flashcard_plan(self, topic: str) -> BlockPlan:
-        self.q_streak = 0
         self.next_kind = None
         self.focus_gap = GapType.KNOWLEDGE
         return BlockPlan(
@@ -720,11 +723,9 @@ class SpeedrunSession:
             self.mode = Mode.INTERLEAVED_DISCOVERY
             self.focus_topic = None
             self.focus_gap = None
-            self.q_streak = 0
             self.next_kind = None
             return self.plan_block(stats)
 
-        self.q_streak += 1
         self.focus_gap = GapType.APPLICATION
         return BlockPlan(
             kind="questions",
@@ -756,7 +757,6 @@ class SpeedrunSession:
         self.mode = Mode.FOCUSED_REMEDIATION
         self.focus_topic = gap.name
         self.focus_gap = gap.gap_type
-        self.q_streak = 0
         self.next_kind = None
 
     # -- transitions ---------------------------------------------------------
@@ -805,9 +805,8 @@ class SpeedrunSession:
                 self.next_kind = "questions"
             return
 
-        # A flashcard block finished: reset the question streak and move on only
-        # once the topic is solid (memory established and performance cleared).
-        self.q_streak = 0
+        # A flashcard block finished: move on once the topic is solid
+        # (memory established and performance cleared).
         self.next_kind = None
         if self._topic_solid(topic):
             self._enter_consolidation()
@@ -816,7 +815,6 @@ class SpeedrunSession:
         self.remediated_topic = self.focus_topic
         self.focus_topic = None
         self.focus_gap = None
-        self.q_streak = 0
         self.next_kind = None
         self.mode = Mode.INTERLEAVED_CONSOLIDATION
 

@@ -335,31 +335,32 @@ def render_text(sections: list[SectionScore]) -> str:
 
 _MEMORY_CSS = """
 <style>
-.mcat-memory { max-width: 720px; margin: 0 auto; padding: 20px 16px 40px; }
-.mcat-memory h1 { font-size: 20px; margin: 0 0 4px; }
-.mcat-memory .give-up-rule { opacity: 0.7; font-size: 13px; margin: 0 0 20px; }
+.mcat-memory { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+.mcat-memory h1 { font-size: 22px; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.02em; }
+.mcat-memory .give-up-rule { opacity: 0.55; font-size: 13px; margin: 0 0 24px; line-height: 1.6; }
 .mcat-section {
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    border-radius: 8px;
-    padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 16px;
+    background: rgba(255,255,255,0.025);
 }
 .mcat-section .section-head { display: flex; align-items: baseline; gap: 8px; }
-.mcat-section .section-code { font-weight: 700; font-size: 15px; }
-.mcat-section .section-name { opacity: 0.7; font-size: 13px; }
+.mcat-section .section-code { font-weight: 800; font-size: 15px; }
+.mcat-section .section-name { opacity: 0.55; font-size: 13px; }
 .mcat-score { margin: 10px 0 6px; }
-.mcat-score .value { font-size: 26px; font-weight: 700; }
-.mcat-score .range { opacity: 0.7; font-size: 13px; margin-left: 8px; }
-.mcat-score .count { opacity: 0.55; font-size: 12px; margin-left: 6px; }
-.mcat-nodata { margin: 10px 0 6px; opacity: 0.75; font-style: italic; }
-table.mcat-subdecks { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+.mcat-score .value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+.mcat-score .range { opacity: 0.6; font-size: 13px; margin-left: 8px; }
+.mcat-score .count { opacity: 0.45; font-size: 12px; margin-left: 6px; }
+.mcat-nodata { margin: 10px 0 6px; opacity: 0.55; font-style: italic; font-size: 13px; }
+table.mcat-subdecks { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
 table.mcat-subdecks th, table.mcat-subdecks td {
-    text-align: left; padding: 5px 8px;
-    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    text-align: left; padding: 6px 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
-table.mcat-subdecks th { opacity: 0.6; font-weight: 600; }
+table.mcat-subdecks th { opacity: 0.45; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
 table.mcat-subdecks td.num { text-align: right; font-variant-numeric: tabular-nums; }
-table.mcat-subdecks td.muted { opacity: 0.5; }
+table.mcat-subdecks td.muted { opacity: 0.4; }
 </style>
 """
 

@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     import aqt.main
 
 
-MCAT_ROOT = "AnKing-MCAT"
+MCAT_ROOT = "MCAT Study Blocks"
 
 # A session is a fixed number of blocks; after the last one a summary is shown.
 SESSION_BLOCKS = 5
@@ -63,7 +63,7 @@ def _modules():
 def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId | None]:
     """Map each in-scope topic (subdeck) to a deck id, within the selection.
 
-    Topics are the AnKing-MCAT subdecks known to the loop (Behavioral,
+    Topics are the MCAT Study Blocks subdecks known to the loop (Behavioral,
     Biochemistry, ...). Reviewing a topic's deck naturally includes any of its
     child decks.
 
@@ -117,45 +117,58 @@ def scope_topics(mw: aqt.main.AnkiQt, deck_id: DeckId) -> dict[str, DeckId | Non
 _SHELL_CSS = """
 <style>
 body { margin: 0; }
-.sr-shell { max-width: 760px; margin: 0 auto; padding: 16px 18px 40px; }
+.sr-shell { max-width: 760px; margin: 0 auto; padding: 16px 18px 48px; }
 .sr-block-badge {
-    position: fixed; top: 10px; right: 14px; z-index: 10;
-    font-size: 12px; font-weight: 600; opacity: 0.6;
-    letter-spacing: 0.03em;
+    position: fixed; top: 12px; right: 16px; z-index: 10;
+    font-size: 11px; font-weight: 700; opacity: 0.4;
+    letter-spacing: 0.06em; text-transform: uppercase;
 }
 .sr-reason {
-    padding: 12px 16px; margin-bottom: 18px; border-radius: 8px;
-    background: rgba(125,125,255,0.12); font-size: 16px; line-height: 1.4;
+    padding: 12px 16px; margin-bottom: 18px; border-radius: 10px;
+    background: rgba(124,110,245,0.1); border: 1px solid rgba(124,110,245,0.22);
+    font-size: 15px; line-height: 1.5;
 }
 .sr-btn {
-    font-size: 15px; font-weight: 600; padding: 11px 22px; margin: 6px 8px 0 0;
-    border: 1px solid rgba(128,128,128,0.4); border-radius: 6px;
-    background: rgba(125,125,255,0.16); cursor: pointer; color: inherit;
+    font-size: 14px; font-weight: 600; padding: 10px 22px; margin: 6px 8px 0 0;
+    border: none; border-radius: 20px;
+    background: linear-gradient(135deg, #7c6ef5, #6558e0);
+    cursor: pointer; color: #fff;
+    transition: opacity 0.18s, transform 0.12s;
+    box-shadow: 0 2px 8px rgba(124,110,245,0.3);
+    font-family: inherit;
 }
-.sr-btn:hover { background: rgba(125,125,255,0.28); }
-.sr-btn.ghost { background: transparent; opacity: 0.7; font-size: 13px; padding: 7px 14px; }
+.sr-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.sr-btn:active { transform: translateY(0); }
+.sr-btn.ghost {
+    background: rgba(255,255,255,0.06); color: inherit;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: none; font-size: 13px; padding: 7px 16px;
+}
+.sr-btn.ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); opacity: 1; }
 .sr-card {
-    border: 1px solid rgba(128,128,128,0.3); border-radius: 8px;
-    padding: 20px 22px; margin-top: 4px; font-size: 14px; line-height: 1.5;
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 14px;
+    padding: 20px 22px; margin-top: 4px;
+    background: rgba(255,255,255,0.025);
+    font-size: 14px; line-height: 1.5;
 }
-.sr-card h2 { margin: 0 0 8px; font-size: 18px; }
-.sr-topic-title { font-size: 20px; font-weight: 700; margin: 0 0 14px; }
+.sr-card h2 { margin: 0 0 10px; font-size: 18px; }
+.sr-topic-title { font-size: 22px; font-weight: 800; margin: 0 0 14px; letter-spacing: -0.02em; }
 .sr-scores { display: flex; gap: 28px; margin: 4px 0 20px; }
 .sr-score-label {
-    display: block; font-size: 12px; opacity: 0.65; text-transform: uppercase;
-    letter-spacing: 0.04em; margin-bottom: 2px;
+    display: block; font-size: 11px; font-weight: 700;
+    opacity: 0.45; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;
 }
-.sr-score-val { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.sr-upnext { font-size: 15px; opacity: 0.85; margin-bottom: 16px; }
+.sr-score-val { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.sr-upnext { font-size: 14px; opacity: 0.65; margin-bottom: 16px; }
 .sr-footer { margin-top: 24px; }
 table.sr-summary { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14px; }
 table.sr-summary th, table.sr-summary td {
-    text-align: left; padding: 7px 8px;
-    border-top: 1px solid rgba(128,128,128,0.2);
+    text-align: left; padding: 8px 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
-table.sr-summary th { opacity: 0.6; font-weight: 600; }
+table.sr-summary th { opacity: 0.45; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
 table.sr-summary td.num { text-align: right; font-variant-numeric: tabular-nums; }
-table.sr-summary td.delta { opacity: 0.8; font-size: 13px; }
+table.sr-summary td.delta { opacity: 0.65; font-size: 13px; }
 .sr-summary-actions { margin-top: 8px; }
 </style>
 """
@@ -903,7 +916,7 @@ def _start_question_sync_pull() -> None:
 
 
 def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:
-    """Launch the Speedrun loop only for the top-level AnKing-MCAT deck.
+    """Launch the Speedrun loop only for the top-level MCAT Study Blocks deck.
 
     Studying an individual subdeck falls through to standard Anki review.
     """

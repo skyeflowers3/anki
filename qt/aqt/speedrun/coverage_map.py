@@ -192,28 +192,29 @@ _CSS = """
 <style>
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
        margin: 0; padding: 16px; }
-.coverage-header { margin-bottom: 18px; }
-.coverage-pct { font-size: 36px; font-weight: 700; }
-.coverage-pct.complete { color: #2e7d32; }
-.coverage-pct.incomplete { color: #c62828; }
-.coverage-label { font-size: 13px; opacity: 0.6; margin-left: 8px; }
-.coverage-bar-wrap { background: #e0e0e0; border-radius: 6px;
-                     height: 10px; width: 260px; margin-top: 6px; }
-.coverage-bar { height: 10px; border-radius: 6px; background: #2e7d32; }
-.coverage-bar.incomplete { background: #c62828; }
-.area-list { list-style: none; padding: 0; margin: 16px 0 0; }
+.coverage-header { margin-bottom: 20px; }
+.coverage-pct { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; }
+.coverage-pct.complete { color: #4ade80; }
+.coverage-pct.incomplete { color: #f87171; }
+.coverage-label { font-size: 13px; opacity: 0.45; margin-left: 8px; }
+.coverage-bar-wrap { background: rgba(255,255,255,0.08); border-radius: 20px;
+                     height: 6px; width: 260px; margin-top: 8px; }
+.coverage-bar { height: 6px; border-radius: 20px; background: #4ade80; }
+.coverage-bar.incomplete { background: linear-gradient(90deg, #7c6ef5, #9d8fff); }
+.area-list { list-style: none; padding: 0; margin: 18px 0 0; }
 .area-list li { display: flex; align-items: center; gap: 10px;
-                padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.07); }
+                padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .area-list li:last-child { border-bottom: none; }
-.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.dot.ok  { background: #2e7d32; }
-.dot.bad { background: #c62828; }
-.dot.rec { background: #e67e22; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot.ok  { background: #4ade80; }
+.dot.bad { background: #f87171; }
+.dot.rec { background: #fbbf24; }
 .area-name { font-weight: 600; font-size: 14px; min-width: 180px; }
-.area-note { font-size: 12px; opacity: 0.55; }
+.area-note { font-size: 12px; opacity: 0.45; }
 .missing-msg { margin-top: 18px; padding: 12px 16px;
-               background: #fff3e0; border-left: 4px solid #e65100;
-               border-radius: 4px; font-size: 13px; color: #bf360c; }
+               background: rgba(248,113,113,0.08);
+               border-left: 4px solid rgba(248,113,113,0.6);
+               border-radius: 8px; font-size: 13px; color: #f87171; }
 </style>
 """
 
