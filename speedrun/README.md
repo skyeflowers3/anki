@@ -4,6 +4,16 @@ This directory contains standalone copies of the core Speedrun modules for use
 outside the full Qt app (CLI workflows, dev iteration without a full build,
 and the Firebase project config).
 
+## Project Documentation
+
+- [Architecture overview](ARCHITECTURE.md) — how the desktop app, mobile app, adaptive loop, databases, AI generator, and sync system fit together
+- [Rust change note](RUST_CHANGE.md) — the Points-at-Stake review ordering added to the Rust scheduler
+- [Model descriptions](MODELS.md) — memory, performance, and readiness models with formulas and give-up rules
+- [Results report](results_report.md) — calibration results and honest interpretation for project submission
+- [Re-running tests](#re-running-tests) — exact commands to regenerate the calibration charts and scores
+
+---
+
 ## Relationship to `qt/aqt/speedrun/`
 
 The **running Speedrun app** imports from `qt/aqt/speedrun/` (the integrated Qt
