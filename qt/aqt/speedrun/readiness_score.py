@@ -340,6 +340,32 @@ _READINESS_CSS = """
 
 def render_html(col: Collection) -> str:
     """Render the readiness-score report as an HTML body for an AnkiWebView."""
+    # Gate on 100% content coverage before computing the score.
+    try:
+        from aqt.speedrun import coverage_map
+    except ImportError:
+        coverage_map = None  # type: ignore[assignment]
+
+    if coverage_map is not None:
+        cov = coverage_map.compute(col)
+        if not cov.is_complete:
+            missing = ", ".join(cov.missing)
+            return (
+                f"{_READINESS_CSS}"
+                '<div class="mcat-readiness">'
+                "<h1>MCAT Readiness Score</h1>"
+                "<div class='readiness-blocked'>"
+                "<p style='font-size:14px;margin:0 0 8px'>"
+                "Readiness score unavailable until all MCAT content areas are covered."
+                "</p>"
+                f"<p style='opacity:0.7;font-size:13px;margin:0'>"
+                f"Missing areas: <strong>{missing}</strong>. "
+                "Go to the <strong>MCAT Coverage</strong> tab for details."
+                "</p>"
+                "</div>"
+                "</div>"
+            )
+
     result = compute(col)
 
     parts: list[str] = [_READINESS_CSS, '<div class="mcat-readiness">']

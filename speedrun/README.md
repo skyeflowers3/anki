@@ -50,27 +50,28 @@ Detailed one-page descriptions of the memory, performance, and readiness models 
 
 ## Re-running Tests
 
-Run these from the **repo root** (`/Users/skyeflowers/anki`). Anki must be closed so the collection database is not locked.
+Run all three commands from the **repo root** (`/Users/skyeflowers/anki`). Anki must be closed for the calibration scripts so the collection database is not locked.
 
-**Memory model calibration** — plots predicted FSRS retrievability vs. actual recall rate on the held-out 20% of review history, and prints the Brier score:
+| Script | What it checks | Output |
+|--------|---------------|--------|
+| `calibrate_memory.py` | FSRS predicted R vs. actual recall on held-out reviews; prints Brier score | `calibration_memory.png` |
+| `calibrate_performance.py` | Held-out question accuracy by MCAT section (last 20% by date) | `calibration_performance.png` |
+| `leakage_check.py` | Near-duplicate detection between test and training questions (threshold 0.8) | `CLEAN` / `FLAGGED` in terminal |
 
 ```bash
+# Memory model calibration (Brier score + chart)
 out/pyenv/bin/python qt/aqt/speedrun/calibrate_memory.py
-```
 
-Outputs `calibration_memory.png` in the repo root.
-
-**Performance model calibration** — reports held-out accuracy (last 20% of answered questions) broken down by MCAT section and topic:
-
-```bash
+# Performance model calibration (section accuracy + chart)
 out/pyenv/bin/python qt/aqt/speedrun/calibrate_performance.py
+
+# Leakage check (no collection needed)
+out/pyenv/bin/python qt/aqt/speedrun/leakage_check.py
 ```
 
-Outputs `calibration_performance.png` in the repo root.
+Results are saved to [`speedrun/results_report.md`](results_report.md); charts are saved to [`proof/calibration_chart.png`](proof/calibration_chart.png) and [`proof/calibration_performance.png`](proof/calibration_performance.png).
 
-Results are saved to [`speedrun/results_report.md`](results_report.md); the memory calibration chart is saved to [`proof/calibration_chart.png`](proof/calibration_chart.png) and the performance chart to [`proof/calibration_performance.png`](proof/calibration_performance.png).
-
-Both scripts auto-detect the Anki collection at the default path (`~/Library/Application Support/Anki2/User 1/collection.anki2` on macOS). To use a different collection, pass its path as the first argument:
+To use a non-default collection path, pass it as the first argument to either calibration script:
 
 ```bash
 out/pyenv/bin/python qt/aqt/speedrun/calibrate_memory.py /path/to/collection.anki2

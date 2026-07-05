@@ -29,7 +29,6 @@ The held-out set is the most recent 20% of review rows by date.
 
 from __future__ import annotations
 
-import math
 import shutil
 import sqlite3
 import sys

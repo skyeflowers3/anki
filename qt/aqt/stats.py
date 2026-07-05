@@ -79,6 +79,19 @@ def _readiness_score_module():
     return readiness_score
 
 
+def _coverage_map_module():
+    """Import the Speedrun MCAT coverage-map module."""
+    try:
+        from aqt.speedrun import coverage_map
+    except ModuleNotFoundError:
+        repo_root = Path(aqt.__file__).resolve().parents[2]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from aqt.speedrun import coverage_map
+
+    return coverage_map
+
+
 class NewDeckStats(QDialog):
     """New deck stats."""
 
@@ -159,6 +172,14 @@ class NewDeckStats(QDialog):
         performance_layout.addWidget(self.performance_web)
         self.tabs.addTab(performance_tab, "MCAT Performance")
 
+        self.coverage_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_COVERAGE)
+        self.coverage_web.set_bridge_command(self._on_bridge_cmd, self)
+        coverage_tab = QWidget()
+        coverage_layout = QVBoxLayout(coverage_tab)
+        coverage_layout.setContentsMargins(0, 0, 0, 0)
+        coverage_layout.addWidget(self.coverage_web)
+        self.tabs.addTab(coverage_tab, "MCAT Coverage")
+
         self.readiness_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_READINESS)
         self.readiness_web.set_bridge_command(self._on_bridge_cmd, self)
         readiness_tab = QWidget()
@@ -179,6 +200,9 @@ class NewDeckStats(QDialog):
         if getattr(self, "performance_web", None):
             self.performance_web.cleanup()
             self.performance_web = None  # type: ignore
+        if getattr(self, "coverage_web", None):
+            self.coverage_web.cleanup()
+            self.coverage_web = None  # type: ignore
         if getattr(self, "readiness_web", None):
             self.readiness_web.cleanup()
             self.readiness_web = None  # type: ignore
@@ -244,6 +268,7 @@ class NewDeckStats(QDialog):
         self.form.web.load_sveltekit_page("graphs")
         self._refresh_memory()
         self._refresh_performance()
+        self._refresh_coverage()
         self._refresh_readiness()
 
     def _refresh_memory(self) -> None:
@@ -277,6 +302,21 @@ class NewDeckStats(QDialog):
                 "</div>"
             )
         performance_web.stdHtml(body, context=self)
+
+    def _refresh_coverage(self) -> None:
+        coverage_web = getattr(self, "coverage_web", None)
+        if coverage_web is None:
+            return
+        try:
+            coverage_map = _coverage_map_module()
+            body = coverage_map.render_html(self.mw.col)
+        except Exception as exc:
+            body = (
+                "<div style='padding:20px'>"
+                f"Unable to compute MCAT coverage: {exc}"
+                "</div>"
+            )
+        coverage_web.stdHtml(body, context=self)
 
     def _refresh_readiness(self) -> None:
         readiness_web = getattr(self, "readiness_web", None)

@@ -183,7 +183,7 @@ def _report(sections: list[SectionResult], total_rows: int, held_n: int) -> None
     total_answered = sum(s.answered for s in sections)
 
     print(f"{'─' * 60}")
-    print(f"  MCAT Performance Score — Held-Out Calibration")
+    print("  MCAT Performance Score — Held-Out Calibration")
     print(f"{'─' * 60}")
     print(f"  Total questions answered (all time): {total_rows:,}")
     print(f"  Training set (first 80%):            {total_rows - held_n:,}")
@@ -194,7 +194,7 @@ def _report(sections: list[SectionResult], total_rows: int, held_n: int) -> None
     for sec in sections:
         if sec.answered == 0:
             print(f"  {sec.code:<6}  {sec.name}")
-            print(f"          No answers in held-out set")
+            print("          No answers in held-out set")
             print()
             continue
         pct = sec.accuracy * 100

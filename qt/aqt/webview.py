@@ -52,6 +52,7 @@ class AnkiWebViewKind(Enum):
     MCAT_MEMORY = "mcat memory"
     MCAT_PERFORMANCE = "mcat performance"
     MCAT_READINESS = "mcat readiness"
+    MCAT_COVERAGE = "mcat coverage"
     SPEEDRUN_LOOP = "speedrun loop"
     PREVIEWER = "previewer"
     CHANGE_NOTETYPE = "change notetype"
