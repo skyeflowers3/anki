@@ -172,14 +172,6 @@ class NewDeckStats(QDialog):
         performance_layout.addWidget(self.performance_web)
         self.tabs.addTab(performance_tab, "MCAT Performance")
 
-        self.coverage_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_COVERAGE)
-        self.coverage_web.set_bridge_command(self._on_bridge_cmd, self)
-        coverage_tab = QWidget()
-        coverage_layout = QVBoxLayout(coverage_tab)
-        coverage_layout.setContentsMargins(0, 0, 0, 0)
-        coverage_layout.addWidget(self.coverage_web)
-        self.tabs.addTab(coverage_tab, "MCAT Coverage")
-
         self.readiness_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_READINESS)
         self.readiness_web.set_bridge_command(self._on_bridge_cmd, self)
         readiness_tab = QWidget()
@@ -187,6 +179,14 @@ class NewDeckStats(QDialog):
         readiness_layout.setContentsMargins(0, 0, 0, 0)
         readiness_layout.addWidget(self.readiness_web)
         self.tabs.addTab(readiness_tab, "MCAT Readiness")
+
+        self.coverage_web = AnkiWebView(kind=AnkiWebViewKind.MCAT_COVERAGE)
+        self.coverage_web.set_bridge_command(self._on_bridge_cmd, self)
+        coverage_tab = QWidget()
+        coverage_layout = QVBoxLayout(coverage_tab)
+        coverage_layout.setContentsMargins(0, 0, 0, 0)
+        coverage_layout.addWidget(self.coverage_web)
+        self.tabs.addTab(coverage_tab, "MCAT Coverage")
 
         layout.insertWidget(0, self.tabs, stretch=1)
 

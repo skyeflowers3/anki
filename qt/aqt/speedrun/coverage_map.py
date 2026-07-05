@@ -1,20 +1,22 @@
 """MCAT content-area coverage map for Speedrun.
 
-Checks whether all seven required MCAT content areas are present in the
-current collection and question bank, then reports a coverage percentage and
-the list of covered/missing areas.
+Checks whether all required MCAT content areas are present in the current
+collection and question bank, then reports a coverage percentage and the list
+of covered/missing areas.
 
 Coverage rules
 --------------
-Flashcard-backed areas (6):
-    A topic is covered when the corresponding AnKing-MCAT subdeck exists in
-    the collection AND contains at least one card.  Subdecks are matched by
-    the path component (e.g. "Biology" anywhere in the deck name).
+Required areas (6):
+    Behavioral Sciences, Biology, Biochemistry, General Chemistry,
+    Organic Chemistry, Physics and Math, CARS.
+    A flashcard-backed area is covered when its AnKing-MCAT subdeck exists in
+    the collection AND contains at least one card.
+    CARS is covered when at least one CARS question exists in the question bank.
 
-CARS (1):
-    CARS has no flashcard deck.  It is covered when at least one CARS question
-    exists in the question bank (questions.json or generated_questions.json
-    with eval_passed=True).
+Recommended areas (not required for the readiness score):
+    Essential Equations — a supplemental deck that strengthens B/B recall.
+    Missing it does not block the readiness score, but a recommendation is
+    shown on the Readiness tab.
 
 This module is intentionally read-only and does not touch quiz, deck, or
 authentication logic.
@@ -35,6 +37,7 @@ if TYPE_CHECKING:
 # ---------------------------------------------------------------------------
 
 # Human-readable name → subdeck path component (or None for question-only areas).
+# These must all be covered for the readiness score to show.
 REQUIRED_AREAS: list[tuple[str, str | None]] = [
     ("Behavioral Sciences", "Behavioral"),
     ("Biology", "Biology"),
@@ -43,6 +46,12 @@ REQUIRED_AREAS: list[tuple[str, str | None]] = [
     ("Organic Chemistry", "Organic-Chemistry"),
     ("Physics and Math", "Physics-and-Math"),
     ("CARS", None),  # covered via question bank, not flashcard deck
+]
+
+# Recommended areas: shown in the coverage tab and surfaced as a tip on the
+# readiness tab, but missing ones do NOT block the readiness score.
+RECOMMENDED_AREAS: list[tuple[str, str | None]] = [
+    ("Essential Equations", "Essential-Equations"),
 ]
 
 _QUESTIONS_PATH = Path(__file__).resolve().parent / "questions.json"
@@ -62,7 +71,8 @@ class AreaStatus:
 
     name: str
     covered: bool
-    note: str = ""  # short explanation of how it is covered (or why not)
+    note: str = ""       # short explanation of how it is covered (or why not)
+    recommended: bool = False  # True = nice to have, does not block readiness
 
 
 @dataclass
@@ -72,30 +82,40 @@ class CoverageResult:
     areas: list[AreaStatus] = field(default_factory=list)
 
     @property
+    def _required(self) -> list[AreaStatus]:
+        return [a for a in self.areas if not a.recommended]
+
+    @property
     def covered_count(self) -> int:
-        return sum(1 for a in self.areas if a.covered)
+        return sum(1 for a in self._required if a.covered)
 
     @property
     def total_count(self) -> int:
-        return len(self.areas)
+        return len(self._required)
 
     @property
     def coverage_pct(self) -> float:
-        if not self.areas:
+        if not self._required:
             return 0.0
         return self.covered_count / self.total_count * 100.0
 
     @property
     def is_complete(self) -> bool:
-        return self.covered_count == self.total_count
+        """True when all *required* areas are covered."""
+        return all(a.covered for a in self._required)
 
     @property
     def missing(self) -> list[str]:
-        return [a.name for a in self.areas if not a.covered]
+        return [a.name for a in self._required if not a.covered]
 
     @property
     def covered(self) -> list[str]:
-        return [a.name for a in self.areas if a.covered]
+        return [a.name for a in self._required if a.covered]
+
+    @property
+    def missing_recommended(self) -> list[str]:
+        """Recommended areas that are not yet covered."""
+        return [a.name for a in self.areas if a.recommended and not a.covered]
 
 
 # ---------------------------------------------------------------------------
@@ -134,39 +154,33 @@ def _deck_card_count(col: Collection, subdeck_component: str) -> int:
     return int(rows[0][0]) if rows else 0
 
 
+def _check_area(
+    col: Collection, area_name: str, subdeck: str | None, recommended: bool
+) -> AreaStatus:
+    if subdeck is None:
+        n = _cars_question_count()
+        if n > 0:
+            return AreaStatus(area_name, covered=True,
+                              note=f"{n} practice questions", recommended=recommended)
+        return AreaStatus(area_name, covered=False,
+                          note="No CARS questions found in question bank",
+                          recommended=recommended)
+    n = _deck_card_count(col, subdeck)
+    if n > 0:
+        return AreaStatus(area_name, covered=True,
+                          note=f"{n:,} flashcards", recommended=recommended)
+    return AreaStatus(area_name, covered=False,
+                      note=f'No "{subdeck}" deck found in collection',
+                      recommended=recommended)
+
+
 def compute(col: Collection) -> CoverageResult:
     """Build the full coverage report for the current collection."""
     result = CoverageResult()
     for area_name, subdeck in REQUIRED_AREAS:
-        if subdeck is None:
-            # CARS — covered by question bank
-            n = _cars_question_count()
-            if n > 0:
-                result.areas.append(
-                    AreaStatus(area_name, covered=True, note=f"{n} practice questions")
-                )
-            else:
-                result.areas.append(
-                    AreaStatus(
-                        area_name,
-                        covered=False,
-                        note="No CARS questions found in question bank",
-                    )
-                )
-        else:
-            n = _deck_card_count(col, subdeck)
-            if n > 0:
-                result.areas.append(
-                    AreaStatus(area_name, covered=True, note=f"{n:,} flashcards")
-                )
-            else:
-                result.areas.append(
-                    AreaStatus(
-                        area_name,
-                        covered=False,
-                        note=f'No "{subdeck}" deck found in collection',
-                    )
-                )
+        result.areas.append(_check_area(col, area_name, subdeck, recommended=False))
+    for area_name, subdeck in RECOMMENDED_AREAS:
+        result.areas.append(_check_area(col, area_name, subdeck, recommended=True))
     return result
 
 
@@ -194,6 +208,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .dot.ok  { background: #2e7d32; }
 .dot.bad { background: #c62828; }
+.dot.rec { background: #e67e22; }
 .area-name { font-weight: 600; font-size: 14px; min-width: 180px; }
 .area-note { font-size: 12px; opacity: 0.55; }
 .missing-msg { margin-top: 18px; padding: 12px 16px;
@@ -211,11 +226,16 @@ def render_html(col: Collection) -> str:
 
     rows = ""
     for area in result.areas:
-        dot_class = "ok" if area.covered else "bad"
+        if area.recommended:
+            dot_class = "ok" if area.covered else "rec"
+            tag = ' <span style="font-size:11px;opacity:0.5">(recommended)</span>'
+        else:
+            dot_class = "ok" if area.covered else "bad"
+            tag = ""
         rows += (
             f'<li>'
             f'<span class="dot {dot_class}"></span>'
-            f'<span class="area-name">{area.name}</span>'
+            f'<span class="area-name">{area.name}{tag}</span>'
             f'<span class="area-note">{area.note}</span>'
             f'</li>'
         )

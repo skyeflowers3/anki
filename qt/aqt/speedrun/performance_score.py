@@ -64,11 +64,16 @@ except ImportError:
 # Section-level give-up rule for the performance score display, mirroring the
 # memory score's SECTION_MIN_REVIEWED / MULTI_SUBDECK_MIN constants.
 # A section needs at least SECTION_MIN_ANSWERED questions answered in total.
-# Sections with 3 or more topics (B/B: Biology/Biochemistry/Essential-Equations,
+# Sections with 3 or more required topics (B/B: Biology/Biochemistry,
 # C/P: G-Chem/Organic-Chem/Physics) additionally require at least
-# MULTI_TOPIC_MIN_ANSWERED in each topic so one thin topic can't inflate the rest.
+# MULTI_TOPIC_MIN_ANSWERED in each required topic.
 SECTION_MIN_ANSWERED = 30
 MULTI_TOPIC_MIN_ANSWERED = 10
+
+# Topics that are supplemental/recommended. They still appear in the
+# performance breakdown but are never counted toward the minimum threshold
+# that blocks the readiness score.
+OPTIONAL_TOPICS: frozenset[str] = frozenset({"Essential-Equations"})
 
 # Kept for backward compat; the adaptive loop uses this lower bar to decide
 # whether a topic has enough answers to weight it meaningfully.
@@ -223,27 +228,30 @@ class SectionPerformance:
         return sum(t.correct for t in self.topics)
 
     @property
-    def _per_topic_min(self) -> int:
-        """Minimum questions required per topic.
-
-        Sections with 3+ topics also require at least MULTI_TOPIC_MIN_ANSWERED
-        in each so no single thin topic drags the section score down.
-        """
-        return MULTI_TOPIC_MIN_ANSWERED if len(self.topics) >= 3 else SECTION_MIN_ANSWERED
+    def _required_topics(self) -> list["TopicResult"]:
+        """Topics that count toward the minimum threshold (non-optional)."""
+        return [t for t in self.topics if t.name not in OPTIONAL_TOPICS]
 
     @property
     def pending_topics(self) -> list[tuple[str, int]]:
-        """Topics still short of their required questions: (name, still_needed)."""
-        min_per = self._per_topic_min
+        """Required topics still short of their per-topic minimum.
+
+        The per-topic floor only applies when there are 3+ required topics
+        (e.g. C/P with G-Chem / Organic / Physics).  With fewer required
+        topics the section total is the only gate, so this returns empty and
+        has_score just checks the overall answered count.
+        """
+        if len(self._required_topics) < 3:
+            return []
         return [
-            (t.name, min_per - t.answered)
-            for t in self.topics
-            if t.answered < min_per
+            (t.name, MULTI_TOPIC_MIN_ANSWERED - t.answered)
+            for t in self._required_topics
+            if t.answered < MULTI_TOPIC_MIN_ANSWERED
         ]
 
     @property
     def has_score(self) -> bool:
-        """True when every topic meets its minimum AND section total >= 30."""
+        """True when every required topic meets its minimum AND section total >= 30."""
         return not self.pending_topics and self.answered >= SECTION_MIN_ANSWERED
 
     @property

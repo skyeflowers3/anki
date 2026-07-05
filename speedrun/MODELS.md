@@ -35,7 +35,8 @@ The section score is the arithmetic mean of R across all cards in that section's
 A section score is only displayed when the student has reviewed a minimum number of cards, to prevent a misleading score from a thin sample:
 
 - Every section requires ≥ **30 total reviewed cards** across its subdecks.
-- Sections with 3 subdecks (B/B and C/P) additionally require ≥ **10 reviewed cards in each subdeck**, so one heavily-reviewed deck cannot mask gaps in another.
+- Sections with 3 subdecks (C/P: G-Chem / Organic / Physics) additionally require ≥ **10 reviewed cards in each subdeck**, so one heavily-reviewed deck cannot mask gaps in another.
+- B/B has 3 subdecks (Biology, Biochemistry, Essential-Equations), but Essential-Equations is supplemental — only Biology and Biochemistry count toward the minimum. B/B therefore follows the 30-total rule across Biology + Biochemistry only.
 - P/S (single subdeck) only needs the 30-total rule.
 
 Until the threshold is met the section shows "not enough data" and lists which subdecks still need reviews.
@@ -56,10 +57,12 @@ Questions are organized by topic and roll up into sections using the same mappin
 
 | Section | Topics |
 |---------|--------|
-| B/B | Biology, Biochemistry, Essential-Equations |
+| B/B | Biology, Biochemistry, Essential-Equations\* |
 | C/P | General-Chemistry, Organic-Chemistry, Physics-and-Math |
 | P/S | Behavioral |
 | CARS | CARS |
+
+\* Essential-Equations is a supplemental/recommended topic. Its answers contribute to B/B accuracy when present, but it is **not required** to unlock the section score (see give-up rule below).
 
 Section accuracy is a flat sum — not an average of per-topic averages — so larger topics receive proportionally more weight:
 
@@ -74,10 +77,13 @@ section accuracy = sum(answer_correct across all topics) / count(all rows in sec
 A section score is only displayed once the student has answered a minimum number of questions, mirroring the memory model's approach:
 
 - Every section requires ≥ **30 total answered questions**.
-- Sections with ≥ 3 topics (B/B and C/P) additionally require ≥ **10 answered questions per topic**, so a topic with very few answers cannot disproportionately skew the section score.
+- Sections with ≥ 3 *required* topics (C/P: G-Chem / Organic / Physics) additionally require ≥ **10 answered questions per required topic**, so a thin topic cannot disproportionately skew the section score.
+- B/B has **2 required topics** (Biology, Biochemistry) — Essential-Equations is treated as supplemental and is **excluded from the per-topic minimum**. B/B therefore only needs the 30-total rule across Biology and Biochemistry. Essential-Equations answers still count toward the B/B accuracy when present, but the absence of Essential-Equations answers never blocks the score.
 - P/S and CARS (single-topic sections) only need the 30-total rule.
 
 Until the threshold is met the section shows "X more needed" and lists which topics are still short.
+
+> **Note (as of July 2026):** Essential-Equations was previously counted as a third required B/B topic, which forced students to answer ≥ 10 Essential-Equations questions before B/B unlocked. This requirement was removed because the Essential-Equations deck is a supplemental aid rather than a core MCAT content area. A recommendation to complete the deck is shown on the MCAT Readiness tab if it is missing.
 
 ---
 
@@ -119,4 +125,6 @@ A confidence label is also shown based on total questions answered across all se
 
 **Give-up rule**
 
-The readiness score is not shown until **every section has passed its own performance-score threshold** (≥ 30 answered, ≥ 10 per topic for B/B and C/P). Until then the display lists which sections are still blocked and how many more questions each one needs. This prevents a misleading composite score from being shown while large portions of the exam are untested.
+The readiness score is not shown until **every section has passed its own performance-score threshold** (≥ 30 answered, ≥ 10 per required topic for C/P). B/B only requires 30 total across Biology and Biochemistry — Essential-Equations is supplemental and does not block B/B. Until thresholds are met the display lists which sections are still blocked and how many more questions each needs.
+
+Additionally, all six core MCAT content areas (Behavioral Sciences, Biology, Biochemistry, General Chemistry, Organic Chemistry, Physics & Math, and CARS) must be present in the collection before the readiness score is shown. The Essential-Equations deck is **recommended but not required**: if it is missing, the readiness score still displays with a recommendation banner to complete the deck.

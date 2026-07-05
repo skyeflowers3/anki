@@ -83,7 +83,7 @@ The script holds out the most recent 20% of answered questions by `answered_at` 
 
 B/B (Biological & Biochemical Foundations) is approaching the 75% target at 74.1%, indicating solid preparation in that section. C/P, P/S, and CARS are all below the 50% chance baseline for a 4-choice question, indicating these sections need significantly more practice before the performance score becomes a reliable predictor of exam readiness.
 
-This is expected at this stage of development — the system is designed so that the adaptive loop prioritizes weaker sections, and scores are expected to rise with continued use. The performance score's give-up rule (≥ 30 questions per section, ≥ 10 per topic for multi-topic sections) is specifically designed to prevent the readiness score from surfacing until accuracy data is sufficient to be meaningful.
+This is expected at this stage of development — the system is designed so that the adaptive loop prioritizes weaker sections, and scores are expected to rise with continued use. The performance score's give-up rule (≥ 30 questions per section, ≥ 10 per required topic for multi-topic sections; Essential-Equations is supplemental and excluded from the per-topic minimum) is specifically designed to prevent the readiness score from surfacing until accuracy data is sufficient to be meaningful.
 
 ---
 

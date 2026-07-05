@@ -334,6 +334,15 @@ _READINESS_CSS = """
 .readiness-blocked-list li.done::before { content: "✓"; color: #27ae60; }
 .readiness-blocked-list li.todo::before { content: "✗"; color: #c0392b; }
 .readiness-blocked-pending { opacity: 0.7; font-size: 12px; margin-left: 6px; }
+.readiness-recommendation {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  background: rgba(230, 126, 34, 0.12);
+  border-left: 3px solid #e67e22;
+  border-radius: 6px;
+  font-size: 13px;
+  color: inherit;
+}
 </style>
 """
 
@@ -346,10 +355,11 @@ def render_html(col: Collection) -> str:
     except ImportError:
         coverage_map = None  # type: ignore[assignment]
 
+    _coverage_result = None
     if coverage_map is not None:
-        cov = coverage_map.compute(col)
-        if not cov.is_complete:
-            missing = ", ".join(cov.missing)
+        _coverage_result = coverage_map.compute(col)
+        if not _coverage_result.is_complete:
+            missing = ", ".join(_coverage_result.missing)
             return (
                 f"{_READINESS_CSS}"
                 '<div class="mcat-readiness">'
@@ -471,6 +481,16 @@ def render_html(col: Collection) -> str:
         "you practice more."
         "</p>"
     )
+
+    # Recommendation banner if Essential Equations deck is missing.
+    if _coverage_result is not None and _coverage_result.missing_recommended:
+        missing_rec = ", ".join(_coverage_result.missing_recommended)
+        parts.append(
+            f'<div class="readiness-recommendation">'
+            f"<strong>Recommendation:</strong> Complete the "
+            f"<strong>{missing_rec}</strong> deck to strengthen recall."
+            f"</div>"
+        )
 
     parts.append("</div>")
     parts.append("</div>")
