@@ -6,6 +6,7 @@ and the Firebase project config).
 
 ## Project Documentation
 
+- [Files touched](FILES_TOUCHED.md) — every file modified or created in this fork, grouped by category with one-line descriptions
 - [Architecture overview](ARCHITECTURE.md) — how the desktop app, mobile app, adaptive loop, databases, AI generator, and sync system fit together
 - [Rust change note](RUST_CHANGE.md) — the Points-at-Stake review ordering added to the Rust scheduler
 - [Model descriptions](MODELS.md) — memory, performance, and readiness models with formulas and give-up rules
