@@ -48,43 +48,63 @@ out/pyenv/bin/python qt/tools/build_installer.py --version 26.05 build \
   --aqt_wheel out/wheels/aqt-26.5-py3-none-any.whl \
   --anki_wheel out/wheels/anki-26.5-cp310-abi3-macosx_12_0_x86_64.whl
 
-# 3. Fix the stub binary (Briefcase downloads a Python 3.12 stub but the
-#    support package is Python 3.13 — replace it with the correct one).
-#    The zip is cached after the first download; use the cache if present.
+# 3. Fix the Python support package. Briefcase uses Python-3.13-macOS-support.b9
+#    which ships a mislabeled Python 3.12.10 binary. Replace it with the b13
+#    package (Python 3.13.11) that matches the b13 stub below.
+APP="out/installer/build/anki/macos/app/Speedrun.app"
+SUPPORT_B13=~/Library/Caches/org.beeware.briefcase/support/Python-3.13-macOS-support.b13.tar.gz
+if [ ! -f "$SUPPORT_B13" ]; then
+  curl -L "https://briefcase-support.s3.amazonaws.com/python/3.13/macOS/Python-3.13-macOS-support.b13.tar.gz" \
+    -o "$SUPPORT_B13"
+fi
+mkdir -p /tmp/py13b13
+tar xzf "$SUPPORT_B13" -C /tmp/py13b13 "Python.xcframework/macos-arm64_x86_64/Python.framework/"
+rm -rf "$APP/Contents/Frameworks/Python.framework"
+cp -R /tmp/py13b13/Python.xcframework/macos-arm64_x86_64/Python.framework/ \
+  "$APP/Contents/Frameworks/Python.framework"
+
+# 4. Fix the stub binary. Briefcase installs a Python 3.12 stub; replace it
+#    with the Python 3.13 b13 stub that matches the support package above.
 STUB_CACHE=~/Library/Caches/org.beeware.briefcase/stub/GUI-Stub-3.13-b13.zip
 if [ ! -f "$STUB_CACHE" ]; then
   curl -L "https://briefcase-support.s3.amazonaws.com/python/3.13/macOS/GUI-Stub-3.13-b13.zip" \
     -o "$STUB_CACHE"
 fi
 unzip -o "$STUB_CACHE" -d /tmp/stub-3.13
-cp /tmp/stub-3.13/Stub \
-  "out/installer/build/anki/macos/app/Speedrun.app/Contents/MacOS/Speedrun"
+cp /tmp/stub-3.13/Stub "$APP/Contents/MacOS/Speedrun"
+chmod +x "$APP/Contents/MacOS/Speedrun"
+
+# Re-sign after swapping both binaries
 codesign --force --sign - \
-  "out/installer/build/anki/macos/app/Speedrun.app/Contents/MacOS/Speedrun"
+  "$APP/Contents/Frameworks/Python.framework/Versions/3.13/Python"
+codesign --force --sign - --deep "$APP"
 
-# 4. Copy the bundled MCAT deck into the app bundle
+# 5. Copy the bundled MCAT deck into the app bundle
 cp qt/aqt/speedrun/mcat_deck.apkg \
-  "out/installer/build/anki/macos/app/Speedrun.app/Contents/Resources/app_packages/aqt/speedrun/mcat_deck.apkg"
+  "$APP/Contents/Resources/app_packages/aqt/speedrun/mcat_deck.apkg"
 
-# 5. Package into a DMG
-out/pyenv/bin/python qt/tools/build_installer.py --version 26.05 package
+# 6. Package into a DMG (needs disk device access — run in a normal terminal,
+#    not inside a sandbox/restricted shell)
+cd out/installer
+/Library/Frameworks/Python.framework/Versions/3.12/bin/briefcase package macOS app \
+  -C 'version="26.05"' \
+  -C "template=\"$(pwd)/../qt/installer/mac-template\"" \
+  --log --adhoc-sign
+mv dist/Speedrun-26.5.dmg dist/anki-26.05-mac-intel.dmg
+cd -
 ```
 
 The DMG is written to `out/installer/dist/anki-26.05-mac-intel.dmg`. The app is
 named **Speedrun** (set in `qt/installer/app/pyproject.toml`).
 
-> **Stub binary note:** Briefcase currently downloads a Python 3.12 stub binary
-> even though the bundled Python framework is 3.13. Step 3 replaces it with the
-> correct Python 3.13 stub. This step is required on every fresh build. The stub
-> zip is cached at `~/Library/Caches/org.beeware.briefcase/stub/` after the first
-> download, so subsequent builds can skip the `curl`.
-
-> **Support package note:** `build_installer.py` does not pass `--update-support`
-> to Briefcase. This lets Briefcase reuse its cached support package
-> (`~/Library/Caches/org.beeware.briefcase/support/Python-3.13-macOS-support.b9.tar.gz`)
-> instead of re-downloading it on every build. If you need to force a fresh
-> download (e.g. after a Python patch release), temporarily add `"--update-support"`
-> back to the `briefcase build` call in `qt/tools/build_installer.py`.
+> **Support package + stub mismatch:** Briefcase's `briefcase.toml` was generated
+> with Python 3.12 (`support_revision = 9`, `stub_binary_revision = 14`), so it
+> installs `Python-3.13-macOS-support.b9` and `GUI-Stub-3.12-b14`. The b9 support
+> package ships a **mislabeled Python 3.12.10 binary** (folder says `Versions/3.13`
+> but the binary is 3.12), and the b14 stub links `Versions/3.12`. Both are wrong.
+> Steps 3–4 replace them with the matching b13 pair: `Python-3.13-macOS-support.b13`
+> (Python 3.13.11) and `GUI-Stub-3.13-b13` (links `Versions/3.13`). These files
+> are cached in `~/Library/Caches/org.beeware.briefcase/` after the first download.
 
 > **Deck import format:** The bundled deck uses the newer `.anki21b` format
 > (Zstandard-compressed). The auto-import in `_maybe_import_bundled_mcat_deck`
