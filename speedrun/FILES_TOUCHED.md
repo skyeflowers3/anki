@@ -11,7 +11,7 @@ The core Speedrun package, imported by the running desktop app.
 | Status | File | Description |
 |--------|------|-------------|
 | A | `__init__.py` | Package init; re-exports `SpeedrunController` and `maybe_start` |
-| A | `driver.py` | Qt driver — wires the adaptive loop to the UI, handles all `pycmd` callbacks from JavaScript, manages state transitions between flashcard and question blocks; also contains `PracticeQuizController` for the standalone 20–60 question practice mode with subject filtering, background AI generation, and a "← Back" button that returns to the MCAT home screen |
+| A | `driver.py` | Qt driver — wires the adaptive loop to the UI, handles all `pycmd` callbacks from JavaScript, manages state transitions between flashcard and question blocks; also contains `PracticeQuizController` for the standalone 20–60 question practice mode with subject filtering, background AI generation, and a "← Back" button that returns to the MCAT home screen; quiz rendering reuses `render_question_block()` + the existing `srq:` bridge protocol from study blocks rather than a custom JS template |
 | A | `home.py` | MCAT home screen — custom `mcatHome` main-window state that replaces the deck browser at startup; shows time-of-day greeting, Start Study Session and Practice Quiz action buttons, live per-section memory+performance score table, and a "View decks" link |
 | A | `speedrun_loop.py` | Pure decision logic — which block to serve next, mode transitions (discovery → remediation → consolidation), points-at-stake weighting; no Qt imports so it is unit-testable in isolation |
 | A | `memory_score.py` | Reads FSRS retrievability from the collection via `extract_fsrs_retrievability`, aggregates by MCAT section, renders the Memory Score Stats tab |
@@ -86,7 +86,7 @@ Changes to the existing Anki Qt application layer.
 |--------|------|--------------------------|
 | M | `qt/pyproject.toml` | Changed `formal_name` to "Speedrun" for the installer; noted that hatchling auto-bundles JSON/XML data files under `aqt/speedrun/` |
 | M | `qt/installer/app/pyproject.toml` | Updated installer app name to "Speedrun" |
-| M | `qt/tools/build_installer.py` | Updated installer build script to reflect the Speedrun app name |
+| M | `qt/tools/build_installer.py` | Updated installer build script to reflect the Speedrun app name; removed `--update-support` flag so Briefcase reuses its local cache instead of forcing a re-download of the Python support package |
 | M | `.gitignore` | Added ignore rules for `speedrun_outbox.json`, `.env`, OpenStax cache, and other generated artifacts |
 | M | `.github/workflows/release.yml` | Updated release workflow for the Speedrun fork |
 | M | `DECK_SETUP.md` | Added (root-level) setup instructions for importing the MCAT deck |

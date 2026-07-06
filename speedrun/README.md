@@ -49,10 +49,14 @@ out/pyenv/bin/python qt/tools/build_installer.py --version 26.05 build \
   --anki_wheel out/wheels/anki-26.5-cp310-abi3-macosx_12_0_x86_64.whl
 
 # 3. Fix the stub binary (Briefcase downloads a Python 3.12 stub but the
-#    support package is Python 3.13 — replace it with the correct one)
-curl -L "https://briefcase-support.s3.amazonaws.com/python/3.13/macOS/GUI-Stub-3.13-b13.zip" \
-  -o /tmp/stub-3.13.zip
-unzip -o /tmp/stub-3.13.zip -d /tmp/stub-3.13
+#    support package is Python 3.13 — replace it with the correct one).
+#    The zip is cached after the first download; use the cache if present.
+STUB_CACHE=~/Library/Caches/org.beeware.briefcase/stub/GUI-Stub-3.13-b13.zip
+if [ ! -f "$STUB_CACHE" ]; then
+  curl -L "https://briefcase-support.s3.amazonaws.com/python/3.13/macOS/GUI-Stub-3.13-b13.zip" \
+    -o "$STUB_CACHE"
+fi
+unzip -o "$STUB_CACHE" -d /tmp/stub-3.13
 cp /tmp/stub-3.13/Stub \
   "out/installer/build/anki/macos/app/Speedrun.app/Contents/MacOS/Speedrun"
 codesign --force --sign - \
@@ -71,7 +75,16 @@ named **Speedrun** (set in `qt/installer/app/pyproject.toml`).
 
 > **Stub binary note:** Briefcase currently downloads a Python 3.12 stub binary
 > even though the bundled Python framework is 3.13. Step 3 replaces it with the
-> correct Python 3.13 stub. This step is required on every fresh build.
+> correct Python 3.13 stub. This step is required on every fresh build. The stub
+> zip is cached at `~/Library/Caches/org.beeware.briefcase/stub/` after the first
+> download, so subsequent builds can skip the `curl`.
+
+> **Support package note:** `build_installer.py` does not pass `--update-support`
+> to Briefcase. This lets Briefcase reuse its cached support package
+> (`~/Library/Caches/org.beeware.briefcase/support/Python-3.13-macOS-support.b9.tar.gz`)
+> instead of re-downloading it on every build. If you need to force a fresh
+> download (e.g. after a Python patch release), temporarily add `"--update-support"`
+> back to the `briefcase build` call in `qt/tools/build_installer.py`.
 
 > **Deck import format:** The bundled deck uses the newer `.anki21b` format
 > (Zstandard-compressed). The auto-import in `_maybe_import_bundled_mcat_deck`
