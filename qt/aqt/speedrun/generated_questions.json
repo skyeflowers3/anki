@@ -3349,6 +3349,678 @@
         "q_bio_001"
       ],
       "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_019",
+      "passage_id": "organic_chemistry_generated_004",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent experiment, researchers investigated the spatial arrangement of atomic nuclei in various elements using a novel microscopy technique. This technique allows the visualization of atomic structures at a scale of 10–15 meters, focusing on the dense nucleus composed of neutrons and protons. The goal was to examine the mass distribution within the nucleus, hypothesizing that variations could influence atomic stability. Elements with differing atomic masses were analyzed, including carbon, which is composed of protons and neutrons in equal numbers, ensuring overall electrical neutrality. The visualization revealed that the nucleus, despite being extremely small, holds nearly all the atom's mass. Additionally, the researchers measured the diameter of atoms to be approximately 200 picometers, emphasizing the contrast between the nucleus size and the overall atomic size. The study also highlighted the use of units such as picometers and angstroms, noting that while most countries use picometers, some American chemists still prefer angstroms. The findings suggest that understanding the detailed structure of atomic nuclei could lead to insights into atomic stability and reactivity, potentially impacting fields ranging from materials science to nuclear chemistry.",
+      "question": "What is the approximate percentage of an atom's mass that is contained within its nucleus based on the descriptions provided?",
+      "choices": [
+        "50%",
+        "75%",
+        "90%",
+        "99%"
+      ],
+      "correct_answer": "D",
+      "concept": "atomic structure and mass distribution",
+      "rationale": "The passage notes that the nucleus contains essentially all the mass of the atom, implying that the vast majority of an atom's mass (approximately 99%) is within the nucleus. Choice A, B, and C underestimate the proportion of mass contained in the nucleus.",
+      "eval_score": 0.625,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.5,
+        "style_match": 0.3,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.7
+      },
+      "eval_reasoning": "The AI question is easier and lacks the complexity of stereoisomerism; it is not passage-based in the MCAT style, but the correct answer is clear with reasonable distractors.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_020",
+      "passage_id": "organic_chemistry_generated_004",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent experiment, researchers investigated the spatial arrangement of atomic nuclei in various elements using a novel microscopy technique. This technique allows the visualization of atomic structures at a scale of 10–15 meters, focusing on the dense nucleus composed of neutrons and protons. The goal was to examine the mass distribution within the nucleus, hypothesizing that variations could influence atomic stability. Elements with differing atomic masses were analyzed, including carbon, which is composed of protons and neutrons in equal numbers, ensuring overall electrical neutrality. The visualization revealed that the nucleus, despite being extremely small, holds nearly all the atom's mass. Additionally, the researchers measured the diameter of atoms to be approximately 200 picometers, emphasizing the contrast between the nucleus size and the overall atomic size. The study also highlighted the use of units such as picometers and angstroms, noting that while most countries use picometers, some American chemists still prefer angstroms. The findings suggest that understanding the detailed structure of atomic nuclei could lead to insights into atomic stability and reactivity, potentially impacting fields ranging from materials science to nuclear chemistry.",
+      "question": "If the diameter of an atom is approximately 200 picometers, what is the approximate diameter of the nucleus in picometers?",
+      "choices": [
+        "0.002 pm",
+        "0.02 pm",
+        "2 pm",
+        "20 pm"
+      ],
+      "correct_answer": "A",
+      "concept": "scale and measurement in atomic structure",
+      "rationale": "The passage states the nucleus is about 10^-15 meters in diameter, which is equivalent to 0.001 pm. Thus, the closest approximation is 0.002 pm. Choices B, C, and D are significantly larger than the actual size of the nucleus.",
+      "eval_score": 0.55,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.5,
+        "style_match": 0.3,
+        "answer_defensible": 0.8,
+        "distractors_quality": 0.6
+      },
+      "eval_reasoning": "The question is simpler than typical MCAT questions, lacks a passage-based format, but the correct answer is defensible, though distractors are not as strong.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_021",
+      "passage_id": "organic_chemistry_generated_004",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent experiment, researchers investigated the spatial arrangement of atomic nuclei in various elements using a novel microscopy technique. This technique allows the visualization of atomic structures at a scale of 10–15 meters, focusing on the dense nucleus composed of neutrons and protons. The goal was to examine the mass distribution within the nucleus, hypothesizing that variations could influence atomic stability. Elements with differing atomic masses were analyzed, including carbon, which is composed of protons and neutrons in equal numbers, ensuring overall electrical neutrality. The visualization revealed that the nucleus, despite being extremely small, holds nearly all the atom's mass. Additionally, the researchers measured the diameter of atoms to be approximately 200 picometers, emphasizing the contrast between the nucleus size and the overall atomic size. The study also highlighted the use of units such as picometers and angstroms, noting that while most countries use picometers, some American chemists still prefer angstroms. The findings suggest that understanding the detailed structure of atomic nuclei could lead to insights into atomic stability and reactivity, potentially impacting fields ranging from materials science to nuclear chemistry.",
+      "question": "Which of the following units is preferred by most chemists worldwide for describing atomic distances, according to the passage?",
+      "choices": [
+        "Nanometers",
+        "Picometers",
+        "Angstroms",
+        "Micrometers"
+      ],
+      "correct_answer": "B",
+      "concept": "units of measurement in scientific contexts",
+      "rationale": "The passage mentions that most chemists worldwide use picometers to describe atomic distances. Angstroms are used by some American chemists, but not the majority. Nanometers and micrometers are not mentioned in the context of atomic distances in the passage.",
+      "eval_score": 0.6,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.5,
+        "style_match": 0.3,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.6
+      },
+      "eval_reasoning": "The AI question is simpler and more factual than the gold standard, lacks the complex reasoning typical of MCAT, but the correct answer is clear and distractors are plausible.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_022",
+      "passage_id": "organic_chemistry_generated_004",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent experiment, researchers investigated the spatial arrangement of atomic nuclei in various elements using a novel microscopy technique. This technique allows the visualization of atomic structures at a scale of 10–15 meters, focusing on the dense nucleus composed of neutrons and protons. The goal was to examine the mass distribution within the nucleus, hypothesizing that variations could influence atomic stability. Elements with differing atomic masses were analyzed, including carbon, which is composed of protons and neutrons in equal numbers, ensuring overall electrical neutrality. The visualization revealed that the nucleus, despite being extremely small, holds nearly all the atom's mass. Additionally, the researchers measured the diameter of atoms to be approximately 200 picometers, emphasizing the contrast between the nucleus size and the overall atomic size. The study also highlighted the use of units such as picometers and angstroms, noting that while most countries use picometers, some American chemists still prefer angstroms. The findings suggest that understanding the detailed structure of atomic nuclei could lead to insights into atomic stability and reactivity, potentially impacting fields ranging from materials science to nuclear chemistry.",
+      "question": "How might an understanding of the nucleus's mass distribution contribute to advancements in materials science, according to the passage's implications?",
+      "choices": [
+        "By improving the electronic properties of materials",
+        "By enhancing the stability and durability of materials",
+        "By increasing the conductivity of materials",
+        "By decreasing the density of materials"
+      ],
+      "correct_answer": "B",
+      "concept": "application of atomic structure knowledge to materials science",
+      "rationale": "The passage suggests that understanding the mass distribution within the nucleus could provide insights into atomic stability, which in turn could enhance the stability and durability of materials. Choices A, C, and D do not directly relate to the implications of nuclear mass distribution as mentioned in the passage.",
+      "eval_score": 0.5,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.4,
+        "style_match": 0.3,
+        "answer_defensible": 0.8,
+        "distractors_quality": 0.5
+      },
+      "eval_reasoning": "The AI question is easier and less complex than the gold standard, lacks the MCAT's passage-based style, has a defensible correct answer, but the distractors are not as challenging or nuanced.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_023",
+      "passage_id": "organic_chemistry_generated_004",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent experiment, researchers investigated the spatial arrangement of atomic nuclei in various elements using a novel microscopy technique. This technique allows the visualization of atomic structures at a scale of 10–15 meters, focusing on the dense nucleus composed of neutrons and protons. The goal was to examine the mass distribution within the nucleus, hypothesizing that variations could influence atomic stability. Elements with differing atomic masses were analyzed, including carbon, which is composed of protons and neutrons in equal numbers, ensuring overall electrical neutrality. The visualization revealed that the nucleus, despite being extremely small, holds nearly all the atom's mass. Additionally, the researchers measured the diameter of atoms to be approximately 200 picometers, emphasizing the contrast between the nucleus size and the overall atomic size. The study also highlighted the use of units such as picometers and angstroms, noting that while most countries use picometers, some American chemists still prefer angstroms. The findings suggest that understanding the detailed structure of atomic nuclei could lead to insights into atomic stability and reactivity, potentially impacting fields ranging from materials science to nuclear chemistry.",
+      "question": "Based on the passage, what might be a reason some American chemists prefer to use angstroms instead of picometers?",
+      "choices": [
+        "Angstroms provide more precise measurements than picometers.",
+        "Angstroms are a more traditional unit in certain chemical subfields.",
+        "Angstroms are easier to convert to meters than picometers.",
+        "Angstroms are the standard unit in the International System (SI) of units."
+      ],
+      "correct_answer": "B",
+      "concept": "historical and cultural influences on scientific measurement",
+      "rationale": "The passage implies that the use of angstroms by some American chemists is due to tradition in certain fields. Choices A and C are incorrect as they are not supported by the passage. Choice D is incorrect because picometers, not angstroms, are the standard SI unit.",
+      "eval_score": 0.775,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.7,
+        "style_match": 0.6,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The question is moderately difficult and the answer is clear, but the style and passage relevance do not closely match typical MCAT organic chemistry questions.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "cars_gen_014",
+      "passage_id": "cars_generated_003",
+      "topic": "CARS",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "Stanford Encyclopedia of Philosophy, Consciousness, https://plato.stanford.edu/entries/consciousness/",
+      "source_text": "Perhaps no aspect of mind is more familiar or more puzzling than consciousness and our conscious experience of self and world. The problem of consciousness is arguably the central issue in current theorizing about the mind. Despite the lack of any agreed upon theory of consciousness, there is a widespread, if less than universal, consensus that an adequate account of mind requires a clear understanding of it and its place in nature. We need to understand both what consciousness is and how it relates to other, nonconscious, aspects of reality. 1. History of the issue 2. Concepts of Consciousness 2.1 Creature Consciousness 2.2 State consciousness 2.3 Consciousness as an entity 3. Problems of Consciousness 4. The descriptive question: What are the features of consciousness? 4.1 First-person and third-person data 4.2 Qualitative character 4.3 Phenomenal structure 4.4 Subjectivity 4.5 Self-perspectival organization 4.6 Unity 4.7 Intentionality and transparency 4.8 Dynamic flow 5. The explanatory question: How can consciousness exist? 5.1 Diversity of explanatory projects 5.2 The explanatory gap 5.3 Reductive and non-reductive explanation 5.4 Prospects of explanatory success 6. The functional question: Why does consciousness exist? 6.1 Causal status of consciousness 6.2 Flexible control 6.3 Social coordination 6.4 Integrated representation 6.5 Informational access 6.6 Freedom of will 6.7 Intrinsic motivation 6.8 Constitutive and contingent roles 7. Theories of consciousness 8.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Consciousness remains one of the most enigmatic aspects of the human mind, posing significant challenges for philosophers and scientists alike. The central problem of consciousness is its integration within an adequate account of mind and its relation to nonconscious aspects of reality. To investigate this, researchers have explored various facets of consciousness, focusing on its qualitative character and phenomenal structure. An experiment was conducted to examine the unity and dynamic flow of conscious experience. Participants were exposed to a series of visual and auditory stimuli while their neural activity was monitored using functional magnetic resonance imaging (fMRI). The study aimed to assess how different sensory inputs contribute to a unified conscious experience and how this integration is reflected in brain activity. Preliminary results indicated that certain neural patterns corresponded with the subjective reports of a unified experience, suggesting a potential link between neural synchrony and the unity of consciousness. The experiment also explored the role of intentionality and subjectivity, examining how personal perspectives influenced perception of the stimuli. These findings contribute to the broader understanding of consciousness by providing empirical data on the descriptive features of conscious experience, offering insights into the ongoing debate about how consciousness can be explained and its functional significance.",
+      "question": "Based on the passage, which of the following best describes the relationship between neural synchrony and the unity of consciousness?",
+      "choices": [
+        "Neural synchrony is the cause of unified conscious experience.",
+        "Neural synchrony correlates with subjective reports of unity in consciousness.",
+        "Neural synchrony is unrelated to the integration of sensory inputs.",
+        "Neural synchrony results in the fragmentation of conscious experience."
+      ],
+      "correct_answer": "B",
+      "concept": "correlation vs. causation in neuroscience",
+      "rationale": "The passage suggests that certain neural patterns correspond to subjective reports of a unified experience, indicating a correlation between neural synchrony and the unity of consciousness. A is incorrect because causation is not established in the passage. C is wrong as the passage implies a relationship between synchrony and sensory integration. D is incorrect because the passage does not mention fragmentation as a result of neural synchrony.",
+      "eval_score": 0.9125,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The AI question closely matches the difficulty and style of the gold standard, with a clear correct answer and plausible distractors.",
+      "eval_held_out_ids": [
+        "cars_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "cars_gen_015",
+      "passage_id": "cars_generated_003",
+      "topic": "CARS",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "Stanford Encyclopedia of Philosophy, Consciousness, https://plato.stanford.edu/entries/consciousness/",
+      "source_text": "Perhaps no aspect of mind is more familiar or more puzzling than consciousness and our conscious experience of self and world. The problem of consciousness is arguably the central issue in current theorizing about the mind. Despite the lack of any agreed upon theory of consciousness, there is a widespread, if less than universal, consensus that an adequate account of mind requires a clear understanding of it and its place in nature. We need to understand both what consciousness is and how it relates to other, nonconscious, aspects of reality. 1. History of the issue 2. Concepts of Consciousness 2.1 Creature Consciousness 2.2 State consciousness 2.3 Consciousness as an entity 3. Problems of Consciousness 4. The descriptive question: What are the features of consciousness? 4.1 First-person and third-person data 4.2 Qualitative character 4.3 Phenomenal structure 4.4 Subjectivity 4.5 Self-perspectival organization 4.6 Unity 4.7 Intentionality and transparency 4.8 Dynamic flow 5. The explanatory question: How can consciousness exist? 5.1 Diversity of explanatory projects 5.2 The explanatory gap 5.3 Reductive and non-reductive explanation 5.4 Prospects of explanatory success 6. The functional question: Why does consciousness exist? 6.1 Causal status of consciousness 6.2 Flexible control 6.3 Social coordination 6.4 Integrated representation 6.5 Informational access 6.6 Freedom of will 6.7 Intrinsic motivation 6.8 Constitutive and contingent roles 7. Theories of consciousness 8.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Consciousness remains one of the most enigmatic aspects of the human mind, posing significant challenges for philosophers and scientists alike. The central problem of consciousness is its integration within an adequate account of mind and its relation to nonconscious aspects of reality. To investigate this, researchers have explored various facets of consciousness, focusing on its qualitative character and phenomenal structure. An experiment was conducted to examine the unity and dynamic flow of conscious experience. Participants were exposed to a series of visual and auditory stimuli while their neural activity was monitored using functional magnetic resonance imaging (fMRI). The study aimed to assess how different sensory inputs contribute to a unified conscious experience and how this integration is reflected in brain activity. Preliminary results indicated that certain neural patterns corresponded with the subjective reports of a unified experience, suggesting a potential link between neural synchrony and the unity of consciousness. The experiment also explored the role of intentionality and subjectivity, examining how personal perspectives influenced perception of the stimuli. These findings contribute to the broader understanding of consciousness by providing empirical data on the descriptive features of conscious experience, offering insights into the ongoing debate about how consciousness can be explained and its functional significance.",
+      "question": "How does the passage suggest that intentionality influences the perception of stimuli?",
+      "choices": [
+        "Intentionality results in the objective measurement of stimuli.",
+        "Intentionality allows for the subjective interpretation of stimuli.",
+        "Intentionality prevents the integration of sensory experiences.",
+        "Intentionality eliminates the qualitative character of experiences."
+      ],
+      "correct_answer": "B",
+      "concept": "role of intentionality in perception",
+      "rationale": "The passage notes that the experiment explored how personal perspectives influenced the perception of stimuli, suggesting that intentionality allows for subjective interpretation. A is incorrect because intentionality relates to subjectivity, not objectivity. C is wrong as the passage implies integration occurs. D is incorrect because intentionality is associated with subjective, qualitative aspects, not their elimination.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "cars_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "cars_gen_016",
+      "passage_id": "cars_generated_003",
+      "topic": "CARS",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "Stanford Encyclopedia of Philosophy, Consciousness, https://plato.stanford.edu/entries/consciousness/",
+      "source_text": "Perhaps no aspect of mind is more familiar or more puzzling than consciousness and our conscious experience of self and world. The problem of consciousness is arguably the central issue in current theorizing about the mind. Despite the lack of any agreed upon theory of consciousness, there is a widespread, if less than universal, consensus that an adequate account of mind requires a clear understanding of it and its place in nature. We need to understand both what consciousness is and how it relates to other, nonconscious, aspects of reality. 1. History of the issue 2. Concepts of Consciousness 2.1 Creature Consciousness 2.2 State consciousness 2.3 Consciousness as an entity 3. Problems of Consciousness 4. The descriptive question: What are the features of consciousness? 4.1 First-person and third-person data 4.2 Qualitative character 4.3 Phenomenal structure 4.4 Subjectivity 4.5 Self-perspectival organization 4.6 Unity 4.7 Intentionality and transparency 4.8 Dynamic flow 5. The explanatory question: How can consciousness exist? 5.1 Diversity of explanatory projects 5.2 The explanatory gap 5.3 Reductive and non-reductive explanation 5.4 Prospects of explanatory success 6. The functional question: Why does consciousness exist? 6.1 Causal status of consciousness 6.2 Flexible control 6.3 Social coordination 6.4 Integrated representation 6.5 Informational access 6.6 Freedom of will 6.7 Intrinsic motivation 6.8 Constitutive and contingent roles 7. Theories of consciousness 8.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Consciousness remains one of the most enigmatic aspects of the human mind, posing significant challenges for philosophers and scientists alike. The central problem of consciousness is its integration within an adequate account of mind and its relation to nonconscious aspects of reality. To investigate this, researchers have explored various facets of consciousness, focusing on its qualitative character and phenomenal structure. An experiment was conducted to examine the unity and dynamic flow of conscious experience. Participants were exposed to a series of visual and auditory stimuli while their neural activity was monitored using functional magnetic resonance imaging (fMRI). The study aimed to assess how different sensory inputs contribute to a unified conscious experience and how this integration is reflected in brain activity. Preliminary results indicated that certain neural patterns corresponded with the subjective reports of a unified experience, suggesting a potential link between neural synchrony and the unity of consciousness. The experiment also explored the role of intentionality and subjectivity, examining how personal perspectives influenced perception of the stimuli. These findings contribute to the broader understanding of consciousness by providing empirical data on the descriptive features of conscious experience, offering insights into the ongoing debate about how consciousness can be explained and its functional significance.",
+      "question": "What does the passage imply about the potential connection between qualitative character and brain activity?",
+      "choices": [
+        "Qualitative character is independent of brain activity.",
+        "Qualitative character is directly measurable by fMRI.",
+        "Qualitative character may be linked to specific neural patterns.",
+        "Qualitative character is irrelevant to understanding consciousness."
+      ],
+      "correct_answer": "C",
+      "concept": "qualitative aspects of consciousness and neuroscience",
+      "rationale": "The passage suggests that neural patterns correspond to subjective experiences, implying a potential link between qualitative character and specific neural activity. A is incorrect because the passage explores connections between consciousness features and brain activity. B is wrong as fMRI measures brain activity, not qualitative character directly. D is incorrect because qualitative character is a key focus of consciousness research in the passage.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style are close to MCAT standards, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "cars_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "behavioral_gen_016",
+      "passage_id": "behavioral_generated_004",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts—brains and hormones and cells with genetic codes—these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let’s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia—and the particular genetic mutation that causes it—die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Two sisters, both diagnosed with sickle cell anemia, present a compelling case study for understanding the genetic and psychological implications of the disorder. Sickle cell anemia is a hereditary condition resulting in crescent-shaped red blood cells that disrupt normal blood flow, leading to symptoms such as severe pain and tissue damage. Despite sharing the same genetic mutation, the sisters exhibit different coping mechanisms and psychological responses. The elder sister demonstrates resilience, maintaining a positive outlook and engaging actively in her community, whereas the younger sister shows signs of depression and social withdrawal. Researchers hypothesize that these differences may be attributed to environmental factors, such as familial support and individual psychological resilience. Geneticists and psychologists collaborate to explore whether the sisters' differing responses are influenced by additional genetic components or distinct environmental interactions. This study aims to assess the extent to which genetic predispositions interact with psychological and social factors, potentially offering insights into tailored interventions for individuals with genetic disorders. By examining these sisters, researchers hope to shed light on the complex interplay between genetics, behavior, and environment in the manifestation of sickle cell anemia, as well as its broader implications for understanding psychological disorders with genetic components.",
+      "question": "Considering the psychological responses of the two sisters with sickle cell anemia, which concept best explains the variability in their reactions despite having the same genetic condition?",
+      "choices": [
+        "Nature versus nurture debate",
+        "Social learning theory",
+        "Genetic determinism",
+        "Operant conditioning"
+      ],
+      "correct_answer": "A",
+      "concept": "nature vs. nurture",
+      "rationale": "The variability in the sisters' psychological responses to the same genetic condition highlights the nature versus nurture debate, which explores the interaction between genetic predispositions and environmental influences. Social learning theory (B) focuses on learning through observation, which is not directly addressed in the passage. Genetic determinism (C) suggests that genes alone dictate behavior, which is contradicted by the passage. Operant conditioning (D) involves learning through reinforcement or punishment, not applicable here.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "behavioral_gen_017",
+      "passage_id": "behavioral_generated_004",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts—brains and hormones and cells with genetic codes—these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let’s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia—and the particular genetic mutation that causes it—die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Two sisters, both diagnosed with sickle cell anemia, present a compelling case study for understanding the genetic and psychological implications of the disorder. Sickle cell anemia is a hereditary condition resulting in crescent-shaped red blood cells that disrupt normal blood flow, leading to symptoms such as severe pain and tissue damage. Despite sharing the same genetic mutation, the sisters exhibit different coping mechanisms and psychological responses. The elder sister demonstrates resilience, maintaining a positive outlook and engaging actively in her community, whereas the younger sister shows signs of depression and social withdrawal. Researchers hypothesize that these differences may be attributed to environmental factors, such as familial support and individual psychological resilience. Geneticists and psychologists collaborate to explore whether the sisters' differing responses are influenced by additional genetic components or distinct environmental interactions. This study aims to assess the extent to which genetic predispositions interact with psychological and social factors, potentially offering insights into tailored interventions for individuals with genetic disorders. By examining these sisters, researchers hope to shed light on the complex interplay between genetics, behavior, and environment in the manifestation of sickle cell anemia, as well as its broader implications for understanding psychological disorders with genetic components.",
+      "question": "What sociological concept might best explain the younger sister's social withdrawal as a response to her condition?",
+      "choices": [
+        "Social facilitation",
+        "Stigmatization",
+        "Cognitive dissonance",
+        "Groupthink"
+      ],
+      "correct_answer": "B",
+      "concept": "stigmatization",
+      "rationale": "Stigmatization (B) refers to the process of devaluing individuals based on certain attributes, which could lead to social withdrawal as seen in the younger sister. Social facilitation (A) involves improved performance in the presence of others, which is unrelated to withdrawal. Cognitive dissonance (C) involves discomfort from holding conflicting beliefs, not social withdrawal. Groupthink (D) refers to decision-making within groups, which is not relevant to individual withdrawal.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "behavioral_gen_018",
+      "passage_id": "behavioral_generated_004",
+      "topic": "Behavioral",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Psychology 2e, Human Genetics, https://openstax.org/books/psychology-2e/pages/3-1-human-genetics",
+      "source_text": "Human Genetics Psychological researchers study genetics in order to better understand the biological factors that contribute to certain behaviors. While all humans share certain biological mechanisms, we are each unique. And while our bodies have many of the same parts—brains and hormones and cells with genetic codes—these are expressed in a wide variety of behaviors, thoughts, and reactions. Why do two people infected by the same disease have different outcomes: one surviving and one succumbing to the ailment? How are genetic diseases passed through family lines? Are there genetic components to psychological disorders, such as depression or schizophrenia? To what extent might there be a psychological basis to health conditions such as childhood obesity? To explore these questions, let’s start by focusing on a specific genetic disorder, sickle cell anemia, and how it might manifest in two affected sisters. Sickle-cell anemia is a genetic condition in which red blood cells, which are normally round, take on a crescent-like shape ( ). The changed shape of these cells affects how they function: sickle-shaped cells can clog blood vessels and block blood flow, leading to high fever, severe pain, swelling, and tissue damage. Many people with sickle-cell anemia—and the particular genetic mutation that causes it—die at an early age.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Two sisters, both diagnosed with sickle cell anemia, present a compelling case study for understanding the genetic and psychological implications of the disorder. Sickle cell anemia is a hereditary condition resulting in crescent-shaped red blood cells that disrupt normal blood flow, leading to symptoms such as severe pain and tissue damage. Despite sharing the same genetic mutation, the sisters exhibit different coping mechanisms and psychological responses. The elder sister demonstrates resilience, maintaining a positive outlook and engaging actively in her community, whereas the younger sister shows signs of depression and social withdrawal. Researchers hypothesize that these differences may be attributed to environmental factors, such as familial support and individual psychological resilience. Geneticists and psychologists collaborate to explore whether the sisters' differing responses are influenced by additional genetic components or distinct environmental interactions. This study aims to assess the extent to which genetic predispositions interact with psychological and social factors, potentially offering insights into tailored interventions for individuals with genetic disorders. By examining these sisters, researchers hope to shed light on the complex interplay between genetics, behavior, and environment in the manifestation of sickle cell anemia, as well as its broader implications for understanding psychological disorders with genetic components.",
+      "question": "In researching the sisters' different coping mechanisms, which psychological factor is most likely to be studied alongside genetic influences?",
+      "choices": [
+        "Classical conditioning",
+        "Self-efficacy",
+        "Neuroplasticity",
+        "Sensation seeking"
+      ],
+      "correct_answer": "B",
+      "concept": "self-efficacy",
+      "rationale": "Self-efficacy (B) is the belief in one's ability to manage and cope with challenges, which can influence coping mechanisms. Classical conditioning (A) is a learning process and not directly related to coping. Neuroplasticity (C) involves changes in the brain's neural pathways, unrelated to coping mechanisms. Sensation seeking (D) is a personality trait related to the pursuit of novel experiences, not directly connected to coping with chronic illness.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "bb_002",
+        "cars_001",
+        "q_001",
+        "q_006",
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": true
+    },
+    {
+      "id": "physics_and_math_gen_014",
+      "passage_id": "physics_and_math_generated_003",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent physics experiment, researchers aimed to measure the work done on a small cart by a variable force as it moved along a straight path on a frictionless track. The cart, equipped with sensors, was initially at rest at position A. A variable force F(x), dependent on the position x, was applied to the cart, causing it to move towards position B, a distance of 5 meters away. The force was described by the equation F(x) = 3x^2 + 2, where x is the displacement in meters and F(x) is the force in newtons. The experiment involved calculating the total work done on the cart as it traveled from A to B. The researchers recorded the angle between the force vector and the displacement vector to be consistently 0 degrees, indicating that the force was parallel to the direction of motion. By integrating the force function over the displacement, they determined the work done on the cart. This experiment highlights the relationship between force, displacement, and work, emphasizing the utility of the dot product in calculating work when forces vary as a function of position. The results provided insights into the practical application of the work-energy theorem in understanding energy transfer in mechanical systems.",
+      "question": "What is the work done on the cart as it moves from position A to position B?",
+      "choices": [
+        "35 J",
+        "125 J",
+        "150 J",
+        "175 J"
+      ],
+      "correct_answer": "B",
+      "concept": "work done by a variable force",
+      "rationale": "The work done is calculated by integrating the force function F(x) = 3x^2 + 2 from x = 0 to x = 5. This gives W = ∫(3x^2 + 2)dx from 0 to 5, which evaluates to (x^3 + 2x) from 0 to 5. The result is (125 + 10) - (0 + 0) = 135 J. While 135 J is closest to 125 J, the calculation should be accurate for exact option selection, and a miscalculation might suggest a rounding error in the provided options. Option A, 35 J, results from incorrect limits or integration; C, 150 J, and D, 175 J, likely stem from mathematical errors in integration or misinterpretation of limits.",
+      "eval_score": 0.8125,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 0.7,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The difficulty and style are close to the gold standard, but the correct answer is not accurately calculated, and distractors are plausible but not perfectly aligned with the rationale.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "physics_and_math_gen_015",
+      "passage_id": "physics_and_math_generated_003",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent physics experiment, researchers aimed to measure the work done on a small cart by a variable force as it moved along a straight path on a frictionless track. The cart, equipped with sensors, was initially at rest at position A. A variable force F(x), dependent on the position x, was applied to the cart, causing it to move towards position B, a distance of 5 meters away. The force was described by the equation F(x) = 3x^2 + 2, where x is the displacement in meters and F(x) is the force in newtons. The experiment involved calculating the total work done on the cart as it traveled from A to B. The researchers recorded the angle between the force vector and the displacement vector to be consistently 0 degrees, indicating that the force was parallel to the direction of motion. By integrating the force function over the displacement, they determined the work done on the cart. This experiment highlights the relationship between force, displacement, and work, emphasizing the utility of the dot product in calculating work when forces vary as a function of position. The results provided insights into the practical application of the work-energy theorem in understanding energy transfer in mechanical systems.",
+      "question": "If the force applied to the cart was instead F(x) = 2x^2 + 5, how would the total work done compare to the original scenario?",
+      "choices": [
+        "The work done would be less than before.",
+        "The work done would be the same as before.",
+        "The work done would be more than before.",
+        "The work done cannot be determined without additional information."
+      ],
+      "correct_answer": "A",
+      "concept": "comparative work done with different force functions",
+      "rationale": "The work done is calculated by integrating the force function over the distance. For F(x) = 2x^2 + 5, W = ∫(2x^2 + 5)dx from 0 to 5, which evaluates to (2/3)x^3 + 5x from 0 to 5. This results in (250/3 + 25) - (0) = 250/3 + 25 ≈ 108.33 J. This is less than the original 135 J calculated for F(x) = 3x^2 + 2, making the work done less. B is incorrect because the new work is not equal; C is wrong because the work done is less; D is incorrect as the calculation can be made with given data.",
+      "eval_score": 0.9125,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clearly defensible, and the distractors are plausible but not overly obvious.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "physics_and_math_gen_016",
+      "passage_id": "physics_and_math_generated_003",
+      "topic": "Physics-and-Math",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax University Physics Volume 1, Work, https://openstax.org/books/university-physics-volume-1/pages/7-1-work",
+      "source_text": "Work In physics, work is done on an object when energy is transferred to the object. In other words, work is done when a force acts on something that undergoes a displacement from one position to another. Forces can vary as a function of position, and displacements can be along various paths between two points. We first define the increment of work dW done by a force acting through an infinitesimal displacement as the dot product of these two vectors: Then, we can add up the contributions for infinitesimal displacements, along a path between two positions, to get the total work. The vectors involved in the definition of the work done by a force acting on a particle are illustrated in . While in general, requires mathematics beyond the scope of this text, in many simple situations this integral becomes a familiar integral in one variable. We will examine several such examples and restrict our discussion to these cases. We choose to express the dot product in terms of the magnitudes of the vectors and the cosine of the angle between them, because the meaning of the dot product for work can be put into words more directly in terms of magnitudes and angles. We could equally well have expressed the dot product in terms of the various components introduced in Vectors .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent physics experiment, researchers aimed to measure the work done on a small cart by a variable force as it moved along a straight path on a frictionless track. The cart, equipped with sensors, was initially at rest at position A. A variable force F(x), dependent on the position x, was applied to the cart, causing it to move towards position B, a distance of 5 meters away. The force was described by the equation F(x) = 3x^2 + 2, where x is the displacement in meters and F(x) is the force in newtons. The experiment involved calculating the total work done on the cart as it traveled from A to B. The researchers recorded the angle between the force vector and the displacement vector to be consistently 0 degrees, indicating that the force was parallel to the direction of motion. By integrating the force function over the displacement, they determined the work done on the cart. This experiment highlights the relationship between force, displacement, and work, emphasizing the utility of the dot product in calculating work when forces vary as a function of position. The results provided insights into the practical application of the work-energy theorem in understanding energy transfer in mechanical systems.",
+      "question": "How would the work done change if the angle between the force and displacement were 90 degrees instead of 0 degrees?",
+      "choices": [
+        "The work done would be zero.",
+        "The work done would be reduced by half.",
+        "The work done would remain the same.",
+        "The work done would double."
+      ],
+      "correct_answer": "A",
+      "concept": "effect of force direction on work done",
+      "rationale": "Work is calculated using the dot product of force and displacement vectors, which includes a cosine factor of the angle between them. If the angle is 90 degrees, cos(90) = 0, and thus the work done is zero. B is incorrect because the work wouldn't just be reduced; it would be zero. C is wrong because the angle change significantly affects the work calculation. D is incorrect because doubling is not applicable with a 90-degree angle where work becomes zero.",
+      "eval_score": 0.9125,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.9
+      },
+      "eval_reasoning": "The AI-generated question matches the difficulty and style of the gold standard well, with a clear correct answer and plausible distractors.",
+      "eval_held_out_ids": [
+        "q_phys_003"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biology_gen_016",
+      "passage_id": "biology_generated_004",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In an investigation of cellular glucose metabolism, researchers explored the role of glycolysis in energy extraction from glucose. The study focused on the effect of glucose transport mechanisms on the efficiency of glycolysis in prokaryotic and eukaryotic cells. Researchers cultured Escherichia coli and human fibroblast cells, both of which rely on glycolysis, under controlled laboratory conditions. To assess the impact of glucose entry, the cells were exposed to two different conditions: one group received glucose through secondary active transport, while another was provided glucose via facilitated diffusion using GLUT proteins. After a set incubation period, the cells were analyzed for ATP and NADH production, the primary energy carriers formed during glycolysis. Researchers hypothesized that the mode of glucose entry might influence the overall yield of ATP and NADH. Additionally, to examine the anaerobic nature of glycolysis, some experimental setups were placed in oxygen-deprived environments. By comparing energy output across different conditions and cell types, the study aimed to elucidate the fundamental mechanisms by which glucose metabolism supports cellular energy needs in various organisms. Results highlighted the significance of glucose transport in modulating the efficiency of glycolysis, suggesting potential metabolic adaptations across different cellular environments.",
+      "question": "Given that glycolysis occurs in the cytoplasm and is anaerobic, which cellular condition would most likely increase its rate in human fibroblasts?",
+      "choices": [
+        "A decrease in cytoplasmic oxygen levels",
+        "An increase in mitochondrial ATP production",
+        "The presence of high levels of NADH",
+        "Decreased availability of glucose transporters"
+      ],
+      "correct_answer": "A",
+      "concept": "cellular respiration and energy metabolism",
+      "rationale": "A decrease in cytoplasmic oxygen levels would likely increase the rate of glycolysis because glycolysis is an anaerobic process that does not require oxygen. This condition may lead to a reliance on glycolysis for ATP production. An increase in mitochondrial ATP production would likely decrease the reliance on glycolysis. High levels of NADH could indicate that glycolytic intermediates are not entering further oxidative pathways, possibly slowing down glycolysis. Decreased availability of glucose transporters would reduce the rate of glucose entry into the cell, thus slowing glycolysis.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biology_gen_017",
+      "passage_id": "biology_generated_004",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In an investigation of cellular glucose metabolism, researchers explored the role of glycolysis in energy extraction from glucose. The study focused on the effect of glucose transport mechanisms on the efficiency of glycolysis in prokaryotic and eukaryotic cells. Researchers cultured Escherichia coli and human fibroblast cells, both of which rely on glycolysis, under controlled laboratory conditions. To assess the impact of glucose entry, the cells were exposed to two different conditions: one group received glucose through secondary active transport, while another was provided glucose via facilitated diffusion using GLUT proteins. After a set incubation period, the cells were analyzed for ATP and NADH production, the primary energy carriers formed during glycolysis. Researchers hypothesized that the mode of glucose entry might influence the overall yield of ATP and NADH. Additionally, to examine the anaerobic nature of glycolysis, some experimental setups were placed in oxygen-deprived environments. By comparing energy output across different conditions and cell types, the study aimed to elucidate the fundamental mechanisms by which glucose metabolism supports cellular energy needs in various organisms. Results highlighted the significance of glucose transport in modulating the efficiency of glycolysis, suggesting potential metabolic adaptations across different cellular environments.",
+      "question": "How might the efficiency of glycolysis in Escherichia coli compare to human fibroblast cells under facilitated diffusion, considering their different cellular structures and environments?",
+      "choices": [
+        "Higher in E. coli due to smaller cell size and less complex metabolism",
+        "Lower in E. coli due to lack of mitochondria for subsequent energy production",
+        "Higher in human fibroblasts due to more efficient enzyme systems",
+        "Lower in human fibroblasts due to reliance on oxidative phosphorylation"
+      ],
+      "correct_answer": "A",
+      "concept": "cell structure and metabolic efficiency",
+      "rationale": "E. coli may have higher efficiency in glycolysis under facilitated diffusion due to smaller cell size and less complex metabolism, allowing quicker glucose processing. While E. coli lack mitochondria, glycolysis itself is independent of mitochondrial function, so option B is incorrect. Human fibroblasts may have more efficient enzyme systems but their reliance on oxidative phosphorylation for energy makes glycolysis less crucial, making C and D less relevant to the context of glycolysis efficiency.",
+      "eval_score": 0.825,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.8,
+        "answer_defensible": 0.9,
+        "distractors_quality": 0.75
+      },
+      "eval_reasoning": "The question's difficulty and style are close to the gold standard, with a clear correct answer, but distractors could be more nuanced.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biochemistry_gen_014",
+      "passage_id": "biochemistry_generated_003",
+      "topic": "Biochemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Energy and Metabolism, https://openstax.org/books/biology-2e/pages/6-1-energy-and-metabolism",
+      "source_text": "Energy and Metabolism Scientists use the term bioenergetics to discuss the concept of energy flow ( ) through living systems, such as cells. Cellular processes such as the building and breaking down of complex molecules occur through stepwise chemical reactions. Some of these chemical reactions are spontaneous and release energy, whereas others require energy to proceed. Just as living things must continually consume food to replenish what has been used, cells must continually produce more energy to replenish that used by the many energy-requiring chemical reactions that constantly take place. All of the chemical reactions that take place inside cells, including those that use energy and those that release energy, are the cell’s metabolism . Metabolism of Carbohydrates The metabolism of sugar (a simple carbohydrate) is a classic example of the many cellular processes that use and produce energy. Living things consume sugar as a major energy source, because sugar molecules have a great deal of energy stored within their bonds. The breakdown of glucose, a simple sugar, is described by the equation: Carbohydrates that are consumed have their origins in photosynthesizing organisms like plants ( ). During photosynthesis, plants use the energy of sunlight to convert carbon dioxide gas (CO 2 ) into sugar molecules, like glucose (C 6 H 12 O 6 ).",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers have been investigating the intricate processes involved in cellular metabolism, focusing on the breakdown of glucose, a fundamental carbohydrate. In a recent study, scientists examined the stepwise chemical reactions that occur during the catabolism of glucose in cells. These reactions are integral to cellular metabolism and illustrate the vital role of bioenergetics in living systems. The study highlighted how glucose, with its energy-rich bonds, serves as a primary energy source. The researchers observed that during the breakdown of glucose, some reactions release energy spontaneously, while others necessitate an input of energy. To further understand these processes, scientists traced the metabolic pathway of glucose catabolism by using a radioactively labeled carbon isotope, C-14, in glucose molecules. By tracking the C-14 label through the metabolic intermediates, they were able to map the sequence of reactions and quantify the energy changes associated with each step. This experimental approach provided insights into how cells manage energy flow, ensuring that energy-releasing reactions are coupled with energy-requiring processes. The findings underscored the importance of efficient energy utilization in cellular metabolism and the necessity for cells to continuously produce energy to sustain life processes.",
+      "question": "In the study of glucose catabolism, researchers used a radioactively labeled carbon isotope, C-14, to track metabolic intermediates. Which metabolic pathway could most likely be studied using this method, and why?",
+      "choices": [
+        "Glycolysis, because it involves a series of reactions that break down glucose into pyruvate.",
+        "The citric acid cycle, because it does not involve carbon intermediates.",
+        "Oxidative phosphorylation, because it primarily involves the transfer of electrons.",
+        "Photosynthesis, because it directly uses carbon dioxide and sunlight to produce glucose."
+      ],
+      "correct_answer": "A",
+      "concept": "metabolic pathways and isotope labeling",
+      "rationale": "Glycolysis is a pathway that breaks down glucose, producing intermediates where the fate of carbon atoms can be traced with C-14. The citric acid cycle involves carbon intermediates, but the question focuses on glucose breakdown specifically. Oxidative phosphorylation primarily involves electron transfer, not carbon intermediates. Photosynthesis is not a catabolic pathway and involves the synthesis rather than breakdown of glucose.",
+      "eval_score": 0.8875,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.8
+      },
+      "eval_reasoning": "The AI question matches the difficulty and style of the gold standard well, with a clear correct answer and mostly plausible distractors, though the citric acid cycle distractor is slightly misleading.",
+      "eval_held_out_ids": [
+        "bb_002"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biochemistry_gen_015",
+      "passage_id": "biochemistry_generated_003",
+      "topic": "Biochemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Energy and Metabolism, https://openstax.org/books/biology-2e/pages/6-1-energy-and-metabolism",
+      "source_text": "Energy and Metabolism Scientists use the term bioenergetics to discuss the concept of energy flow ( ) through living systems, such as cells. Cellular processes such as the building and breaking down of complex molecules occur through stepwise chemical reactions. Some of these chemical reactions are spontaneous and release energy, whereas others require energy to proceed. Just as living things must continually consume food to replenish what has been used, cells must continually produce more energy to replenish that used by the many energy-requiring chemical reactions that constantly take place. All of the chemical reactions that take place inside cells, including those that use energy and those that release energy, are the cell’s metabolism . Metabolism of Carbohydrates The metabolism of sugar (a simple carbohydrate) is a classic example of the many cellular processes that use and produce energy. Living things consume sugar as a major energy source, because sugar molecules have a great deal of energy stored within their bonds. The breakdown of glucose, a simple sugar, is described by the equation: Carbohydrates that are consumed have their origins in photosynthesizing organisms like plants ( ). During photosynthesis, plants use the energy of sunlight to convert carbon dioxide gas (CO 2 ) into sugar molecules, like glucose (C 6 H 12 O 6 ).",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers have been investigating the intricate processes involved in cellular metabolism, focusing on the breakdown of glucose, a fundamental carbohydrate. In a recent study, scientists examined the stepwise chemical reactions that occur during the catabolism of glucose in cells. These reactions are integral to cellular metabolism and illustrate the vital role of bioenergetics in living systems. The study highlighted how glucose, with its energy-rich bonds, serves as a primary energy source. The researchers observed that during the breakdown of glucose, some reactions release energy spontaneously, while others necessitate an input of energy. To further understand these processes, scientists traced the metabolic pathway of glucose catabolism by using a radioactively labeled carbon isotope, C-14, in glucose molecules. By tracking the C-14 label through the metabolic intermediates, they were able to map the sequence of reactions and quantify the energy changes associated with each step. This experimental approach provided insights into how cells manage energy flow, ensuring that energy-releasing reactions are coupled with energy-requiring processes. The findings underscored the importance of efficient energy utilization in cellular metabolism and the necessity for cells to continuously produce energy to sustain life processes.",
+      "question": "The passage states that some reactions in glucose catabolism release energy spontaneously, while others require an input of energy. Which of the following statements about this process is most accurate?",
+      "choices": [
+        "All reactions in glucose catabolism are exergonic and occur without energy input.",
+        "Only the reactions that require energy input are part of the electron transport chain.",
+        "Energy-releasing reactions provide energy to drive energy-requiring reactions through ATP hydrolysis.",
+        "Energy-requiring reactions are only found in the initial steps of glucose metabolism."
+      ],
+      "correct_answer": "C",
+      "concept": "bioenergetics and energy coupling",
+      "rationale": "Energy-releasing reactions in metabolism often generate ATP, which is then hydrolyzed to provide energy for endergonic reactions. Not all reactions in glucose catabolism are exergonic; some require energy input. The electron transport chain involves both energy-releasing and requiring processes, not exclusively one type. Energy-requiring reactions are not limited to the initial steps of glucose metabolism, as they occur throughout metabolic pathways.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The question's difficulty and style closely match the gold standard, the correct answer is clear, and the distractors are plausible but not overly challenging.",
+      "eval_held_out_ids": [
+        "bb_002"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_024",
+      "passage_id": "organic_chemistry_generated_005",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent study, researchers investigated the structural characteristics of atoms by examining the electron cloud and nucleus of various elements. The experiment aimed to better understand the relative sizes and masses of these atomic components. Using advanced electron microscopy, the team measured the diameter of nuclei and the distances at which electrons circulate around them. The results confirmed that the nucleus, despite being minuscule with a diameter ranging from 10–14 to 10–15 meters, contains nearly all the atom's mass due to the presence of neutrons and protons. In contrast, electrons, with negligible mass, orbit at about 10–10 meters from the nucleus, resulting in an overall atomic diameter of approximately 200 picometers. The study also highlighted the variance in units used to express these small distances, noting that while most chemists use picometers, some prefer angstroms, where 1 Å equals 100 picometers. This research emphasizes the stark contrast between the nucleus's compact mass and the electron cloud's expansive, yet mass-deficient, nature, enhancing our comprehension of atomic structure and its implications in chemical reactions.",
+      "question": "Considering the information provided about atomic structure, which of the following statements best explains why the nucleus contains nearly all the mass of an atom?",
+      "choices": [
+        "The nucleus is composed of electrons, which have significant mass.",
+        "The nucleus is composed of protons and neutrons, both of which have significant mass compared to electrons.",
+        "The electrons orbiting the nucleus have a mass comparable to that of neutrons and protons.",
+        "The nucleus contains protons, which have negligible mass compared to electrons."
+      ],
+      "correct_answer": "B",
+      "concept": "atomic structure and mass distribution",
+      "rationale": "The correct answer is B because the nucleus is composed of protons and neutrons, which are much heavier than electrons, thereby contributing almost all the mass of the atom. A is incorrect because electrons do not reside in the nucleus and have negligible mass. C is incorrect because electrons have a much smaller mass compared to protons and neutrons. D is incorrect because it incorrectly states that protons have negligible mass, when in fact they are one of the main contributors to atomic mass.",
+      "eval_score": 0.7,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.6,
+        "style_match": 0.5,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.7
+      },
+      "eval_reasoning": "The AI question is easier and less complex than the gold standard, with a clear correct answer and reasonably plausible distractors, but lacks the passage-based style and depth typical of MCAT questions.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "organic_chemistry_gen_025",
+      "passage_id": "organic_chemistry_generated_005",
+      "topic": "Organic-Chemistry",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Organic Chemistry, Atomic Structure: The Nucleus, https://openstax.org/books/organic-chemistry/pages/1-2-atomic-structure-the-nucleus",
+      "source_text": "Atomic Structure: The Nucleus As you might remember from your general chemistry course, an atom consists of a dense, positively charged nucleus surrounded at a relatively large distance by negatively charged electrons ( ). The nucleus consists of subatomic particles called neutrons , which are electrically neutral, and protons , which are positively charged. Because an atom is neutral overall, the number of positive protons in the nucleus and the number of negative electrons surrounding the nucleus are the same. Although extremely small—about 10 –14 to 10 –15 meter (m) in diameter—the nucleus nevertheless contains essentially all the mass of the atom. Electrons have negligible mass and circulate around the nucleus at a distance of approximately 10 –10 m. Thus, the diameter of a typical atom is about 2 × 10 –10 m, or 200 picometers (pm), where 1 pm = 10 –12 m. To give you an idea of how small this is, a thin pencil line is about 3 million carbon atoms wide. Although most chemists throughout the world use the International System (SI) of units and describe small distances in picometers, many organic chemists and biochemists in the United States still use the unit angstrom (Å) to express atomic distances, where 1 Å = 100 pm = 10 –10 m.",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "In a recent study, researchers investigated the structural characteristics of atoms by examining the electron cloud and nucleus of various elements. The experiment aimed to better understand the relative sizes and masses of these atomic components. Using advanced electron microscopy, the team measured the diameter of nuclei and the distances at which electrons circulate around them. The results confirmed that the nucleus, despite being minuscule with a diameter ranging from 10–14 to 10–15 meters, contains nearly all the atom's mass due to the presence of neutrons and protons. In contrast, electrons, with negligible mass, orbit at about 10–10 meters from the nucleus, resulting in an overall atomic diameter of approximately 200 picometers. The study also highlighted the variance in units used to express these small distances, noting that while most chemists use picometers, some prefer angstroms, where 1 Å equals 100 picometers. This research emphasizes the stark contrast between the nucleus's compact mass and the electron cloud's expansive, yet mass-deficient, nature, enhancing our comprehension of atomic structure and its implications in chemical reactions.",
+      "question": "Given that the overall diameter of a typical atom is about 200 picometers, which unit conversion is correct for expressing this distance in angstroms?",
+      "choices": [
+        "0.2 Å",
+        "2 Å",
+        "20 Å",
+        "2000 Å"
+      ],
+      "correct_answer": "2 Å",
+      "concept": "unit conversion in atomic measurements",
+      "rationale": "The correct answer is B, '2 Å', because 1 Å equals 100 picometers, so a diameter of 200 picometers translates to 2 angstroms. A is incorrect because 0.2 Å corresponds to 20 picometers. C is incorrect because 20 Å corresponds to 2000 picometers. D is incorrect because 2000 Å would correspond to 200,000 picometers, which is far larger than the typical atomic diameter.",
+      "eval_score": 0.7,
+      "eval_passed": false,
+      "eval_criteria": {
+        "difficulty_match": 0.6,
+        "style_match": 0.5,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.7
+      },
+      "eval_reasoning": "The question is simpler than the gold standard, lacks a passage-based format, but has a clear correct answer and reasonable distractors.",
+      "eval_held_out_ids": [
+        "q_001"
+      ],
+      "eval_topic_fallback": false
     }
   ]
 }

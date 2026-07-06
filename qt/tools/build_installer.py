@@ -205,7 +205,6 @@ def build(args: argparse.Namespace) -> None:
             "--update",
             "--update-requirements",
             "--update-resources",
-            "--update-support",
             "--log",
         ],
         cwd=out_dir,

@@ -986,106 +986,6 @@ _PRACTICE_CONFIG_JS = """
 </script>
 """
 
-_PRACTICE_JS = """
-<script>
-(function() {
-  var questions = %%QUESTIONS%%;
-  var idx = 0;
-  var correct = 0;
-  var total = questions.length;
-  var LETTERS = ["A","B","C","D","E","F"];
-
-  function esc(s) {
-    return String(s)
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-
-  function render() {
-    if (idx >= total) { finish(); return; }
-    var q = questions[idx];
-    var pct = Math.round(idx / total * 100);
-
-    var passageHtml = "";
-    if (q.passage) {
-      passageHtml = '<details style="margin:8px 0 4px">'
-        + '<summary style="cursor:pointer;opacity:0.5;font-size:12px;margin-bottom:4px">Show passage</summary>'
-        + '<div style="font-size:13px;line-height:1.6;opacity:0.8;border-left:3px solid rgba(124,110,245,.5);padding-left:12px;margin-top:8px">'
-        + esc(q.passage) + '</div></details>';
-    }
-
-    var choicesHtml = q.choices.map(function(c, i) {
-      return '<button class="mcat-choice" id="ch'+i+'" onclick="pick('+i+')">'
-        + '<span class="letter">'+LETTERS[i]+'</span>' + esc(c) + '</button>';
-    }).join("");
-
-    document.getElementById("pq-root").innerHTML =
-      '<div class="pq-progress-wrap">'
-      + '<div class="pq-progress-bar"><div class="pq-progress-fill" style="width:'+pct+'%"></div></div>'
-      + '<span class="pq-progress-text">Question '+(idx+1)+' of '+total+'</span>'
-      + '<span class="pq-score">'+correct+' correct</span>'
-      + '</div>'
-      + '<div class="mcat-quiz-card">'
-      + '<div class="mcat-quiz-topic">'+esc(q.topic)+'</div>'
-      + passageHtml
-      + '<div class="mcat-quiz-question">'+esc(q.question)+'</div>'
-      + '<div class="mcat-quiz-choices">'+choicesHtml+'</div>'
-      + '<div id="pq-feedback"></div>'
-      + '</div>';
-  }
-
-  window.pick = function(i) {
-    var q = questions[idx];
-    var choices = document.querySelectorAll(".mcat-choice");
-    choices.forEach(function(b) { b.disabled = true; });
-    var encoded = encodeURIComponent(JSON.stringify({id: q.id, answer: q.choices[i]}));
-    pycmd("pq:grade:" + encoded, function(res) {
-      var wasCorrect = res.answer_correct;
-      if (wasCorrect) correct++;
-      choices[i].classList.add(wasCorrect ? "correct" : "incorrect");
-      if (!wasCorrect) {
-        choices.forEach(function(b, j) {
-          if (q.choices[j] === res.correct_answer) b.classList.add("correct");
-        });
-      }
-      var rationale = res.rationale || res.correct_concept || "";
-      document.getElementById("pq-feedback").innerHTML =
-        '<div class="mcat-quiz-feedback">'
-        + '<div class="mcat-verdict-row">'
-        + '<span class="verdict '+(wasCorrect?"correct":"incorrect")+'">'
-        + (wasCorrect ? "Correct" : "Incorrect") + '</span>'
-        + (rationale ? '<span class="note">'+esc(rationale)+'</span>' : '')
-        + '</div>'
-        + '<div class="mcat-quiz-actions" style="margin-top:14px">'
-        + (idx + 1 < total
-            ? '<button class="sr-btn" onclick="next()">Next \u2192</button>'
-            : '<button class="sr-btn" onclick="next()">See results</button>')
-        + '</div></div>';
-    });
-  };
-
-  window.next = function() { idx++; render(); };
-
-  function finish() {
-    var pct = total > 0 ? Math.round(correct / total * 100) : 0;
-    var color = pct >= 70 ? "#4ade80" : pct >= 50 ? "#fbbf24" : "#f87171";
-    document.getElementById("pq-root").innerHTML =
-      '<div class="mcat-quiz-card">'
-      + '<h2 style="margin:0 0 6px">Practice Quiz Complete</h2>'
-      + '<p style="font-size:32px;font-weight:800;margin:10px 0;color:'+color+'">'
-      + correct + ' / ' + total + '</p>'
-      + '<p style="opacity:0.6;font-size:14px;margin:0 0 20px">'+pct+'% correct</p>'
-      + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
-      + '<button class="sr-btn" onclick=\'pycmd("pq:config")\'>New quiz</button>'
-      + '<button class="sr-btn ghost" onclick=\'pycmd("pq:done")\'>Done</button>'
-      + '</div></div>';
-  }
-
-  render();
-})();
-</script>
-"""
-
 # Topics belonging to each MCAT section (used to filter questions).
 _SECTION_TOPICS: dict[str, list[str]] = {
     "B/B": ["Biology", "Biochemistry", "Essential-Equations"],
@@ -1109,6 +1009,9 @@ class PracticeQuizController:
         self._count = PRACTICE_QUIZ_SIZE
         self._section = "All"
         self._body = ""
+        self._correct = 0
+        self._total = 0
+        self._pending_concept: dict = {}
 
     # -- lifecycle -----------------------------------------------------------
 
@@ -1138,12 +1041,11 @@ class PracticeQuizController:
         self.mw.web.setFocus()
 
     def _paint(self, body: str) -> None:
-        """Set a new body and render it, transitioning to speedrun state if needed."""
         self._body = body
-        if self.mw.state == SPEEDRUN_STATE:
-            self._paint_current()
-        else:
+        if self.mw.state != SPEEDRUN_STATE:
             self.mw.moveToState(SPEEDRUN_STATE)  # type: ignore[arg-type]
+        else:
+            self._paint_current()
 
     # -- config screen -------------------------------------------------------
 
@@ -1237,7 +1139,7 @@ class PracticeQuizController:
                 pass
 
     def _render_quiz(self) -> None:
-        import json
+        from aqt.speedrun.performance_score import render_question_block
 
         questions = self.performance_score.client_questions_for_ids(self._question_ids)
         if not questions:
@@ -1247,22 +1149,26 @@ class PracticeQuizController:
                 else "No practice questions available yet."
             )
             return
-        questions_json = json.dumps(questions).replace("<", "\\u003c")
-        js = _PRACTICE_JS.replace("%%QUESTIONS%%", questions_json)
-        self._paint(
-            _PRACTICE_CSS
-            + '<div class="pq-shell"><div id="pq-root"></div></div>'
-            + js
-        )
+        self._correct = 0
+        self._total = len(questions)
+        self._pending_concept = {}
+        inner = render_question_block(questions, ai_available=False)
+        self._paint(_shell("", inner, footer=False))
 
     # -- bridge --------------------------------------------------------------
 
     def on_bridge_cmd(self, cmd: str) -> Any:
-        if cmd.startswith("pq:grade:"):
-            return self._grade(cmd[len("pq:grade:"):])
+        if cmd.startswith("srq:grade_concept:"):
+            return self._grade_concept(cmd[len("srq:grade_concept:"):])
+        if cmd.startswith("srq:grade_answer:"):
+            return self._grade_answer_step(cmd[len("srq:grade_answer:"):])
+        if cmd.startswith("srq:explain:"):
+            return False  # no AI in standalone practice quiz
         if cmd.startswith("pq:start:"):
             return self._handle_start(cmd[len("pq:start:"):])
-        if cmd == "pq:config":
+        if cmd == "sr:block_done":
+            self._show_results()
+        elif cmd == "pq:config":
             self._show_config()
         elif cmd == "pq:home":
             self._go_home()
@@ -1280,25 +1186,55 @@ class PracticeQuizController:
             self._section = str(payload.get("section", "All"))
         except Exception:  # noqa: BLE001
             pass
-        self._pick_questions()
-        self._render_quiz()
+        try:
+            self._pick_questions()
+            self._render_quiz()
+        except Exception as exc:  # noqa: BLE001
+            import traceback; traceback.print_exc()
+            self._show_error(f"Failed to load quiz: {exc}")
 
-    def _grade(self, encoded: str) -> Any:
+    def _grade_concept(self, encoded: str) -> Any:
+        """Practice quiz has no AI grading — just skip the concept step."""
+        return {"ai_unavailable": True}
+
+    def _grade_answer_step(self, encoded: str) -> Any:
         import json
         from urllib.parse import unquote
 
         try:
             payload = json.loads(unquote(encoded))
-            res = self.performance_score.grade_answer_for_session(
-                self.mw.col,
-                payload["id"],
-                payload.get("answer", ""),
-                concept_correct=False,
-                application_correct=False,
-            )
+            qid = payload["id"]
+            answer = payload.get("answer", "")
+            pending = self._pending_concept.pop(qid, None)
+            concept_correct = bool((pending or {}).get("concept_correct", False))
+            application_correct = bool((pending or {}).get("application_correct", False))
         except Exception as exc:  # noqa: BLE001
-            return {"error": str(exc), "answer_correct": False}
+            return {"error": str(exc)}
+
+        res = self.performance_score.grade_answer_for_session(
+            self.mw.col, qid, answer,
+            concept_correct=concept_correct,
+            application_correct=application_correct,
+        )
+        if res.get("answer_correct"):
+            self._correct += 1
         return res
+
+    def _show_results(self) -> None:
+        pct = round(self._correct / self._total * 100) if self._total else 0
+        color = "#4ade80" if pct >= 70 else "#fbbf24" if pct >= 50 else "#f87171"
+        inner = (
+            '<div class="sr-card">'
+            "<h2 style='margin:0 0 6px'>Practice Quiz Complete</h2>"
+            f"<p style='font-size:32px;font-weight:800;margin:10px 0;color:{color}'>"
+            f"{self._correct} / {self._total}</p>"
+            f"<p style='opacity:0.6;font-size:14px;margin:0 0 20px'>{pct}% correct</p>"
+            "<div style='display:flex;gap:8px;flex-wrap:wrap'>"
+            "<button class='sr-btn' onclick='pycmd(\"pq:config\")'>New quiz</button>"
+            "<button class='sr-btn ghost' onclick='pycmd(\"pq:home\")'>Done</button>"
+            "</div></div>"
+        )
+        self._paint(_SHELL_CSS + '<div class="sr-shell">' + inner + "</div>")
 
     def _show_error(self, msg: str) -> None:
         inner = (
