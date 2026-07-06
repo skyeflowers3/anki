@@ -30,3 +30,8 @@ speedrun/openstax_cache/
 # Speedrun runtime-generated files (not source)
 qt/aqt/speedrun/.firebase_token_cache.json
 speedrun/firebase/firestore.rules.bak
+
+# Briefcase installer build artifacts and bundled deck (too large for git)
+qt/installer/app/build/
+qt/installer/app/dist/
+qt/aqt/speedrun/mcat_deck.apkg

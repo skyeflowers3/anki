@@ -41,6 +41,9 @@ MCAT_ROOT = "MCAT Study Blocks"
 # A session is a fixed number of blocks; after the last one a summary is shown.
 SESSION_BLOCKS = 5
 
+# Number of questions in a practice quiz session.
+PRACTICE_QUIZ_SIZE = 20
+
 # Custom main-window state, so the loop's screens render inline in mw.web (the
 # same web view the reviewer uses) instead of a separate dialog window. Typed as
 # a plain str since it is not one of Anki's built-in MainWindowState literals.
@@ -913,6 +916,441 @@ def _start_question_sync_pull() -> None:
             pass
 
     threading.Thread(target=_run, daemon=True, name="speedrun-sync-pull").start()
+
+
+_PRACTICE_CSS = _SHELL_CSS + """
+<style>
+.pq-shell { max-width: 760px; margin: 0 auto; padding: 16px 18px 48px; }
+.pq-progress-wrap { margin-bottom: 14px; }
+.pq-progress-bar {
+    height: 4px; border-radius: 2px; overflow: hidden;
+    background: rgba(255,255,255,0.08); margin-bottom: 8px;
+}
+.pq-progress-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, #7c6ef5, #9d8fff);
+    transition: width 0.35s ease;
+}
+.pq-progress-text { opacity: 0.4; font-size: 12px; }
+.pq-score { margin-left: 8px; font-size: 12px; font-weight: 700; opacity: 0.7; }
+/* Config screen */
+.pq-config-label {
+    font-size: 11px; font-weight: 700; opacity: 0.45;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: block; margin: 18px 0 8px;
+}
+.pq-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pq-chip {
+    padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04);
+    cursor: pointer; color: inherit; font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+}
+.pq-chip:hover { background: rgba(124,110,245,0.1); border-color: rgba(124,110,245,0.4); }
+.pq-chip.active {
+    background: rgba(124,110,245,0.2); border-color: rgba(124,110,245,0.7);
+    color: #a89fff;
+}
+</style>
+"""
+
+_PRACTICE_CONFIG_JS = """
+<script>
+(function() {
+  var selCount = %%DEFAULT_COUNT%%;
+  var selSection = "All";
+  var counts = [10, 20, 30, 40, 60];
+  var sections = %%SECTIONS%%;
+
+  function setCount(n) {
+    selCount = n;
+    counts.forEach(function(c) {
+      var el = document.getElementById("cnt-"+c);
+      if (el) el.classList.toggle("active", c === n);
+    });
+  }
+  function setSection(s) {
+    selSection = s;
+    sections.forEach(function(sec) {
+      var el = document.getElementById("sec-"+sec.replace("/","-"));
+      if (el) el.classList.toggle("active", sec === s);
+    });
+  }
+  window.setCount = setCount;
+  window.setSection = setSection;
+  window.startQuiz = function() {
+    var encoded = encodeURIComponent(JSON.stringify({count: selCount, section: selSection}));
+    pycmd("pq:start:" + encoded);
+  };
+})();
+</script>
+"""
+
+_PRACTICE_JS = """
+<script>
+(function() {
+  var questions = %%QUESTIONS%%;
+  var idx = 0;
+  var correct = 0;
+  var total = questions.length;
+  var LETTERS = ["A","B","C","D","E","F"];
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function render() {
+    if (idx >= total) { finish(); return; }
+    var q = questions[idx];
+    var pct = Math.round(idx / total * 100);
+
+    var passageHtml = "";
+    if (q.passage) {
+      passageHtml = '<details style="margin:8px 0 4px">'
+        + '<summary style="cursor:pointer;opacity:0.5;font-size:12px;margin-bottom:4px">Show passage</summary>'
+        + '<div style="font-size:13px;line-height:1.6;opacity:0.8;border-left:3px solid rgba(124,110,245,.5);padding-left:12px;margin-top:8px">'
+        + esc(q.passage) + '</div></details>';
+    }
+
+    var choicesHtml = q.choices.map(function(c, i) {
+      return '<button class="mcat-choice" id="ch'+i+'" onclick="pick('+i+')">'
+        + '<span class="letter">'+LETTERS[i]+'</span>' + esc(c) + '</button>';
+    }).join("");
+
+    document.getElementById("pq-root").innerHTML =
+      '<div class="pq-progress-wrap">'
+      + '<div class="pq-progress-bar"><div class="pq-progress-fill" style="width:'+pct+'%"></div></div>'
+      + '<span class="pq-progress-text">Question '+(idx+1)+' of '+total+'</span>'
+      + '<span class="pq-score">'+correct+' correct</span>'
+      + '</div>'
+      + '<div class="mcat-quiz-card">'
+      + '<div class="mcat-quiz-topic">'+esc(q.topic)+'</div>'
+      + passageHtml
+      + '<div class="mcat-quiz-question">'+esc(q.question)+'</div>'
+      + '<div class="mcat-quiz-choices">'+choicesHtml+'</div>'
+      + '<div id="pq-feedback"></div>'
+      + '</div>';
+  }
+
+  window.pick = function(i) {
+    var q = questions[idx];
+    var choices = document.querySelectorAll(".mcat-choice");
+    choices.forEach(function(b) { b.disabled = true; });
+    var encoded = encodeURIComponent(JSON.stringify({id: q.id, answer: q.choices[i]}));
+    pycmd("pq:grade:" + encoded, function(res) {
+      var wasCorrect = res.answer_correct;
+      if (wasCorrect) correct++;
+      choices[i].classList.add(wasCorrect ? "correct" : "incorrect");
+      if (!wasCorrect) {
+        choices.forEach(function(b, j) {
+          if (q.choices[j] === res.correct_answer) b.classList.add("correct");
+        });
+      }
+      var rationale = res.rationale || res.correct_concept || "";
+      document.getElementById("pq-feedback").innerHTML =
+        '<div class="mcat-quiz-feedback">'
+        + '<div class="mcat-verdict-row">'
+        + '<span class="verdict '+(wasCorrect?"correct":"incorrect")+'">'
+        + (wasCorrect ? "Correct" : "Incorrect") + '</span>'
+        + (rationale ? '<span class="note">'+esc(rationale)+'</span>' : '')
+        + '</div>'
+        + '<div class="mcat-quiz-actions" style="margin-top:14px">'
+        + (idx + 1 < total
+            ? '<button class="sr-btn" onclick="next()">Next \u2192</button>'
+            : '<button class="sr-btn" onclick="next()">See results</button>')
+        + '</div></div>';
+    });
+  };
+
+  window.next = function() { idx++; render(); };
+
+  function finish() {
+    var pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    var color = pct >= 70 ? "#4ade80" : pct >= 50 ? "#fbbf24" : "#f87171";
+    document.getElementById("pq-root").innerHTML =
+      '<div class="mcat-quiz-card">'
+      + '<h2 style="margin:0 0 6px">Practice Quiz Complete</h2>'
+      + '<p style="font-size:32px;font-weight:800;margin:10px 0;color:'+color+'">'
+      + correct + ' / ' + total + '</p>'
+      + '<p style="opacity:0.6;font-size:14px;margin:0 0 20px">'+pct+'% correct</p>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      + '<button class="sr-btn" onclick=\'pycmd("pq:config")\'>New quiz</button>'
+      + '<button class="sr-btn ghost" onclick=\'pycmd("pq:done")\'>Done</button>'
+      + '</div></div>';
+  }
+
+  render();
+})();
+</script>
+"""
+
+# Topics belonging to each MCAT section (used to filter questions).
+_SECTION_TOPICS: dict[str, list[str]] = {
+    "B/B": ["Biology", "Biochemistry", "Essential-Equations"],
+    "C/P": ["General-Chemistry", "Organic-Chemistry", "Physics-and-Math"],
+    "P/S": ["Behavioral"],
+    "CARS": ["CARS"],
+}
+_ALL_SECTIONS = ["All"] + list(_SECTION_TOPICS)
+
+
+class PracticeQuizController:
+    """Configurable interleaved MC quiz — no concept step, no flashcard blocks."""
+
+    def __init__(self, mw: aqt.main.AnkiQt, deck_id: DeckId) -> None:
+        self.mw = mw
+        self.deck_id = deck_id
+        self.speedrun_loop, self.performance_score = _modules()
+        self.topic_decks = scope_topics(mw, deck_id)
+        self._ended = False
+        self._question_ids: list[str | int] = []
+        self._count = PRACTICE_QUIZ_SIZE
+        self._section = "All"
+        self._body = ""
+
+    # -- lifecycle -----------------------------------------------------------
+
+    def start(self) -> None:
+        self._register_state()
+        if not self.topic_decks:
+            self._show_error("No MCAT topics found.")
+            return
+        self._show_config()
+
+    def _register_state(self) -> None:
+        self.mw._speedrunState = self._enter_state  # type: ignore[attr-defined]
+        self.mw._speedrunCleanup = self._exit_state  # type: ignore[attr-defined]
+
+    def _enter_state(self, _old: str) -> None:
+        self._paint_current()
+
+    def _exit_state(self, new_state: str) -> None:
+        if new_state != SPEEDRUN_STATE and not self._ended:
+            self.end(navigated=True)
+
+    def _paint_current(self) -> None:
+        """Repaint the current body into mw.web (mirrors SpeedrunController._paint)."""
+        self.mw.web.set_bridge_command(self.on_bridge_cmd, self)
+        self.mw.web.stdHtml(self._body, context=self)
+        self.mw.bottomWeb.hide()
+        self.mw.web.setFocus()
+
+    def _paint(self, body: str) -> None:
+        """Set a new body and render it, transitioning to speedrun state if needed."""
+        self._body = body
+        if self.mw.state == SPEEDRUN_STATE:
+            self._paint_current()
+        else:
+            self.mw.moveToState(SPEEDRUN_STATE)  # type: ignore[arg-type]
+
+    # -- config screen -------------------------------------------------------
+
+    def _show_config(self) -> None:
+        import json
+
+        count_chips = "".join(
+            f'<button class="pq-chip{" active" if n == self._count else ""}" '
+            f'id="cnt-{n}" onclick="setCount({n})">{n}</button>'
+            for n in [10, 20, 30, 40, 60]
+        )
+        section_chips = "".join(
+            f'<button class="pq-chip{" active" if s == self._section else ""}" '
+            f'id="sec-{s.replace("/","-")}" onclick="setSection(\'{s}\')">{s}</button>'
+            for s in _ALL_SECTIONS
+        )
+        inner = (
+            '<div class="sr-card">'
+            "<h2 style='margin:0 0 4px'>Practice Quiz</h2>"
+            "<p style='opacity:0.6;font-size:13px;margin:0 0 4px'>"
+            "Questions are drawn adaptively based on your weakest areas.</p>"
+            f'<span class="pq-config-label">Number of questions</span>'
+            f'<div class="pq-chips">{count_chips}</div>'
+            f'<span class="pq-config-label">Subject</span>'
+            f'<div class="pq-chips">{section_chips}</div>'
+            '<div style="margin-top:22px;display:flex;gap:8px">'
+            '<button class="sr-btn" onclick="startQuiz()">Start quiz</button>'
+            '<button class="sr-btn ghost" onclick=\'pycmd("pq:home")\'>&#8592; Back</button>'
+            "</div></div>"
+        )
+        sections_json = json.dumps(_ALL_SECTIONS)
+        js = (
+            _PRACTICE_CONFIG_JS
+            .replace("%%DEFAULT_COUNT%%", str(self._count))
+            .replace("%%SECTIONS%%", sections_json)
+        )
+        self._paint(_PRACTICE_CSS + '<div class="sr-shell">' + inner + "</div>" + js)
+
+    # -- quiz ----------------------------------------------------------------
+
+    def _pick_questions(self) -> None:
+        import random as _random
+
+        # Restrict to topics in the chosen section.
+        if self._section == "All":
+            in_scope = dict(self.topic_decks)
+        else:
+            wanted = set(_SECTION_TOPICS.get(self._section, []))
+            in_scope = {t: d for t, d in self.topic_decks.items() if t in wanted}
+
+        stats = self.speedrun_loop.build_topic_stats(self.mw.col, list(in_scope))
+        questions_by_topic = self.speedrun_loop._questions_by_topic(list(in_scope))
+
+        ids = self.speedrun_loop.select_interleaved_questions(
+            stats, questions_by_topic, self._count
+        )
+        # Fall back to random if no eligible topics yet (early in studying).
+        if not ids:
+            all_ids: list[str | int] = []
+            for id_list in questions_by_topic.values():
+                all_ids.extend(id_list)
+            _random.shuffle(all_ids)
+            ids = all_ids[: self._count]
+        self._question_ids = ids
+
+        # Fire background generation for any topics running low on questions,
+        # so the pool stays stocked for future quizzes without blocking the UI.
+        self._trigger_generation(list(in_scope), set(ids))
+
+    def _trigger_generation(
+        self, topics: list[str], seen_ids: set[str | int]
+    ) -> None:
+        """Start background AI generation for topics below the question threshold."""
+        try:
+            from aqt.speedrun.auto_generator import maybe_trigger_generation
+        except ModuleNotFoundError:
+            repo_root = Path(aqt.__file__).resolve().parents[2]
+            if str(repo_root) not in sys.path:
+                sys.path.insert(0, str(repo_root))
+            try:
+                from aqt.speedrun.auto_generator import maybe_trigger_generation
+            except Exception:  # noqa: BLE001
+                return
+        except Exception:  # noqa: BLE001
+            return
+
+        for topic in topics:
+            try:
+                maybe_trigger_generation(topic, seen_ids=seen_ids)
+            except Exception:  # noqa: BLE001
+                pass
+
+    def _render_quiz(self) -> None:
+        import json
+
+        questions = self.performance_score.client_questions_for_ids(self._question_ids)
+        if not questions:
+            self._show_error(
+                f"No practice questions available for {self._section}."
+                if self._section != "All"
+                else "No practice questions available yet."
+            )
+            return
+        questions_json = json.dumps(questions).replace("<", "\\u003c")
+        js = _PRACTICE_JS.replace("%%QUESTIONS%%", questions_json)
+        self._paint(
+            _PRACTICE_CSS
+            + '<div class="pq-shell"><div id="pq-root"></div></div>'
+            + js
+        )
+
+    # -- bridge --------------------------------------------------------------
+
+    def on_bridge_cmd(self, cmd: str) -> Any:
+        if cmd.startswith("pq:grade:"):
+            return self._grade(cmd[len("pq:grade:"):])
+        if cmd.startswith("pq:start:"):
+            return self._handle_start(cmd[len("pq:start:"):])
+        if cmd == "pq:config":
+            self._show_config()
+        elif cmd == "pq:home":
+            self._go_home()
+        elif cmd in ("pq:done", "sr:end"):
+            self.end()
+        return False
+
+    def _handle_start(self, encoded: str) -> None:
+        import json
+        from urllib.parse import unquote
+
+        try:
+            payload = json.loads(unquote(encoded))
+            self._count = int(payload.get("count", PRACTICE_QUIZ_SIZE))
+            self._section = str(payload.get("section", "All"))
+        except Exception:  # noqa: BLE001
+            pass
+        self._pick_questions()
+        self._render_quiz()
+
+    def _grade(self, encoded: str) -> Any:
+        import json
+        from urllib.parse import unquote
+
+        try:
+            payload = json.loads(unquote(encoded))
+            res = self.performance_score.grade_answer_for_session(
+                self.mw.col,
+                payload["id"],
+                payload.get("answer", ""),
+                concept_correct=False,
+                application_correct=False,
+            )
+        except Exception as exc:  # noqa: BLE001
+            return {"error": str(exc), "answer_correct": False}
+        return res
+
+    def _show_error(self, msg: str) -> None:
+        inner = (
+            '<div class="sr-card">'
+            f"<p>{_esc(msg)}</p>"
+            '<button class="sr-btn ghost" onclick=\'pycmd("pq:config")\'>Back</button>'
+            "</div>"
+        )
+        self._paint(
+            _PRACTICE_CSS + '<div class="sr-shell">' + inner + "</div>"
+        )
+
+    def _go_home(self) -> None:
+        self.end(navigated=True)
+        try:
+            from aqt.speedrun.home import McatHomeController
+
+            ctrl = getattr(self.mw, "_mcat_home_controller", None)
+            if ctrl is None:
+                ctrl = McatHomeController(self.mw)
+                self.mw._mcat_home_controller = ctrl  # type: ignore[attr-defined]
+            ctrl.show()
+        except Exception:  # noqa: BLE001
+            self.mw.moveToState("deckBrowser")
+
+    def end(self, navigated: bool = False) -> None:
+        if self._ended:
+            return
+        self._ended = True
+        for attr in ("_speedrunState", "_speedrunCleanup"):
+            if hasattr(self.mw, attr):
+                delattr(self.mw, attr)
+        if getattr(self.mw, "_practice_quiz_controller", None) is self:
+            self.mw._practice_quiz_controller = None  # type: ignore[attr-defined]
+        self.mw.bottomWeb.show()
+        if not navigated and self.mw.state == SPEEDRUN_STATE:
+            self.mw.moveToState("overview")
+
+
+def start_practice_quiz(mw: aqt.main.AnkiQt) -> None:
+    """Open the practice quiz config screen for the current MCAT deck."""
+    deck = mw.col.decks.current()
+    if deck.get("name", "") != MCAT_ROOT:
+        return
+    existing = getattr(mw, "_practice_quiz_controller", None)
+    if existing is not None:
+        existing.end()
+    controller = PracticeQuizController(mw, DeckId(int(deck["id"])))
+    mw._practice_quiz_controller = controller  # type: ignore[attr-defined]
+    controller.start()
+
+
 
 
 def maybe_start(mw: aqt.main.AnkiQt, deck: dict) -> bool:

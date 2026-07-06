@@ -343,7 +343,24 @@ class Toolbar:
         )
 
     def _centerLinks(self) -> str:
-        links = [
+        links = []
+
+        # MCAT home link — shown whenever the MCAT Study Blocks deck is present.
+        try:
+            if self.mw.col and self.mw.col.decks.by_name("MCAT Study Blocks"):
+                links.append(
+                    self.create_link(
+                        "mcat_home",
+                        "Study",
+                        self._mcatHomeLinkHandler,
+                        tip="MCAT Study Home",
+                        id="mcat-home-link",
+                    )
+                )
+        except Exception:  # noqa: BLE001
+            pass
+
+        links += [
             self.create_link(
                 "decks",
                 tr.actions_decks(),
@@ -429,6 +446,18 @@ class Toolbar:
         if link in self.link_handlers:
             self.link_handlers[link]()
         return False
+
+    def _mcatHomeLinkHandler(self) -> None:
+        try:
+            from aqt.speedrun.home import McatHomeController
+
+            ctrl = getattr(self.mw, "_mcat_home_controller", None)
+            if ctrl is None:
+                ctrl = McatHomeController(self.mw)
+                self.mw._mcat_home_controller = ctrl  # type: ignore[attr-defined]
+            ctrl.show()
+        except Exception:  # noqa: BLE001
+            pass
 
     def _deckLinkHandler(self) -> None:
         self.mw.moveToState("deckBrowser")

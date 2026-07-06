@@ -814,6 +814,26 @@ class AnkiQt(QMainWindow):
         gui_hooks.state_did_change(state, oldState)
 
     def _deckBrowserState(self, oldState: MainWindowState) -> None:
+        # On startup, redirect to the MCAT home screen instead of the deck browser.
+        if oldState in ("startup", "profileManager"):
+            try:
+                from aqt.speedrun.home import McatHomeController
+
+                if self.col and self.col.decks.by_name("MCAT Study Blocks"):
+                    ctrl = getattr(self, "_mcat_home_controller", None)
+                    if ctrl is None:
+                        ctrl = McatHomeController(self)
+                        self._mcat_home_controller = ctrl  # type: ignore[attr-defined]
+
+                    def _show_home() -> None:
+                        ctrl.show()  # type: ignore[union-attr]
+
+                    from aqt.qt import QTimer
+
+                    QTimer.singleShot(0, _show_home)
+                    return
+            except Exception:  # noqa: BLE001
+                pass
         self.deckBrowser.show()
 
     def _selectedDeck(self) -> DeckDict | None:

@@ -259,6 +259,7 @@ class Overview:
 </tr>
 """
 
+        study_col = but("study", tr.studying_study_now(), id="study", extra=" autofocus")
         return f"""
 <table width=400 cellpadding=5>
 <tr><td align=center valign=top>
@@ -268,7 +269,8 @@ class Overview:
 {number_row(tr.studying_to_review(), "review-count", counts[2], buried_review)}
 </table>
 </td><td align=center>
-{but("study", tr.studying_study_now(), id="study", extra=" autofocus")}</td></tr></table>"""
+{study_col}
+</td></tr></table>"""
 
     _body = """
 <center>

@@ -5,27 +5,9 @@
 @use "../../../../../ts/lib/sass/card-counts";
 @use "../../../../../ts/lib/sass/elevation" as *;
 
-#speedrun-banner {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    margin: 0.5rem 0 1rem;
-    color: var(--fg);
-}
-
 table {
-    padding: 1rem;
-
-    .fancy & {
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--border-radius-medium);
-
-        @include elevation(1, $opacity-boost: -0.08);
-        &:hover {
-            @include elevation(2);
-        }
-        background: var(--canvas-glass);
-    }
+    padding: 0.5rem 0.75rem;
+    width: 100%;
 }
 
 a.deck {
@@ -66,9 +48,57 @@ tr.drag-hover td {
     border-bottom: 1px solid color(border);
 }
 
+/* ── Layout ─────────────────────────────────────────────────────────────── */
 body {
-    margin: 2em 1em 1em 1em;
+    margin: 0;
+    padding: 0 1em 2em;
     -webkit-user-select: none;
+}
+
+#sr-home {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-top: 2.2em;
+}
+
+/* ── Greeting ───────────────────────────────────────────────────────────── */
+#sr-greeting {
+    margin-bottom: 1.6em;
+}
+
+#sr-salutation {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    line-height: 1.15;
+}
+
+#sr-tagline {
+    display: block;
+    font-size: 0.95rem;
+    opacity: 0.45;
+    margin-top: 0.25em;
+    font-weight: 500;
+}
+
+/* ── Deck table ─────────────────────────────────────────────────────────── */
+#sr-deck-wrap {
+    background: var(--canvas-glass);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.2em;
+
+    @include elevation(1, $opacity-boost: -0.06);
+}
+
+#studiedToday {
+    font-size: 0.82rem;
+    opacity: 0.45;
+    text-align: center;
+    margin: 0.4em 0 1.6em;
 }
 
 .current,
@@ -162,4 +192,24 @@ tr:hover:not(.top-level-drag-row) {
 
 #studiedToday {
     margin: 2em 0;
+}
+
+#sr-back-wrap {
+    margin-bottom: 1em;
+}
+
+#sr-back-btn {
+    background: none;
+    border: none;
+    font-size: 13px;
+    opacity: 0.5;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    padding: 0;
+    transition: opacity 0.15s;
+
+    &:hover {
+        opacity: 0.9;
+    }
 }

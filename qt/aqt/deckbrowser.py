@@ -130,11 +130,26 @@ class DeckBrowser:
                 openLink("https://faqs.ankiweb.net/the-anki-2.1-scheduler.html")
             else:
                 openLink("https://faqs.ankiweb.net/the-2021-scheduler.html")
+        elif cmd == "sr":
+            if arg == "home":
+                self._go_mcat_home()
         elif cmd == "select":
             set_current_deck(
                 parent=self.mw, deck_id=DeckId(int(arg))
             ).run_in_background()
         return False
+
+    def _go_mcat_home(self) -> None:
+        try:
+            from aqt.speedrun.home import McatHomeController
+
+            ctrl = getattr(self.mw, "_mcat_home_controller", None)
+            if ctrl is None:
+                ctrl = McatHomeController(self.mw)
+                self.mw._mcat_home_controller = ctrl  # type: ignore[attr-defined]
+            ctrl.show()
+        except Exception:  # noqa: BLE001
+            pass
 
     def set_current_deck(self, deck_id: DeckId) -> None:
         set_current_deck(parent=self.mw, deck_id=deck_id).success(
@@ -145,15 +160,18 @@ class DeckBrowser:
     ##########################################################################
 
     _body = """
-<center>
-<div id="speedrun-banner">Speedrun: MCAT Study Blocks</div>
-<table cellspacing=0 cellpadding=3>
-%(tree)s
-</table>
-
-<br>
-%(stats)s
-</center>
+<div id="sr-home">
+  <div id="sr-greeting">%(greeting)s</div>
+  <div id="sr-back-wrap">
+    <button id="sr-back-btn" onclick="pycmd('sr:home')">&#8592; Back to Study Home</button>
+  </div>
+  <div id="sr-deck-wrap">
+    <table cellspacing=0 cellpadding=3>
+    %(tree)s
+    </table>
+  </div>
+  <div id="studiedToday">%(stats_inner)s</div>
+</div>
 """
 
     def _renderPage(self, reuse: bool = False) -> None:
@@ -179,6 +197,22 @@ class DeckBrowser:
         else:
             self.web.evalWithCallback("window.pageYOffset", self.__renderPage)
 
+    @staticmethod
+    def _greeting() -> str:
+        import datetime
+
+        hour = datetime.datetime.now().hour
+        if hour < 12:
+            salutation = "Good morning"
+        elif hour < 17:
+            salutation = "Good afternoon"
+        else:
+            salutation = "Good evening"
+        return (
+            f'<span id="sr-salutation">{salutation}!</span>'
+            '<span id="sr-tagline">Your decks are ready.</span>'
+        )
+
     def __renderPage(self, offset: int | None) -> None:
         data = self._render_data
         content = DeckBrowserContent(
@@ -186,9 +220,14 @@ class DeckBrowser:
             stats=self._renderStats(),
         )
         gui_hooks.deck_browser_will_render_content(self, content)
+        # Build the extra template vars the new layout needs.
+        body = self._body % {
+            "tree": content.tree,
+            "stats_inner": content.stats,
+            "greeting": self._greeting(),
+        }
         self.web.stdHtml(
-            self._v1_upgrade_message(data.sched_upgrade_required)
-            + self._body % content.__dict__,
+            self._v1_upgrade_message(data.sched_upgrade_required) + body,
             css=["css/deckbrowser.css"],
             js=[
                 "js/vendor/jquery.min.js",
@@ -206,9 +245,7 @@ class DeckBrowser:
         self.web.eval("window.scrollTo(0, %d, 'instant');" % offset)
 
     def _renderStats(self) -> str:
-        return '<div id="studiedToday"><span>{}</span></div>'.format(
-            self._render_data.studied_today
-        )
+        return "<span>{}</span>".format(self._render_data.studied_today)
 
     def _renderDeckTree(self, top: DeckTreeNode) -> str:
         buf = """

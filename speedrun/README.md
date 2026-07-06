@@ -15,6 +15,61 @@ and the Firebase project config).
 
 ---
 
+## Bundled Deck & Installer
+
+### What ships with the app
+
+`qt/aqt/speedrun/mcat_deck.apkg` (224 MB) is the full MCAT Study Blocks deck
+exported from the development collection. It is bundled inside the Briefcase
+installer so that students receive all flashcard content on first launch —
+no manual import required.
+
+**First-run import flow** (`qt/aqt/main.py → _maybe_import_bundled_mcat_deck`):
+
+1. On profile load, Anki checks the `speedrun_deck_imported` flag in profile metadata.
+2. If not set, it checks whether the deck root (`AnKing-MCAT`) already exists.
+3. If absent, it imports `mcat_deck.apkg` silently in a background thread.
+4. After import, sets the flag so the check never runs again.
+
+### Building the macOS DMG
+
+Requires [Briefcase](https://briefcase.readthedocs.io) and the bundled deck in
+place at `qt/aqt/speedrun/mcat_deck.apkg`.
+
+```bash
+# Install Briefcase (one-time)
+pip install briefcase
+
+# Build the .app bundle
+cd qt/installer/app
+briefcase build macOS
+
+# Package into a distributable DMG
+briefcase package macOS
+```
+
+The DMG is written to `qt/installer/app/dist/Speedrun-1.0.0.dmg`. The app is
+named **Speedrun** (set in `qt/installer/app/pyproject.toml`).
+
+> **Note on Gatekeeper:** The DMG is signed with an ad-hoc identity (no Apple
+> Developer certificate). On another Mac, Gatekeeper will block it on first
+> launch. To open it, right-click the app → **Open** → **Open** in the dialog.
+> This is a one-time step. Alternatively, reviewers can run the app directly
+> from source with `just run` (no Gatekeeper prompt).
+
+### Updating the bundled deck
+
+Re-export the MCAT Study Blocks deck from Anki (File → Export, include
+scheduling, format = Anki Deck Package), then overwrite the bundled file:
+
+```bash
+cp "MCAT Study Blocks.apkg" qt/aqt/speedrun/mcat_deck.apkg
+```
+
+Then rebuild the DMG using the steps above.
+
+---
+
 ## Relationship to `qt/aqt/speedrun/`
 
 The **running Speedrun app** imports from `qt/aqt/speedrun/` (the integrated Qt
@@ -41,6 +96,16 @@ If you are reading the source to understand how something works, start in
 | `eval_results.json` | Latest eval run output |
 | `firebase/` | Firestore project config and security rules |
 | `openstax_cache/` | Cached OpenStax content (gitignored) |
+
+### Key Qt/UI files (in `qt/aqt/speedrun/`)
+
+| File | Purpose |
+|------|---------|
+| `home.py` | MCAT home screen — startup landing page with action buttons and live score summary |
+| `driver.py` | Adaptive loop Qt driver + `PracticeQuizController` (20–60 question practice mode) |
+| `coverage_map.py` | MCAT content coverage tracker — required vs. recommended areas, Coverage Stats tab |
+| `readiness_score.py` | 472–528 MCAT score projection with confidence interval; Readiness Stats tab |
+| `mcat_deck.apkg` | Bundled MCAT flashcard deck — auto-imported on first launch |
 
 ## Model Descriptions
 

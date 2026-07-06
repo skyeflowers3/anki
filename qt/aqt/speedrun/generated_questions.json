@@ -3283,6 +3283,72 @@
         "q_bio_001"
       ],
       "eval_topic_fallback": true
+    },
+    {
+      "id": "biology_gen_014",
+      "passage_id": "biology_generated_003",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers are investigating how cells adapt their glucose uptake mechanisms under varying energy demands. In a study, cultured human muscle cells were exposed to different concentrations of glucose to observe changes in glucose transporter proteins. Cells were divided into three groups: high glucose concentration, low glucose concentration, and a control group with normal glucose levels. Over a period of 24 hours, the expression levels of GLUT proteins were measured using Western blot analysis. Additionally, the cells' glycolytic activity was assessed by quantifying pyruvate and lactate production. It was hypothesized that under low glucose conditions, cells would increase the expression of GLUT proteins to facilitate more efficient glucose uptake through facilitated diffusion. The study also examined whether increased GLUT expression correlated with an increase in glycolytic flux, as evidenced by higher levels of pyruvate and lactate. In contrast, cells exposed to high glucose concentrations might exhibit downregulation of GLUT proteins as a feedback mechanism to prevent excessive glucose uptake. Understanding these adaptations could provide insights into how cells maintain energy homeostasis under different metabolic states, particularly in conditions where oxygen is limited and glycolysis becomes the primary pathway for ATP production.",
+      "question": "In the study described, which mechanism is most likely responsible for increased glucose uptake in muscle cells under low glucose conditions?",
+      "choices": [
+        "Increased secondary active transport of glucose",
+        "Upregulation of GLUT protein expression",
+        "Enhanced glycolytic enzyme activity",
+        "Increased oxidative phosphorylation"
+      ],
+      "correct_answer": "B",
+      "concept": "regulation of glucose transport and cellular adaptation",
+      "rationale": "Under low glucose conditions, cells typically increase the expression of GLUT proteins to enhance facilitated diffusion of glucose, as these transporters are responsible for glucose uptake. A is incorrect because secondary active transport is not the primary method for glucose uptake under normal physiological conditions. C is incorrect as increased glycolytic enzyme activity does not directly increase glucose uptake. D is incorrect because oxidative phosphorylation is not directly related to glucose uptake through GLUT transporters.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The AI-generated question matches the difficulty and style of the gold standard well, with a clear correct answer and plausible distractors, though slightly more straightforward than typical MCAT questions.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
+    },
+    {
+      "id": "biology_gen_015",
+      "passage_id": "biology_generated_003",
+      "topic": "Biology",
+      "generated_by": "openai-gpt-4o",
+      "source_citation": "OpenStax Biology 2e, Glycolysis, https://openstax.org/books/biology-2e/pages/7-2-glycolysis",
+      "source_text": "Glycolysis You have read that nearly all of the energy used by living cells comes to them in the bonds of the sugar, glucose. Glycolysis is the first step in the breakdown of glucose to extract energy for cellular metabolism. Nearly all living organisms carry out glycolysis as part of their metabolism. The process does not use oxygen and is therefore anaerobic . Glycolysis takes place in the cytoplasm of both prokaryotic and eukaryotic cells. Glucose enters heterotrophic cells in two ways. One method is through secondary active transport in which the transport takes place against the glucose concentration gradient. The other mechanism uses a group of integral proteins called GLUT proteins, also known as glucose transporter proteins. These transporters assist in the facilitated diffusion of glucose. Glycolysis begins with the six carbon ring-shaped structure of a single glucose molecule and ends with two molecules of a three-carbon keto acid called pyruvate . Glycolysis consists of two distinct phases. The first part of the glycolysis pathway traps the glucose molecule in the cell and uses energy to modify it so that the six-carbon sugar molecule can be split evenly into the two three-carbon molecules. The second part of glycolysis extracts energy from the molecules and stores it in the form of ATP and NADH, the reduced form of NAD + .",
+      "format_reference": "AAMC Sample Questions via speedrun/questions.json",
+      "passage": "Researchers are investigating how cells adapt their glucose uptake mechanisms under varying energy demands. In a study, cultured human muscle cells were exposed to different concentrations of glucose to observe changes in glucose transporter proteins. Cells were divided into three groups: high glucose concentration, low glucose concentration, and a control group with normal glucose levels. Over a period of 24 hours, the expression levels of GLUT proteins were measured using Western blot analysis. Additionally, the cells' glycolytic activity was assessed by quantifying pyruvate and lactate production. It was hypothesized that under low glucose conditions, cells would increase the expression of GLUT proteins to facilitate more efficient glucose uptake through facilitated diffusion. The study also examined whether increased GLUT expression correlated with an increase in glycolytic flux, as evidenced by higher levels of pyruvate and lactate. In contrast, cells exposed to high glucose concentrations might exhibit downregulation of GLUT proteins as a feedback mechanism to prevent excessive glucose uptake. Understanding these adaptations could provide insights into how cells maintain energy homeostasis under different metabolic states, particularly in conditions where oxygen is limited and glycolysis becomes the primary pathway for ATP production.",
+      "question": "What would be the expected effect on lactate production in cells with increased GLUT expression under low glucose conditions?",
+      "choices": [
+        "Decreased lactate production due to less available glucose",
+        "Unchanged lactate production due to constant glycolytic flux",
+        "Increased lactate production due to enhanced glycolytic flux",
+        "Increased lactate production due to greater oxidative phosphorylation"
+      ],
+      "correct_answer": "C",
+      "concept": "glycolysis and cellular energy metabolism",
+      "rationale": "Increased GLUT expression under low glucose conditions would likely enhance glycolytic flux, leading to increased lactate production as a byproduct of anaerobic glycolysis. A is incorrect because increased glucose uptake should increase lactate production, not decrease it. B is incorrect because increased glucose uptake would alter glycolytic flux. D is incorrect because lactate production is associated with anaerobic glycolysis, not oxidative phosphorylation.",
+      "eval_score": 0.9,
+      "eval_passed": true,
+      "eval_criteria": {
+        "difficulty_match": 0.85,
+        "style_match": 0.9,
+        "answer_defensible": 1.0,
+        "distractors_quality": 0.85
+      },
+      "eval_reasoning": "The AI-generated question matches the difficulty and style of the gold standard well, with a clear correct answer and plausible distractors, though slightly less complex than typical MCAT questions.",
+      "eval_held_out_ids": [
+        "q_bio_001"
+      ],
+      "eval_topic_fallback": false
     }
   ]
 }

@@ -285,5 +285,21 @@
     },
     "fallback_count": 2,
     "passage_id": "behavioral_generated_003"
+  },
+  {
+    "timestamp": "2026-07-05T23:25:04.890601+00:00",
+    "cutoff": 0.75,
+    "questions_evaluated": 2,
+    "questions_passed": 2,
+    "questions_failed": 0,
+    "pass_rate": 1.0,
+    "wrong_answer_rate": 0.0,
+    "avg_score": 0.9,
+    "failed_question_ids": [],
+    "held_out_coverage": {
+      "Biology": "matched"
+    },
+    "fallback_count": 0,
+    "passage_id": "biology_generated_003"
   }
 ]

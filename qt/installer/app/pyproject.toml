@@ -3,7 +3,8 @@ requires-python = ">=3.10"
 
 # This project was generated with 0.3.26 using template: https://github.com/beeware/briefcase-template @ v0.3.26
 [tool.briefcase]
-project_name = "Anki"
+project_name = "Speedrun"
+version = "1.0.0"
 bundle = "net.ankiweb"
 url = "https://apps.ankiweb.net"
 license = "AGPL-3.0-or-later"

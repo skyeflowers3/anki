@@ -11,11 +11,13 @@ The core Speedrun package, imported by the running desktop app.
 | Status | File | Description |
 |--------|------|-------------|
 | A | `__init__.py` | Package init; re-exports `SpeedrunController` and `maybe_start` |
-| A | `driver.py` | Qt driver — wires the adaptive loop to the UI, handles all `pycmd` callbacks from JavaScript, manages state transitions between flashcard and question blocks |
+| A | `driver.py` | Qt driver — wires the adaptive loop to the UI, handles all `pycmd` callbacks from JavaScript, manages state transitions between flashcard and question blocks; also contains `PracticeQuizController` for the standalone 20–60 question practice mode with subject filtering, background AI generation, and a "← Back" button that returns to the MCAT home screen |
+| A | `home.py` | MCAT home screen — custom `mcatHome` main-window state that replaces the deck browser at startup; shows time-of-day greeting, Start Study Session and Practice Quiz action buttons, live per-section memory+performance score table, and a "View decks" link |
 | A | `speedrun_loop.py` | Pure decision logic — which block to serve next, mode transitions (discovery → remediation → consolidation), points-at-stake weighting; no Qt imports so it is unit-testable in isolation |
 | A | `memory_score.py` | Reads FSRS retrievability from the collection via `extract_fsrs_retrievability`, aggregates by MCAT section, renders the Memory Score Stats tab |
-| A | `performance_score.py` | Reads `speedrun_performance` table, tallies quiz accuracy per topic/section, renders the quiz UI (passage, concept input, multiple-choice, feedback), renders the Performance Score Stats tab |
-| A | `readiness_score.py` | Projects a 472–528 MCAT composite from per-section accuracy with a 0.92 calibration factor and binomial confidence interval; renders the Readiness Score Stats tab |
+| A | `performance_score.py` | Reads `speedrun_performance` table, tallies quiz accuracy per topic/section, renders the quiz UI (passage, concept input, multiple-choice, feedback), renders the Performance Score Stats tab; treats Essential-Equations as an optional/supplemental topic that does not gate section readiness |
+| A | `readiness_score.py` | Projects a 472–528 MCAT composite from per-section accuracy with a 0.92 calibration factor and binomial confidence interval; renders the Readiness Score Stats tab; shows a recommendation banner if Essential-Equations deck is missing (but does not block the score) |
+| A | `coverage_map.py` | Tracks whether the app covers all official MCAT content areas; distinguishes required areas (block readiness score if missing) from recommended areas (show tip only); renders the MCAT Coverage Stats tab |
 | A | `question_sync.py` | Firestore REST sync — pushes performance records with deduplication via `sync_key`, pulls AI-generated questions, collection-group pull across all device sync IDs, offline outbox queue for failed pushes |
 | A | `auto_generator.py` | Background thread that triggers AI question generation when a topic's question bank falls below the minimum threshold |
 | A | `question_generator.py` | CLI — generates new MCAT-style questions from OpenStax source text via GPT-4o |
@@ -26,6 +28,7 @@ The core Speedrun package, imported by the running desktop app.
 | A | `eval_results.json` | Output of the most recent eval run |
 | A | `calibrate_memory.py` | Calibration script — plots FSRS predicted R vs. actual recall rate on held-out reviews, prints Brier score |
 | A | `calibrate_performance.py` | Calibration script — reports held-out accuracy (last 20% of answered questions) by MCAT section |
+| A | `mcat_deck.apkg` | Bundled MCAT Study Blocks deck (224 MB) — auto-imported silently on first launch via `_maybe_import_bundled_mcat_deck()` in `main.py` |
 | A | `openstax_cache/` | Cached OpenStax XML/HTML per topic (7 files) — avoids redundant network fetches during question generation |
 
 ---
@@ -67,12 +70,13 @@ Changes to the existing Anki Qt application layer.
 
 | Status | File | What was changed and why |
 |--------|------|--------------------------|
-| M | `overview.py` | Added a hook in `_linkHandler` so clicking "Study" on the `AnKing-MCAT` deck launches the Speedrun loop via `maybe_start()` instead of the standard reviewer |
-| M | `stats.py` | Added three new `QWebEngineView` tabs to the Stats dialog (MCAT Memory, MCAT Performance, MCAT Readiness) with refresh methods that call the respective `render_html()` functions |
-| M | `webview.py` | Added four new `AnkiWebViewKind` enum values: `MCAT_MEMORY`, `MCAT_PERFORMANCE`, `MCAT_READINESS`, `SPEEDRUN_LOOP` — required by `AnkiWebView` to identify the new web views |
-| M | `main.py` | Added window title override ("Speedrun: MCAT Study Blocks"), first-run deck import logic (auto-imports bundled `mcat_deck.apkg` on first launch), and `speedrun_deck_imported` profile metadata flag |
-| M | `deckbrowser.py` | Added a Speedrun banner element to the deck browser HTML |
-| M | `data/web/css/deckbrowser.scss` | Added `#speedrun-banner` CSS rule to style the banner in the deck browser |
+| M | `overview.py` | `_linkHandler` routes to Speedrun adaptive loop via `maybe_start()`; "Practice Quiz" button removed (now lives on the home screen) |
+| M | `stats.py` | Added four `QWebEngineView` tabs: MCAT Readiness (before Coverage), MCAT Coverage, MCAT Memory, MCAT Performance; tab order puts Readiness first |
+| M | `webview.py` | Added `AnkiWebViewKind` enum values: `MCAT_MEMORY`, `MCAT_PERFORMANCE`, `MCAT_READINESS`, `MCAT_COVERAGE`, `SPEEDRUN_LOOP` |
+| M | `main.py` | Window title override; `_maybe_import_bundled_mcat_deck()` auto-imports `mcat_deck.apkg` on first launch; `_deckBrowserState()` redirects startup `deckBrowser` transition to the MCAT home screen when the MCAT deck is present |
+| M | `toolbar.py` | `_centerLinks()` prepends a "Study" link that navigates to the MCAT home screen whenever the MCAT Study Blocks deck exists; `_mcatHomeLinkHandler()` creates/reuses `McatHomeController` |
+| M | `deckbrowser.py` | Full redesign: time-of-day greeting, "← Back to Study Home" button, deck table in a card-style container; `_go_mcat_home()` bridge handler for the back button |
+| M | `data/web/css/deckbrowser.scss` | New styles for `#sr-home`, `#sr-greeting`, `#sr-salutation`, `#sr-tagline`, `#sr-deck-wrap`, `#sr-back-btn`, `#studiedToday` |
 
 ---
 
