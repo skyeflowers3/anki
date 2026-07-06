@@ -584,14 +584,16 @@ class AnkiQt(QMainWindow):
             self.pm.save()
             return
 
-        # Import silently in a background thread.
+        # Import silently in a background thread using the Rust backend so that
+        # newer .anki21b / zstd-compressed packages are handled correctly.
         from aqt.operations import QueryOp
 
         def do_import(col: Collection) -> None:
-            from anki.importing.apkg import AnkiPackageImporter
+            from anki.collection import ImportAnkiPackageRequest
 
-            imp = AnkiPackageImporter(col, str(apkg_path))
-            imp.run()
+            col.import_anki_package(
+                ImportAnkiPackageRequest(package_path=str(apkg_path))
+            )
 
         def on_done(_: None) -> None:
             self.pm.meta["speedrun_deck_imported"] = True

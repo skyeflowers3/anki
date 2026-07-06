@@ -33,29 +33,56 @@ no manual import required.
 
 ### Building the macOS DMG
 
-Requires [Briefcase](https://briefcase.readthedocs.io) and the bundled deck in
-place at `qt/aqt/speedrun/mcat_deck.apkg`.
+Requires the bundled deck at `qt/aqt/speedrun/mcat_deck.apkg` (export from
+Anki: File → Export → MCAT Study Blocks → Anki Deck Package, include
+scheduling, save to that path).
 
 ```bash
-# Install Briefcase (one-time)
-pip install briefcase
+cd /path/to/anki
 
-# Build the .app bundle
-cd qt/installer/app
-briefcase build macOS
+# 1. Rebuild aqt/anki wheels with latest source changes
+just wheels
 
-# Package into a distributable DMG
-briefcase package macOS
+# 2. Build the app bundle (uses the proper Anki build script)
+out/pyenv/bin/python qt/tools/build_installer.py --version 26.05 build \
+  --aqt_wheel out/wheels/aqt-26.5-py3-none-any.whl \
+  --anki_wheel out/wheels/anki-26.5-cp310-abi3-macosx_12_0_x86_64.whl
+
+# 3. Fix the stub binary (Briefcase downloads a Python 3.12 stub but the
+#    support package is Python 3.13 — replace it with the correct one)
+curl -L "https://briefcase-support.s3.amazonaws.com/python/3.13/macOS/GUI-Stub-3.13-b13.zip" \
+  -o /tmp/stub-3.13.zip
+unzip -o /tmp/stub-3.13.zip -d /tmp/stub-3.13
+cp /tmp/stub-3.13/Stub \
+  "out/installer/build/anki/macos/app/Speedrun.app/Contents/MacOS/Speedrun"
+codesign --force --sign - \
+  "out/installer/build/anki/macos/app/Speedrun.app/Contents/MacOS/Speedrun"
+
+# 4. Copy the bundled MCAT deck into the app bundle
+cp qt/aqt/speedrun/mcat_deck.apkg \
+  "out/installer/build/anki/macos/app/Speedrun.app/Contents/Resources/app_packages/aqt/speedrun/mcat_deck.apkg"
+
+# 5. Package into a DMG
+out/pyenv/bin/python qt/tools/build_installer.py --version 26.05 package
 ```
 
-The DMG is written to `qt/installer/app/dist/Speedrun-1.0.0.dmg`. The app is
+The DMG is written to `out/installer/dist/anki-26.05-mac-intel.dmg`. The app is
 named **Speedrun** (set in `qt/installer/app/pyproject.toml`).
+
+> **Stub binary note:** Briefcase currently downloads a Python 3.12 stub binary
+> even though the bundled Python framework is 3.13. Step 3 replaces it with the
+> correct Python 3.13 stub. This step is required on every fresh build.
+
+> **Deck import format:** The bundled deck uses the newer `.anki21b` format
+> (Zstandard-compressed). The auto-import in `_maybe_import_bundled_mcat_deck`
+> uses Anki's Rust backend (`col.import_anki_package`) rather than the legacy
+> Python importer, so both old and new `.apkg` formats are handled correctly.
 
 > **Note on Gatekeeper:** The DMG is signed with an ad-hoc identity (no Apple
 > Developer certificate). On another Mac, Gatekeeper will block it on first
-> launch. To open it, right-click the app → **Open** → **Open** in the dialog.
-> This is a one-time step. Alternatively, reviewers can run the app directly
-> from source with `just run` (no Gatekeeper prompt).
+> launch. To open it, right-click **Speedrun.app** → **Open** → **Open** in
+> the dialog. This is a one-time step. Alternatively, reviewers can run the
+> app directly from source with `just run` (no Gatekeeper prompt).
 
 ### Updating the bundled deck
 

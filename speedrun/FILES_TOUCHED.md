@@ -73,7 +73,7 @@ Changes to the existing Anki Qt application layer.
 | M | `overview.py` | `_linkHandler` routes to Speedrun adaptive loop via `maybe_start()`; "Practice Quiz" button removed (now lives on the home screen) |
 | M | `stats.py` | Added four `QWebEngineView` tabs: MCAT Readiness (before Coverage), MCAT Coverage, MCAT Memory, MCAT Performance; tab order puts Readiness first |
 | M | `webview.py` | Added `AnkiWebViewKind` enum values: `MCAT_MEMORY`, `MCAT_PERFORMANCE`, `MCAT_READINESS`, `MCAT_COVERAGE`, `SPEEDRUN_LOOP` |
-| M | `main.py` | Window title override; `_maybe_import_bundled_mcat_deck()` auto-imports `mcat_deck.apkg` on first launch; `_deckBrowserState()` redirects startup `deckBrowser` transition to the MCAT home screen when the MCAT deck is present |
+| M | `main.py` | Window title override; `_maybe_import_bundled_mcat_deck()` auto-imports `mcat_deck.apkg` on first launch using the Rust backend (`col.import_anki_package`) so that the newer `.anki21b` / Zstandard-compressed format is handled correctly; `_deckBrowserState()` redirects startup `deckBrowser` transition to the MCAT home screen when the MCAT deck is present |
 | M | `toolbar.py` | `_centerLinks()` prepends a "Study" link that navigates to the MCAT home screen whenever the MCAT Study Blocks deck exists; `_mcatHomeLinkHandler()` creates/reuses `McatHomeController` |
 | M | `deckbrowser.py` | Full redesign: time-of-day greeting, "← Back to Study Home" button, deck table in a card-style container; `_go_mcat_home()` bridge handler for the back button |
 | M | `data/web/css/deckbrowser.scss` | New styles for `#sr-home`, `#sr-greeting`, `#sr-salutation`, `#sr-tagline`, `#sr-deck-wrap`, `#sr-back-btn`, `#studiedToday` |
